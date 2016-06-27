@@ -1,0 +1,16 @@
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2016-06-27 15:03:16
+hint
+project --topLevelPackage com.zeal
+hint
+jpa setup --database MYSQL --provider HIBERNATE 
+hint
+entity jpa --class com.zeal.entity.UserInfo 
+hint
+web mvc setup
+hint
+field string --fieldName loginName 
+hint
+logging setup --level DEBUG 
+hint
+controller class --class com.zeal.controller.UserInfoController  
+controller scaffold --class ~.entity.UserInfo
