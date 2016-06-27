@@ -1,7 +1,7 @@
 package com.zeal.controller;
 
-import com.zeal.dao.UserInfoDao;
-import com.zeal.entity.UserInfo;
+import com.zeal.http.response.Response;
+import com.zeal.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class UserInfoController {
 
     @Autowired
-    private UserInfoDao userInfoDao;
+    private UserInfoService userInfoService;
 
-    @RequestMapping(value = "/{id}",method = RequestMethod.GET,produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public UserInfo post(@PathVariable Long id) {
-       return userInfoDao.find(id);
+    public Response post(@PathVariable Long id) {
+        return new Response.Builder().success().result(userInfoService.find(id)).build();
     }
 
 
