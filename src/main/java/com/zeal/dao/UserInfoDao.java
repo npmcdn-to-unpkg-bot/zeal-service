@@ -3,10 +3,7 @@ package com.zeal.dao;
 import com.zeal.entity.UserInfo;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.List;
 
 /**
  * Created by Administrator on 6/27/2016.

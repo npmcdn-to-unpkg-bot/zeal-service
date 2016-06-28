@@ -1,7 +1,5 @@
 package com.zeal.exception;
 
-import com.zeal.utils.StringUtils;
-
 /**
  * Created by yang_shoulai on 2016/6/27.
  */

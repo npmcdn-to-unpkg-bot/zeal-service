@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class SessionUtils {
 
+    /**
+     * 用户会话用户信息key
+     */
     public static final String KEY_USERINFO = "key_userinfo";
 
     public static void setAttribute(HttpServletRequest request, String key, Object obj) {
