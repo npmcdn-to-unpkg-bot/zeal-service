@@ -1,5 +1,6 @@
 package com.zeal.dao;
 
+import com.zeal.common.PagedList;
 import com.zeal.entity.BaseEntity;
 
 import java.util.List;
@@ -41,17 +42,23 @@ public interface BaseDao<T extends BaseEntity> {
 
     /**
      * 获取所有实体
-     *
-     * @param t
      */
     List<T> findAll();
 
     /**
      * 分页查询实体
      *
-     * @param firstResult 开始位置
-     * @param maxResults  数量
+     * @param page 分页的页码 从 1 开始
+     * @param size 每页展示的数量
      * @return
      */
-    List<T> pagedList(int firstResult, int maxResults);
+    PagedList<T> paged(int page, int size);
+
+    /**
+     * 获取所有实体的数量
+     *
+     * @return
+     */
+    long countAll();
+
 }

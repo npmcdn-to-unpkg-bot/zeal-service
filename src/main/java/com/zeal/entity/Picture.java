@@ -16,6 +16,7 @@ public class Picture extends BaseEntity {
     private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "album")
     private Album album;
 
     public String getDescription() {

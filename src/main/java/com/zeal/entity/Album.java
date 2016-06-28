@@ -25,9 +25,11 @@ public class Album extends BaseEntity {
     @Column(name = "update_date", nullable = false, unique = false)
     private Date updateDate;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, mappedBy = "album")
     private List<Picture> pictures;
 
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    private UserInfo userInfo;
 
     public String getName() {
         return name;
@@ -67,5 +69,13 @@ public class Album extends BaseEntity {
 
     public void setPictures(List<Picture> pictures) {
         this.pictures = pictures;
+    }
+
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
 }

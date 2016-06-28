@@ -1,5 +1,6 @@
 package com.zeal.dao;
 
+import com.zeal.common.PagedList;
 import com.zeal.entity.BaseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,8 +67,19 @@ public abstract class AbstractBaseDao<T extends BaseEntity> implements BaseDao<T
     }
 
     @Override
-    public List<T> pagedList(int firstResult, int maxResults) {
-        return this.entityManager().createQuery("SELECT o FROM " + entityClass.getSimpleName() + " o", entityClass).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    public PagedList<T> paged(int page, int size) {
+        List<T> list = this.entityManager().createQuery("SELECT o FROM " + entityClass.getSimpleName() + " o", entityClass).setFirstResult((page - 1) * size).setMaxResults(size).getResultList();
+        PagedList<T> pagedList = new PagedList<>();
+        pagedList.setList(list);
+        pagedList.setTotalSize(countAll());
+        pagedList.setPage(page);
+        pagedList.setSize(size);
+        return pagedList;
     }
 
+
+    @Override
+    public long countAll() {
+        return this.entityManager().createQuery("SELECT count(o) FROM " + entityClass.getSimpleName() + " o", Long.class).getSingleResult();
+    }
 }

@@ -1,7 +1,8 @@
 package com.zeal.entity;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "user_info")
@@ -18,10 +19,6 @@ public class UserInfo extends BaseEntity {
 
     @Column(name = "phone_number", unique = true, nullable = false, length = 255)
     private String phoneNumber;
-
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    @Column(name = "album")
-    private List<Album> albums;
 
     public String getLoginName() {
         return loginName;
@@ -45,14 +42,6 @@ public class UserInfo extends BaseEntity {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public List<Album> getAlbums() {
-        return albums;
-    }
-
-    public void setAlbums(List<Album> albums) {
-        this.albums = albums;
     }
 
     public String getNickName() {

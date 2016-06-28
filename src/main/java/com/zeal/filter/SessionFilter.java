@@ -1,6 +1,7 @@
 package com.zeal.filter;
 
 
+import com.zeal.http.response.Response;
 import com.zeal.utils.LogUtils;
 import com.zeal.utils.SessionUtils;
 import com.zeal.utils.StringUtils;
@@ -61,7 +62,8 @@ public class SessionFilter implements Filter {
         if (isBlack(servletPath)) {
             Object userInfo = SessionUtils.getAttribute(request, SessionUtils.KEY_USERINFO);
             if (userInfo == null) {
-                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                response.setStatus(HttpStatus.OK.value());
+                response.getWriter().write(Response.UNAUTHENTICATED.toJson());
                 return;
             }
         }

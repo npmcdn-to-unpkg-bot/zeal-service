@@ -20,4 +20,11 @@ public class SessionUtils {
         return request.getSession().getAttribute(key);
     }
 
+    public static void removeAttribute(HttpServletRequest request, String key) {
+        request.getSession().removeAttribute(key);
+    }
+
+    public static void ivalidate(HttpServletRequest request) {
+        request.getSession().invalidate();
+    }
 }

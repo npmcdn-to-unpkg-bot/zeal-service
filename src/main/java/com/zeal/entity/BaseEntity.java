@@ -1,13 +1,14 @@
 package com.zeal.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by Administrator on 6/27/2016.
  */
 
 @MappedSuperclass
-public abstract class BaseEntity {
+public abstract class BaseEntity implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

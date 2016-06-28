@@ -1,0 +1,1 @@
+#INSERT INTO user_info(id, version, login_name, nick_name, password, phone_number) VALUES (1, 1, '5863', 'Terrorblade', '123456', '15195952860');

@@ -1,6 +1,8 @@
 package com.zeal.service;
 
 import com.zeal.entity.UserInfo;
+import com.zeal.http.request.user.UserLoginRequest;
+import com.zeal.http.request.user.UserRegisterRequest;
 
 /**
  * Created by yang_shoulai on 2016/6/27.
@@ -16,13 +18,18 @@ public interface UserInfoService {
     UserInfo find(long id);
 
     /**
-     * 根据用户登录名和密码查找用户信息
+     * 用户登录
      *
-     * @param loginName 用户登录名
-     * @param password  用户密码（未加密）
+     * @param userLoginRequest 用户登录请求
      * @return 用户信息
      */
-    UserInfo findByLoginNameAndPasswordEquals(String loginName, String password);
+    UserInfo login(UserLoginRequest userLoginRequest);
 
-
+    /**
+     * 用户注册
+     *
+     * @param userRegisterRequest 用户注册信息
+     * @return 用户信息
+     */
+    UserInfo register(UserRegisterRequest userRegisterRequest);
 }
