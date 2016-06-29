@@ -1,6 +1,5 @@
 package com.zeal.test;
 
-import com.zeal.entity.UserInfo;
 import com.zeal.http.request.user.UserRegisterRequest;
 import com.zeal.service.UserInfoService;
 import com.zeal.vo.user.UserInfoVO;

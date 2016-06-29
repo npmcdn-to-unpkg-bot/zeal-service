@@ -48,13 +48,13 @@ public class AlbumTest {
         List<Picture> pictures = new ArrayList<>();
         Picture picture1 = new Picture();
         picture1.setDescription("");
-        picture1.setUrl("http://www.picture.com/1");
+        picture1.setUrl("http://www.worker.com/1");
         picture1.setAlbum(album);
         pictureDao.insert(picture1);
 
         Picture picture2 = new Picture();
         picture2.setDescription("");
-        picture2.setUrl("http://www.picture.com/2");
+        picture2.setUrl("http://www.worker.com/2");
         picture2.setAlbum(album);
         pictureDao.insert(picture2);
         //pictures.add(picture1);

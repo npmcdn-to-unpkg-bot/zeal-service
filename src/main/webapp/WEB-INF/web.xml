@@ -43,6 +43,7 @@
         <init-param>
             <param-name>exclude-urls</param-name>
             <param-value>
+                /app/*
                 /userinfo/login
                 /userinfo/logout
                 /userinfo/register
@@ -100,4 +101,6 @@
     <session-config>
         <session-timeout>10</session-timeout>
     </session-config>
+
+
 </web-app>
