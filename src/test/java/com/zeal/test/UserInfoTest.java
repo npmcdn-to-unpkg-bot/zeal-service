@@ -3,6 +3,7 @@ package com.zeal.test;
 import com.zeal.entity.UserInfo;
 import com.zeal.http.request.user.UserRegisterRequest;
 import com.zeal.service.UserInfoService;
+import com.zeal.vo.user.UserInfoVO;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +27,7 @@ public class UserInfoTest {
         registerRequest.loginName = "5864";
         registerRequest.password = "123456";
         registerRequest.phoneNumber = "15195952861";
-        UserInfo userInfo = userInfoService.register(registerRequest);
+        UserInfoVO userInfo = userInfoService.register(registerRequest);
         Assert.assertTrue(userInfo.getId() != 0);
     }
 }

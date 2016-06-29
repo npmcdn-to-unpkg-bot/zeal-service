@@ -38,8 +38,23 @@ public abstract class AbstractBaseDao<T extends BaseEntity> implements BaseDao<T
 
     @Override
     @Transactional
-    public void save(T t) {
+    public void insert(T t) {
         entityManager().persist(t);
+        entityManager().flush();
+    }
+
+    @Override
+    @Transactional
+    public void batchInsert(List<T> entities) {
+        if (entities != null && !entities.isEmpty()) {
+            for (int i = 0; i < entities.size(); i++) {
+                entityManager().persist(entities.get(i));
+                if (i % 50 == 0) {
+                    entityManager().flush();
+                    entityManager().clear();
+                }
+            }
+        }
     }
 
     @Override

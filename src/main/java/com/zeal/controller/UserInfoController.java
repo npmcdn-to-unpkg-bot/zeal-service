@@ -1,12 +1,11 @@
 package com.zeal.controller;
 
-import com.zeal.entity.UserInfo;
 import com.zeal.http.request.user.UserLoginRequest;
 import com.zeal.http.request.user.UserRegisterRequest;
 import com.zeal.http.response.Response;
 import com.zeal.service.UserInfoService;
 import com.zeal.utils.SessionUtils;
-import com.zeal.utils.StringUtils;
+import com.zeal.vo.user.UserInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -43,11 +42,11 @@ public class UserInfoController {
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public Response login(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest httpServletRequest) {
-        UserInfo userInfo = userInfoService.login(userLoginRequest);
+        UserInfoVO userInfo = userInfoService.login(userLoginRequest);
         if (userInfo == null) {
             return new Response.Builder().failed().result(null).message("用户不存在，请检查用户名、密码是否正确").build();
         }
-        SessionUtils.setAttribute(httpServletRequest, SessionUtils.KEY_USERINFO, userInfo);
+        SessionUtils.setUserInfo(httpServletRequest,userInfo);
         return new Response.Builder().success().result(userInfo).build();
     }
 
@@ -61,7 +60,7 @@ public class UserInfoController {
     @RequestMapping(value = "/logout", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public Response logout(HttpServletRequest httpServletRequest) {
-        SessionUtils.ivalidate(httpServletRequest);
+        SessionUtils.invalidate(httpServletRequest);
         return new Response.Builder().success().build();
     }
 
@@ -74,7 +73,7 @@ public class UserInfoController {
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public Response register(@RequestBody UserRegisterRequest userRegisterRequest) {
-        UserInfo userInfo = userInfoService.register(userRegisterRequest);
+        UserInfoVO userInfo = userInfoService.register(userRegisterRequest);
         if (userInfo == null) {
             return new Response.Builder().failed().result(null).message("注册失败").build();
         }

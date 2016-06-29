@@ -2,6 +2,7 @@ package com.zeal.service;
 
 import com.zeal.common.PagedList;
 import com.zeal.entity.Album;
+import com.zeal.vo.album.AlbumVO;
 
 import java.util.List;
 
@@ -10,9 +11,19 @@ import java.util.List;
  */
 public interface AlbumService {
 
-    PagedList<Album> page(int page, int pageSize);
+    PagedList<AlbumVO> paged(int page, int pageSize);
 
-    Album find(long id);
+    AlbumVO find(long id);
 
-    List<Album> findAll();
+    List<AlbumVO> findAll();
+
+    void publish(long id, long userId);
+
+    void unPublish(long id, long userId);
+
+    PagedList<AlbumVO> published(int page, int pageSize);
+
+    PagedList<AlbumVO> pagedByUserInfoId(int page, int pageSize, long userInfoId);
+
+    void delete(long id, long userInfoId);
 }

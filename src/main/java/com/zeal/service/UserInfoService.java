@@ -1,8 +1,8 @@
 package com.zeal.service;
 
-import com.zeal.entity.UserInfo;
 import com.zeal.http.request.user.UserLoginRequest;
 import com.zeal.http.request.user.UserRegisterRequest;
+import com.zeal.vo.user.UserInfoVO;
 
 /**
  * Created by yang_shoulai on 2016/6/27.
@@ -15,7 +15,7 @@ public interface UserInfoService {
      * @param id 用户ID
      * @return 用户信息
      */
-    UserInfo find(long id);
+    UserInfoVO find(long id);
 
     /**
      * 用户登录
@@ -23,7 +23,7 @@ public interface UserInfoService {
      * @param userLoginRequest 用户登录请求
      * @return 用户信息
      */
-    UserInfo login(UserLoginRequest userLoginRequest);
+    UserInfoVO login(UserLoginRequest userLoginRequest);
 
     /**
      * 用户注册
@@ -31,5 +31,5 @@ public interface UserInfoService {
      * @param userRegisterRequest 用户注册信息
      * @return 用户信息
      */
-    UserInfo register(UserRegisterRequest userRegisterRequest);
+    UserInfoVO register(UserRegisterRequest userRegisterRequest);
 }

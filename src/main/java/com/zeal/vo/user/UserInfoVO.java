@@ -1,0 +1,58 @@
+package com.zeal.vo.user;
+
+import com.zeal.entity.UserInfo;
+
+/**
+ * Created by Administrator on 6/29/2016.
+ */
+public class UserInfoVO {
+
+    private long id;
+
+    private String loginName;
+
+    private String nickName;
+
+    private String phoneNumber;
+
+    public UserInfoVO(UserInfo userInfo) {
+        if (userInfo != null) {
+            this.id = userInfo.getId();
+            this.loginName = userInfo.getLoginName();
+            this.nickName = userInfo.getNickName();
+            this.phoneNumber = userInfo.getPhoneNumber();
+        }
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+}

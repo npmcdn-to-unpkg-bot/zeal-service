@@ -46,9 +46,12 @@
                 /userinfo/login
                 /userinfo/logout
                 /userinfo/register
+                /userinfo/\d{1,}
                 /resources/*
                 /album/all
                 /album/list
+                /album/\d{1,}
+                /picture/\d{1,}
             </param-value>
         </init-param>
     </filter>

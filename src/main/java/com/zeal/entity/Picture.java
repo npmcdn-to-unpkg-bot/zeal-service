@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by yang_shoulai on 2016/6/28.
  */
 @Entity
-@Table(name = "picture")
+@Table(name = "t_picture")
 public class Picture extends BaseEntity {
 
     @Column(name = "description", nullable = true, unique = false, length = 255)
@@ -16,7 +16,7 @@ public class Picture extends BaseEntity {
     private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "album")
+    @JoinColumn(name = "album", nullable = false)
     private Album album;
 
     public String getDescription() {

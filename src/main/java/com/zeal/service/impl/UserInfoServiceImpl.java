@@ -8,6 +8,7 @@ import com.zeal.http.request.user.UserLoginRequest;
 import com.zeal.http.request.user.UserRegisterRequest;
 import com.zeal.service.UserInfoService;
 import com.zeal.utils.StringUtils;
+import com.zeal.vo.user.UserInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,20 +23,24 @@ public class UserInfoServiceImpl implements UserInfoService {
     private UserInfoDao userInfoDao;
 
     @Override
-    public UserInfo find(long id) {
-        return userInfoDao.find(id);
+    public UserInfoVO find(long id) {
+        UserInfo userInfo = userInfoDao.find(id);
+        if (userInfo == null) return null;
+        return new UserInfoVO(userInfo);
     }
 
     @Override
-    public UserInfo login(UserLoginRequest userLoginRequest) {
+    public UserInfoVO login(UserLoginRequest userLoginRequest) {
         if (userLoginRequest == null || StringUtils.isEmpty(userLoginRequest.loginName) || StringUtils.isEmpty(userLoginRequest.password)) {
             throw new BizException(BizExceptionCode.User.LOGIN_EMPTY_REQUEST, "登录名或者密码为空");
         }
-        return userInfoDao.findByLoginNameAndPasswordEquals(userLoginRequest.loginName, userLoginRequest.password);
+        UserInfo userInfo = userInfoDao.findByLoginNameAndPasswordEquals(userLoginRequest.loginName, StringUtils.toMD5(userLoginRequest.password));
+        if (userInfo == null) return null;
+        return new UserInfoVO(userInfo);
     }
 
     @Override
-    public UserInfo register(UserRegisterRequest userRegisterRequest) {
+    public UserInfoVO register(UserRegisterRequest userRegisterRequest) {
         if (userRegisterRequest == null) {
             throw new BizException(BizExceptionCode.User.REGISTER_EMPTY_REQUEST, "注册信息为空");
         }
@@ -59,10 +64,10 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
         UserInfo userInfo = new UserInfo();
         userInfo.setLoginName(userRegisterRequest.loginName);
-        userInfo.setPassword(userRegisterRequest.password);
+        userInfo.setPassword(StringUtils.toMD5(userRegisterRequest.password));
         userInfo.setNickName(userRegisterRequest.nickName);
         userInfo.setPhoneNumber(userRegisterRequest.phoneNumber);
-        userInfoDao.save(userInfo);
-        return userInfo;
+        userInfoDao.insert(userInfo);
+        return new UserInfoVO(userInfo);
     }
 }

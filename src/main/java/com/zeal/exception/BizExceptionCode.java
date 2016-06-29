@@ -49,4 +49,11 @@ public class BizExceptionCode {
     }
 
 
+    public static class System {
+        /**
+         * 权限不足
+         */
+        public static final int PERMISSION_INSUFFICIENT = 200001001;
+    }
+
 }

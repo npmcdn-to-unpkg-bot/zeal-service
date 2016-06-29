@@ -1,5 +1,7 @@
 package com.zeal.utils;
 
+import com.zeal.vo.user.UserInfoVO;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -24,7 +26,15 @@ public class SessionUtils {
         request.getSession().removeAttribute(key);
     }
 
-    public static void ivalidate(HttpServletRequest request) {
+    public static void setUserInfo(HttpServletRequest request, UserInfoVO userInfoVO) {
+        setAttribute(request, KEY_USERINFO, userInfoVO);
+    }
+
+    public static UserInfoVO getUserInfo(HttpServletRequest request) {
+        return (UserInfoVO) getAttribute(request, KEY_USERINFO);
+    }
+
+    public static void invalidate(HttpServletRequest request) {
         request.getSession().invalidate();
     }
 }

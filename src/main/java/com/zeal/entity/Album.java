@@ -8,7 +8,7 @@ import java.util.List;
  * Created by yang_shoulai on 2016/6/28.
  */
 @Entity
-@Table(name = "album")
+@Table(name = "t_album")
 public class Album extends BaseEntity {
 
     @Column(name = "name", nullable = false, unique = false, length = 255)
@@ -17,18 +17,22 @@ public class Album extends BaseEntity {
     @Column(name = "description", nullable = true, unique = false, length = 1000)
     private String description;
 
-    @Temporal(TemporalType.DATE)
+    @Column(name = "published", nullable = false)
+    private boolean isPublished;
+
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date", nullable = false, unique = false)
     private Date createDate;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "update_date", nullable = false, unique = false)
     private Date updateDate;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, mappedBy = "album")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "album")
     private List<Picture> pictures;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
     private UserInfo userInfo;
 
     public String getName() {
@@ -77,5 +81,13 @@ public class Album extends BaseEntity {
 
     public void setUserInfo(UserInfo userInfo) {
         this.userInfo = userInfo;
+    }
+
+    public boolean isPublished() {
+        return isPublished;
+    }
+
+    public void setPublished(boolean published) {
+        isPublished = published;
     }
 }

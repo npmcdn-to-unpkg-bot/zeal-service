@@ -50,7 +50,7 @@ public class AlbumDao extends AbstractBaseDao<Album> {
      * @param pageSize   分页每页数量
      * @return 分页信息
      */
-    public PagedList<Album> pagedByUserInfoId(Long userInfoId, int page, int pageSize) {
+    public PagedList<Album> pagedByUserInfoId(long userInfoId, int page, int pageSize) {
         TypedQuery<Album> query = this.entityManager().createQuery("SELECT o FROM Album o where o.userInfo.id = :userInfoId ORDER BY o.createDate desc ", Album.class);
         query.setFirstResult((page - 1) * pageSize);
         query.setMaxResults(pageSize);
@@ -73,4 +73,47 @@ public class AlbumDao extends AbstractBaseDao<Album> {
         query.setParameter("userInfoId", userInfoId);
         return query.getSingleResult();
     }
+
+
+    /**
+     * 根据相册ID和用户ID查询相册信息
+     *
+     * @param id
+     * @param userId
+     * @return
+     */
+    public Album findByIdAndUserId(long id, long userId) {
+        TypedQuery<Album> query = this.entityManager().createQuery("SELECT count(o) FROM Album o where o.userInfo.id = :userInfoId and o.id = :id ORDER BY o.createDate desc ", Album.class);
+        query.setParameter("userInfoId", userId);
+        query.setParameter("id", id);
+        return query.getSingleResult();
+    }
+
+    /**
+     * 根据相册发布状态获取相册列表信息
+     *
+     * @param page      开始页码 从 1 开始
+     * @param pageSize  每页数量
+     * @param published 是否发布
+     * @return
+     */
+    public PagedList<Album> pagedByPublishStatus(int page, int pageSize, boolean published) {
+        TypedQuery<Album> query = this.entityManager().createQuery("SELECT o FROM Album o where o.isPublished = :isPublished ORDER BY o.createDate desc ", Album.class);
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
+        query.setParameter("isPublished", published);
+        PagedList<Album> pagedList = new PagedList<>();
+        pagedList.setList(query.getResultList());
+        pagedList.setSize(pageSize);
+        pagedList.setPage(page);
+        pagedList.setTotalSize(countByPublishStatus(published));
+        return pagedList;
+    }
+
+    public long countByPublishStatus(boolean published) {
+        TypedQuery<Long> query = this.entityManager().createQuery("SELECT count(o) FROM Album o where o.isPublished = :isPublished ORDER BY o.createDate desc ", Long.class);
+        query.setParameter("isPublished", published);
+        return query.getSingleResult();
+    }
+
 }

@@ -23,7 +23,14 @@ public interface BaseDao<T extends BaseEntity> {
      *
      * @param t
      */
-    void save(T t);
+    void insert(T t);
+
+    /**
+     * 批量插入
+     *
+     * @param entities
+     */
+    void batchInsert(List<T> entities);
 
     /**
      * 更新实体

@@ -6,6 +6,7 @@ import com.zeal.utils.LogUtils;
 import com.zeal.utils.SessionUtils;
 import com.zeal.utils.StringUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by yang_shoulai on 2015/10/15.
@@ -22,11 +25,13 @@ import java.util.List;
  */
 public class SessionFilter implements Filter {
 
-    private static final String SPLITER = "[,;\r\n]";
+    private static final String SPLITER = "[;\r\n]";
 
     protected String[] excludes = new String[0];
 
     protected PathMatcher pathMatcher = new AntPathMatcher();
+
+    private List<Pattern> excludePatterns = new ArrayList<>();
 
     public void init(FilterConfig filterConfig) throws ServletException {
         LogUtils.error(SessionFilter.class, "/***** SessionFilter initialization start *****");
@@ -37,6 +42,7 @@ public class SessionFilter implements Filter {
             for (String url : array) {
                 if (!url.trim().isEmpty()) {
                     list.add(url.trim());
+                    excludePatterns.add(Pattern.compile(url.trim()));
                 }
             }
         }
@@ -59,9 +65,10 @@ public class SessionFilter implements Filter {
         if (LogUtils.isDebugEnable()) {
             LogUtils.debug(SessionFilter.class, "do filter with servlet path = " + servletPath);
         }
-        if (isBlack(servletPath)) {
+        if (false && isBlack(servletPath)) {
             Object userInfo = SessionUtils.getAttribute(request, SessionUtils.KEY_USERINFO);
             if (userInfo == null) {
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                 response.setStatus(HttpStatus.OK.value());
                 response.getWriter().write(Response.UNAUTHENTICATED.toJson());
                 return;
@@ -71,8 +78,8 @@ public class SessionFilter implements Filter {
     }
 
     private boolean isBlack(String servletPath) {
-        for (String exclude : excludes) {
-            if (pathMatcher.match(exclude, servletPath)) {
+        for (Pattern pattern : excludePatterns) {
+            if (pattern.matcher(servletPath).matches()) {
                 return false;
             }
         }
