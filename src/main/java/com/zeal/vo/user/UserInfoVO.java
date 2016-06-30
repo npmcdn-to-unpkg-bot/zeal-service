@@ -1,6 +1,7 @@
 package com.zeal.vo.user;
 
 import com.zeal.entity.UserInfo;
+import com.zeal.utils.StringUtils;
 
 /**
  * Created by Administrator on 6/29/2016.
@@ -14,6 +15,8 @@ public class UserInfoVO {
     private String nickName;
 
     private String phoneNumber;
+
+    private String password;
 
     public UserInfoVO(UserInfo userInfo) {
         if (userInfo != null) {

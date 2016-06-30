@@ -46,7 +46,7 @@ public class UserInfoController {
         if (userInfo == null) {
             return new Response.Builder().failed().result(null).message("用户不存在，请检查用户名、密码是否正确").build();
         }
-        SessionUtils.setUserInfo(httpServletRequest,userInfo);
+        SessionUtils.setUserInfo(httpServletRequest, userInfo);
         return new Response.Builder().success().result(userInfo).build();
     }
 
@@ -81,4 +81,13 @@ public class UserInfoController {
     }
 
 
+    @RequestMapping(value = "/reload", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public Response reload(HttpServletRequest httpServletRequest) {
+        UserInfoVO userInfo = SessionUtils.getUserInfo(httpServletRequest);
+        if (userInfo == null) {
+            return new Response.Builder().authFailed().result(null).message("用户已经失效，请从新登录").build();
+        }
+        return new Response.Builder().success().result(userInfo).build();
+    }
 }

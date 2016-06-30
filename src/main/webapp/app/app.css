@@ -17,11 +17,27 @@ body {
 
 .album img {
     width: 100%;
-    height: 180px;
+    height: 200px;
 }
 
 .album .album-label {
-    text-decoration: none;
     text-overflow: ellipsis;
     overflow: hidden;
+    display: block;
+    height: 18px;
+    line-height: 18px;
+    font-size: 12px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.footer {
+    margin-top: 100px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    border-top: 1px solid #e5e5e5;
+}
+
+.modal-album-display .modal-lg {
+    width: 1200px;
 }

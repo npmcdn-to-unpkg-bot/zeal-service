@@ -1,0 +1,16 @@
+<div class="container">
+    <h2 class="text-center">{{album.name}}</h2>
+    <div class="row">
+        <div class="col-lg-offset-8 col-lg-2 text-right">
+            <span class="text-info">创建日期：</span> {{album.createDate | date:'yyyy-MM-dd'}}
+        </div>
+        <div class="col-lg-2 text-right">
+            <span class="text-info">作者：</span>{{album.userInfo.nickName}}
+        </div>
+    </div>
+    <hr/>
+    <div class="row text-center" ng-repeat="picture in album.pictures" style="margin-top: 10px;">
+        <img ng-src="{{picture.url}}">
+    </div>
+    <div class="footer"></div>
+</div>

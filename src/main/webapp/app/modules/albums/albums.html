@@ -1,0 +1,20 @@
+<div class="text-center">
+    <div class="row" ng-repeat="albumRow in albums">
+        <div class="col-md-2" ng-repeat="album in albumRow">
+            <div class="album">
+                <div class="pointer" ng-click="onClickAlbum(album)">
+                    <img ng-src="{{album.url}}">
+                </div>
+                <div class="text-left  album-label">
+                    <span class="text-muted pointer" ng-click="onClickAlbum(album)">{{album.name}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-hide="totalSize <= 0">
+        <uib-pagination total-items="totalSize" ng-model="page" ng-change="onPageChanged()" first-text="第一页"
+                        last-text="最后一页" next-text="下一页" previous-text="上一页" max-size="10" boundary-links="true"
+                        boundary-link-numbers="true"
+                        items-per-page="pageSize"></uib-pagination>
+    </div>
+</div>

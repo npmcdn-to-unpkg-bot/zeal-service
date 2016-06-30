@@ -43,14 +43,16 @@
         <init-param>
             <param-name>exclude-urls</param-name>
             <param-value>
-                /app/*
+                /app/.*
                 /userinfo/login
                 /userinfo/logout
                 /userinfo/register
                 /userinfo/\d{1,}
-                /resources/*
+                /userinfo/reload
+                /resources/.*
                 /album/all
                 /album/list
+                /album/published
                 /album/\d{1,}
                 /picture/\d{1,}
             </param-value>

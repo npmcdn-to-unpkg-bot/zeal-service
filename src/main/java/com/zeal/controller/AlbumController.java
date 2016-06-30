@@ -23,7 +23,7 @@ public class AlbumController {
 
     @RequestMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Response pagedList(@RequestParam(value = "paged", required = false, defaultValue = "1") int page,
+    public Response pagedList(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
                               @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
         return new Response.Builder().success().result(albumService.paged(page, pageSize)).build();
     }
@@ -58,7 +58,7 @@ public class AlbumController {
 
     @RequestMapping(value = "/published", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Response published(@RequestParam(value = "paged", required = false, defaultValue = "1") int page,
+    public Response published(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
                               @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
         return new Response.Builder().success().result(albumService.published(page, pageSize)).build();
     }

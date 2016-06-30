@@ -77,4 +77,8 @@ public class StringUtils {
         return m.matches();
     }
 
+
+    public static void main(String[] args) {
+        System.out.println(toMD5("123456"));
+    }
 }

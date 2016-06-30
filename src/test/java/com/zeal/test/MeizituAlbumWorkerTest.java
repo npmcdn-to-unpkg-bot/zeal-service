@@ -22,7 +22,7 @@ public class MeizituAlbumWorkerTest {
 
     @Test
     public void test() {
-        //albumWorkerExecutor.execute(new MeizituAlbumWorker("xinggan.html"));
+        albumWorkerExecutor.execute(new MeizituAlbumWorker("xinggan.html"));
 
         albumWorkerExecutor.execute(new MeizituAlbumWorker("sifang.html"));
 

@@ -10,10 +10,15 @@
         $stateProvider.state('home', {
             url: "/home",
             templateUrl: "modules/home/home.html"
+        }).state('albums', {
+            url: "/albums",
+            templateUrl: "modules/albums/albums.html",
+            controller: 'AlbumController'
         }).state('pictures', {
             url: "/pictures",
-            templateUrl: "modules/picture/pictures.html",
-            controller: 'PictureController'
+            templateUrl: "modules/albums/pictures.html",
+            controller: 'AlbumDisplayController',
+            params: {album: null}
         }).state('movies', {
             url: "/movies",
             templateUrl: "modules/movie/movies.html"
@@ -33,9 +38,9 @@
         $httpProvider.interceptors.push('HttpInterceptor');
     }]);
 
-    angular.module("app").controller('IndexController', ['UserService', '$scope', function (UserService, $scope) {
+    angular.module("app").controller('IndexController', ['UserService', '$scope', '$rootScope', function (UserService, $scope, $rootScope) {
 
-        $scope.isLogin  = false;
+        $scope.isLogin = false;
         $scope.username = null;
 
         $scope.showLoginModal = function () {
@@ -52,12 +57,17 @@
 
         $scope.$on('userStateChange', function (event, data) {
             if (data) {
-                $scope.isLogin  = true;
+                $scope.isLogin = true;
                 $scope.username = data.username;
             } else {
-                $scope.isLogin  = false;
+                $scope.isLogin = false;
                 $scope.username = null;
             }
+        });
+
+        UserService.reloadUserInfo().success(function (data) {
+            $rootScope.UserInfo = {username: data.nickName};
+            $rootScope.$broadcast('userStateChange', $rootScope.UserInfo);
         });
     }]);
 

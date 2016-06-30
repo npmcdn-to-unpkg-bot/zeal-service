@@ -2,7 +2,7 @@
 <html lang="en" ng-app="app">
 <head>
     <meta charset="UTF-8">
-    <title>Angular JS</title>
+    <title>Zeal</title>
 
     <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="app.css">
@@ -14,12 +14,13 @@
     <script src="app.js"></script>
     <script src="common/services/cookie.service.js"></script>
     <script src="common/interceptors/http.interceptor.js"></script>
+    <script src="common/services/http.service.js"></script>
     <script src="modules/user/user.controller.js"></script>
     <script src="modules/user/user.service.js"></script>
-    <script src="modules/picture/picture.controller.js"></script>
+    <script src="modules/albums/albums.controller.js"></script>
 </head>
 <body>
-<div class="container" ng-controller="IndexController">
+<div ng-controller="IndexController">
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -29,7 +30,7 @@
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li role="presentation" ui-sref-active="active"><a ui-sref="home">首页</a></li>
-                    <li role="presentation" ui-sref-active="active"><a ui-sref="pictures">图片</a></li>
+                    <li role="presentation" ui-sref-active="active"><a ui-sref="albums">热门相册</a></li>
                     <li role="presentation" ui-sref-active="active"><a ui-sref="movies">视频</a></li>
                     <li role="presentation" ui-sref-active="active"><a ui-sref="jokes">段子</a></li>
                     <li role="presentation" ui-sref-active="active"><a ui-sref="stories">故事</a></li>
@@ -50,7 +51,13 @@
             </div>
         </div>
     </nav>
-    <div id="module-container" ui-view></div>
+    <div id="module-container" class="container" ui-view></div>
+    <footer class="footer">
+        <div class="container text-center">
+            <p>Designed and built by <a href="#">@mdo</a> and <a href="#">@fat</a>.</p>
+            <p>Please contact with me if you like it!</p>
+        </div>
+    </footer>
 </div>
 </body>
 </html>

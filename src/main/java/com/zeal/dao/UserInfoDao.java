@@ -25,7 +25,8 @@ public class UserInfoDao extends AbstractBaseDao<UserInfo> {
         TypedQuery<UserInfo> query = this.entityManager().createQuery(sql, UserInfo.class);
         query.setParameter("loginName", loginName);
         query.setParameter("password", password);
-        return query.getSingleResult();
+        List<UserInfo> list = query.getResultList();
+        return list.isEmpty() ? null : list.get(0);
     }
 
     /**

@@ -65,7 +65,7 @@ public class SessionFilter implements Filter {
         if (LogUtils.isDebugEnable()) {
             LogUtils.debug(SessionFilter.class, "do filter with servlet path = " + servletPath);
         }
-        if (false && isBlack(servletPath)) {
+        if (isBlack(servletPath)) {
             Object userInfo = SessionUtils.getAttribute(request, SessionUtils.KEY_USERINFO);
             if (userInfo == null) {
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
