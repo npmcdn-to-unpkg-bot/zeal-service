@@ -5,9 +5,10 @@
 (function () {
     angular.module("app").controller('AlbumController', ['$scope', 'HttpService', '$log', '$state', '$uibModal',
         function ($scope, HttpService, $log, $state, $uibModal) {
+
             $scope.albums = [];
-            $scope.rowSize = 6;
-            $scope.row = 6;
+            $scope.rowSize = 4;
+            $scope.row = 10;
             $scope.pageSize = $scope.rowSize * $scope.row;
             $scope.page = 1;
             $scope.totalSize = 0;
@@ -72,6 +73,11 @@
     angular.module("app").controller('AlbumDisplayController', ['$scope', 'HttpService', '$log', '$stateParams', 'CookieService', 'album',
         function ($scope, HttpService, $log, $stateParams, CookieService, album) {
             $scope.album = album;
+            $scope.slides = album.pictures;
+            $scope.carouselMode = true;
+            $scope.active = 0;
+            $scope.interval = 2000;
+            $scope.noWrapMode = false;
             /*if ($stateParams.album) {
              CookieService.put(CookieService.KEY_CONSTANT.album_last_visited, $stateParams.album);
              $scope.album = $stateParams.album;

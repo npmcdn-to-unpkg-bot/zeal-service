@@ -33,7 +33,7 @@ public interface AlbumWorker {
      * @param document
      * @return
      */
-    String nextUrl(Document document);
+    String nextUrl(Document document, String currentUrl);
 
     /**
      * 获取当前文档中的相册信息
@@ -41,7 +41,7 @@ public interface AlbumWorker {
      * @param document
      * @return 相册信息map, key为相册的网页连接，value为相册基本信息
      */
-    Map<String, Album> resoveAlbums(Document document);
+    Map<String, Album> resoveAlbums(Document document, String currentUrl);
 
     /**
      * 获取当前文档中的图片信息
@@ -49,7 +49,7 @@ public interface AlbumWorker {
      * @param document
      * @return
      */
-    List<Picture> resovePictures(Document document);
+    List<Picture> resovePictures(Document document, String currentUrl);
 
 
 }

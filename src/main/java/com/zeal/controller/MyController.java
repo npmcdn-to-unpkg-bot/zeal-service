@@ -24,7 +24,7 @@ public class MyController {
 
     @RequestMapping(value = "/albums", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Response albums(@RequestParam(value = "paged", required = false, defaultValue = "1") int page,
+    public Response albums(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
                            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
                            HttpServletRequest request) {
         return new Response.Builder().success().result(albumService.pagedByUserInfoId(page, pageSize, SessionUtils.getUserInfo(request).getId())).build();

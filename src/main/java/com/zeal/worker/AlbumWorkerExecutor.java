@@ -44,12 +44,12 @@ public class AlbumWorkerExecutor {
             try {
                 Document document = Jsoup.connect(url).timeout(10000).get();
                 if (document != null) {
-                    Map<String, Album> albumMap = albumWorker.resoveAlbums(document);
+                    Map<String, Album> albumMap = albumWorker.resoveAlbums(document, url);
                     if (albumMap != null && !albumMap.isEmpty()) {
                         for (Map.Entry<String, Album> entry : albumMap.entrySet()) {
                             Document picDoc = Jsoup.connect(entry.getKey()).timeout(10000).get();
                             if (picDoc != null) {
-                                List<Picture> pictures = albumWorker.resovePictures(picDoc);
+                                List<Picture> pictures = albumWorker.resovePictures(picDoc, entry.getKey());
                                 if (pictures != null && !pictures.isEmpty()) {
                                     entry.getValue().setPictures(pictures);
                                     albumList.add(entry.getValue());
@@ -64,8 +64,12 @@ public class AlbumWorkerExecutor {
                     } else {
                         LogUtils.error(this.getClass(), "无法解析相册列表");
                     }
+                    if (!albumList.isEmpty()) {
+                        saveAlbum(albumList);
+                        albumList.clear();
+                    }
                     if (albumWorker.hasNext(document)) {
-                        url = albumWorker.nextUrl(document);
+                        url = albumWorker.nextUrl(document, url);
                         if (StringUtils.isEmpty(url)) {
                             break;
                         }
@@ -82,7 +86,6 @@ public class AlbumWorkerExecutor {
                 e.printStackTrace();
             }
         }
-        saveAlbum(albumList);
     }
 
     private void saveAlbum(List<Album> albums) {

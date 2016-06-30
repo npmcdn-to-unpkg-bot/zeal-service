@@ -1,1 +1,1 @@
-INSERT INTO t_user_info(id, version, login_name, nick_name, password, phone_number) VALUES (1, 0, 'admin', 'admin', '123456', '15195952860');
+INSERT INTO t_user_info(id, version, login_name, nick_name, password, phone_number) VALUES (1, 0, 'admin', 'Terrorblade', 'E10ADC3949BA59ABBE56E057F20F883E', '15195952860');

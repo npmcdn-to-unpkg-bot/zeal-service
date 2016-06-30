@@ -49,7 +49,7 @@ public class MeizituAlbumWorker implements AlbumWorker {
     }
 
     @Override
-    public String nextUrl(Document document) {
+    public String nextUrl(Document document, String currentUrl) {
         if (document == null) return null;
         Elements navigationElement = document.select(".navigation");
         if (navigationElement != null && navigationElement.size() > 0) {
@@ -67,7 +67,7 @@ public class MeizituAlbumWorker implements AlbumWorker {
     }
 
     @Override
-    public Map<String, Album> resoveAlbums(Document document) {
+    public Map<String, Album> resoveAlbums(Document document, String currentUrl) {
         Map<String, Album> map = new HashMap<>();
         Element main = document.getElementById("maincontent");
         if (main != null) {
@@ -100,7 +100,7 @@ public class MeizituAlbumWorker implements AlbumWorker {
     }
 
     @Override
-    public List<Picture> resovePictures(Document document) {
+    public List<Picture> resovePictures(Document document, String currentUrl) {
         List<Picture> pictures = new ArrayList<>();
         Elements elements = document.select("#picture img");
         if (elements == null || elements.isEmpty()) {

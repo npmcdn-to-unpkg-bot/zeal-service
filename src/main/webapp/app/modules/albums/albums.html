@@ -1,12 +1,14 @@
 <div class="text-center">
     <div class="row" ng-repeat="albumRow in albums">
-        <div class="col-md-2" ng-repeat="album in albumRow">
+        <div class="col-md-3" ng-repeat="album in albumRow">
             <div class="album">
-                <div class="pointer" ng-click="onClickAlbum(album)">
-                    <img ng-src="{{album.url}}">
-                </div>
-                <div class="text-left  album-label">
-                    <span class="text-muted pointer" ng-click="onClickAlbum(album)">{{album.name}}</span>
+                <div style="height: 360px;">
+                    <div class="pointer" ng-click="onClickAlbum(album)" style="height: 340px;">
+                        <img ng-src="{{album.url}}">
+                    </div>
+                    <div class="text-left  album-label">
+                        <span class="text-muted pointer" ng-click="onClickAlbum(album)">{{album.name}}</span>
+                    </div>
                 </div>
             </div>
         </div>
