@@ -1,0 +1,61 @@
+<div>
+    <div>
+        <div class="btn-group">
+            <button class="btn btn-default" ng-click="addModal()">新增</button>
+        </div>
+    </div>
+    <div>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th class="text-center col-md-1">#</th>
+                <th class="text-center col-md-4">名称</th>
+                <th class="text-center col-md-2">创建日期</th>
+                <th class="text-center col-md-1">是否发布</th>
+                <th class="text-center col-md-2"></th>
+                <th class="text-center col-md-1"></th>
+                <th class="text-center col-md-1"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="album in albums">
+                <td class="text-center text-muted" style="vertical-align: middle;">{{$index+1}}</td>
+                <td class="text-left pointer text-primary" style="vertical-align: middle;"
+                    ng-click="onAlbumClick(album)">{{album.name}}
+                </td>
+                <td class="text-center" style="vertical-align: middle;">{{album.createDate | date : "yyyy-MM-dd"}}</td>
+                <td class="text-center text-info" style="vertical-align: middle;">
+                    <span ng-show="album.published == true">是</span>
+                    <span ng-show="album.published == false">否</span>
+                </td>
+                <td class="text-center" style="vertical-align: middle;">
+                    <button ng-show="album.published == true" class="btn btn-warning" ng-click="unpublish(album)">
+                        取消发布
+                    </button>
+                    <button ng-show="album.published == false" class="btn btn-primary" ng-click="publish(album)">
+                        发布相册
+                    </button>
+                </td>
+                <td class="text-center" style="vertical-align: middle;">
+                    <button class="btn btn-warning" ng-click="updateModal(album)">
+                        编辑
+                    </button>
+                </td>
+                <td class="text-center" style="vertical-align: middle;">
+                    <button class="btn btn-danger" ng-click="delete(album)">
+                        删除
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div ng-hide="totalSize <= 0" class="text-center">
+            <uib-pagination total-items="totalSize" ng-model="page" ng-change="onPageChanged()" first-text="第一页"
+                            last-text="最后一页" next-text="下一页" previous-text="上一页" max-size="10" boundary-links="true"
+                            boundary-link-numbers="true"
+                            items-per-page="pageSize">
+
+            </uib-pagination>
+        </div>
+    </div>
+</div>

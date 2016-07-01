@@ -3,8 +3,8 @@
  */
 
 (function () {
-    angular.module("app").controller('AlbumController', ['$scope', 'HttpService', '$log', '$state', '$uibModal',
-        function ($scope, HttpService, $log, $state, $uibModal) {
+    angular.module("app").controller('AlbumController', ['$scope', 'HttpService', '$log', '$state', '$uibModal', 'AlbumService',
+        function ($scope, HttpService, $log, $state, $uibModal, AlbumService) {
 
             $scope.albums = [];
             $scope.rowSize = 4;
@@ -14,10 +14,7 @@
             $scope.totalSize = 0;
 
             $scope.getAlbums = function () {
-                HttpService.http({
-                    method: "GET",
-                    url: "/zeal/album/published?page=" + $scope.page + "&pageSize=" + $scope.pageSize
-                }).success(function (data) {
+                AlbumService.getPublishedAlbums($scope.page, $scope.pageSize).success(function (data) {
                     $scope.albums = [];
                     $scope.page = data.page;
                     $scope.totalSize = data.totalSize;
@@ -55,17 +52,7 @@
 
             $scope.onClickAlbum = function (album) {
                 //$state.go('pictures', {album: album});
-                $uibModal.open({
-                    templateUrl: 'modules/albums/pictures.html',
-                    size: 'lg',
-                    controller: 'AlbumDisplayController',
-                    resolve: {
-                        album: function () {
-                            return album;
-                        }
-                    },
-                    windowClass: "modal-album-display"
-                });
+                AlbumService.showAlbumModal(album);
             };
         }]);
 
@@ -78,11 +65,5 @@
             $scope.active = 0;
             $scope.interval = 2000;
             $scope.noWrapMode = false;
-            /*if ($stateParams.album) {
-             CookieService.put(CookieService.KEY_CONSTANT.album_last_visited, $stateParams.album);
-             $scope.album = $stateParams.album;
-             } else {
-             $scope.album = CookieService.get(CookieService.KEY_CONSTANT.album_last_visited);
-             }*/
         }]);
 })();

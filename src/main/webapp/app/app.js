@@ -3,7 +3,7 @@
  */
 
 (function () {
-    angular.module("app", ['ui.bootstrap', 'ui.router', 'ngCookies']);
+    angular.module("app", ['ui.bootstrap', 'ui.router', 'ngCookies', 'ngFileUpload']);
     angular.module("app").config(function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/home");
 
@@ -30,7 +30,21 @@
             templateUrl: "modules/story/stories.html"
         }).state('my', {
             url: "/my",
-            templateUrl: "modules/my/my.html"
+            templateUrl: "modules/my/my.html",
+            controller: 'MyController'
+        }).state('my.albums', {
+            url: "/albums",
+            templateUrl: "modules/my/albums/albums.html",
+            controller: 'MyAlbumsController'
+        }).state('my.stories', {
+            url: "/stories",
+            templateUrl: "modules/my/stories/stories.html"
+        }).state('my.movies', {
+            url: "/movies",
+            templateUrl: "modules/my/movies/movies.html"
+        }).state('my.jokes', {
+            url: "/jokes",
+            templateUrl: "modules/my/jokes/jokes.html"
         });
     });
 

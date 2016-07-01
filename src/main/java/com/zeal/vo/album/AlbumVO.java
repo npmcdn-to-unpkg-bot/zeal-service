@@ -25,6 +25,8 @@ public class AlbumVO {
 
     private String name;
 
+    private boolean isPublished;
+
     private List<PictureVO> pictures;
 
     public AlbumVO() {
@@ -41,6 +43,7 @@ public class AlbumVO {
             this.updateDate = album.getUpdateDate();
             this.description = album.getDescription();
             this.name = album.getName();
+            this.isPublished = album.isPublished();
             List<Picture> pictures = album.getPictures();
             if (pictures != null) {
                 List<PictureVO> pictureVOs = new ArrayList<>();
@@ -106,5 +109,13 @@ public class AlbumVO {
 
     public void setPictures(List<PictureVO> pictures) {
         this.pictures = pictures;
+    }
+
+    public boolean isPublished() {
+        return isPublished;
+    }
+
+    public void setPublished(boolean published) {
+        isPublished = published;
     }
 }

@@ -83,7 +83,7 @@ public class AlbumDao extends AbstractBaseDao<Album> {
      * @return
      */
     public Album findByIdAndUserId(long id, long userId) {
-        TypedQuery<Album> query = this.entityManager().createQuery("SELECT count(o) FROM Album o where o.userInfo.id = :userInfoId and o.id = :id ORDER BY o.createDate desc ", Album.class);
+        TypedQuery<Album> query = this.entityManager().createQuery("SELECT o FROM Album o where o.userInfo.id = :userInfoId and o.id = :id ORDER BY o.createDate desc ", Album.class);
         query.setParameter("userInfoId", userId);
         query.setParameter("id", id);
         return query.getSingleResult();

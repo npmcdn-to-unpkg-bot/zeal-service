@@ -68,8 +68,8 @@ public abstract class AbstractBaseDao<T extends BaseEntity> implements BaseDao<T
     @Override
     @Transactional
     public void delete(T t) {
-        if (this.entityManager().contains(this)) {
-            this.entityManager().remove(this);
+        if (this.entityManager().contains(t)) {
+            this.entityManager().remove(t);
         } else {
             T attached = find(t.getId());
             this.entityManager().remove(attached);
