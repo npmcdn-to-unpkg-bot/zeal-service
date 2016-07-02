@@ -34,7 +34,8 @@
                                     pictures: album.pictures,
                                     url: album.pictures[0].url,
                                     createDate: album.createDate,
-                                    userInfo: album.userInfo
+                                    userInfo: album.userInfo,
+                                    publishDate: album.publishDate
                                 }
                             );
                         }
@@ -66,4 +67,8 @@
             $scope.interval = 2000;
             $scope.noWrapMode = false;
         }]);
+
+    angular.module("app").controller('PictureDisplayController', function ($scope, picture) {
+        $scope.picture = picture;
+    });
 })();

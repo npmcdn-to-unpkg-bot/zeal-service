@@ -43,6 +43,7 @@
         <init-param>
             <param-name>exclude-urls</param-name>
             <param-value>
+                /
                 /app/.*
                 /userinfo/login
                 /userinfo/logout

@@ -21,12 +21,16 @@ public class Album extends BaseEntity {
     private boolean isPublished;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "create_date", nullable = false, unique = false)
+    @Column(name = "create_date", nullable = false)
     private Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "update_date", nullable = false, unique = false)
+    @Column(name = "update_date", nullable = false)
     private Date updateDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "publish_date")
+    private Date publishDate;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "album")
     private List<Picture> pictures;
@@ -89,5 +93,13 @@ public class Album extends BaseEntity {
 
     public void setPublished(boolean published) {
         isPublished = published;
+    }
+
+    public Date getPublishDate() {
+        return publishDate;
+    }
+
+    public void setPublishDate(Date publishDate) {
+        this.publishDate = publishDate;
     }
 }

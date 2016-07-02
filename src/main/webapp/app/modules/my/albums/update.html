@@ -1,29 +1,42 @@
 <div class="container" style="max-width: 600px;">
-    <h3 class="text-left">创建相册</h3>
+    <h3 class="text-left">更新相册</h3>
     <hr/>
     <form novalidate name="form">
         <div class="form-group" ng-class="{'has-error':form.name.$dirty && !form.name.$valid}">
             <label for="name">名称</label>
-            <input type="text" class="form-control" id="name" name="name" maxlength="30" required ng-model="album.name"
+            <input type="text" class="form-control" id="name" name="name" maxlength="30" required ng-model="name"
                    placeholder="请输入相册名称">
             <span class="help-block" ng-show="form.name.$dirty && form.name.$error.required">相册名称是必填项</span>
             <span class="help-block" ng-show="form.name.$dirty && form.name.$error.maxlength">相册名称长度不能超过30个字</span>
         </div>
         <div class="form-group">
             <label for="description">说明</label>
-            <textarea type="description" class="form-control" id="description" name="description" rows="5"
+            <textarea type="description" class="form-control" id="description" name="description" rows="2"
                       maxlength="300"
-                      ng-model="album.description" placeholder="请输入相册说明"></textarea>
+                      ng-model="description" placeholder="请输入相册说明"></textarea>
             <span class="help-block" ng-show="form.description.$error.maxlength">相册说明长度不能超过300个字</span>
         </div>
-        <div class="form-group" ng-class="{'has-error':form.pictures.$dirty && pictures.length <= 0}">
+        <div class="form-group">
+            <label for="exist">已经存在的图片</label>
+            <ul id="exist" class="list-inline">
+                <li ng-repeat="pic in existPictures">
+                    <span class="pointer" ng-click="showPicture(pic)">
+                        <img ng-src="{{pic.url}}" style="height: 40px;width: 40px;" class="img-responsive img-thumbnail">
+                    </span>
+                    <button type="button" ng-click="deleteExistPicture(pic)" class="close"><span
+                            aria-hidden="true">&times;</span></button>
+                </li>
+            </ul>
+        </div>
+
+
+        <div class="form-group">
             <button type="file" class="btn btn-sm btn-primary" name="pictures" id="pictures" multiple
                     ngf-select="select($files)"
                     ng-model="pictures"
-                    accept="image/*" ngf-max-size="2MB">选择图片
+                    accept="image/*" ngf-max-size="2MB">添加图片
             </button>
             <span class="help-block">请选择需要上传的照片.</span>
-            <span class="help-block" ng-show="form.pictures.$dirty && pictures.length <= 0">请至少选择一张图片</span>
         </div>
         <div class="form-group" ng-hide="pictures.length <= 0">
             <table id="pictureList" class="table table-hover table-condensed">
@@ -52,9 +65,10 @@
             </div>
         </div>
         <div class="form-group text-right">
-            <button ng-disabled="!form.$valid || uploading || pictures.length <= 0" type="submit"
-                    class="btn btn-primary" ng-click="create()">
-                创建
+            <button ng-disabled="!form.$valid || uploading || (pictures.length <= 0 && existPictures.length <= 0 )"
+                    type="submit"
+                    class="btn btn-primary" ng-click="update()">
+                更新
             </button>
         </div>
     </form>

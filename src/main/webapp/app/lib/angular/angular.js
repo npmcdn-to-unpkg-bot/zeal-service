@@ -2284,7 +2284,7 @@ function setupModuleLoader(window) {
            *    configuration.
            * @description
            * Use this method to register work which needs to be performed on module loading.
-           * For more about how to configure services, see
+           * For more about how to configure.properties services, see
            * {@link providers#provider-recipe Provider Recipe}.
            */
           config: config,

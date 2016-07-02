@@ -2,7 +2,7 @@
  * Created by Administrator on 7/1/2016.
  */
 (function () {
-    angular.module("app").service("AlbumService", function (HttpService, $uibModal) {
+    angular.module("app").service("AlbumService", function (HttpService, $uibModal, MessageService) {
 
         this.getPublishedAlbums = function (page, pageSize) {
             return HttpService.http({
@@ -19,17 +19,21 @@
         };
 
         this.showAlbumModal = function (album) {
-            $uibModal.open({
-                templateUrl: 'modules/albums/pictures.html',
-                size: 'lg',
-                controller: 'AlbumDisplayController',
-                resolve: {
-                    album: function () {
-                        return album;
-                    }
-                },
-                windowClass: "modal-album-display"
-            });
+            if (!album.pictures || album.pictures.length <= 0) {
+                MessageService.info({message: "相册为空", size: "sm"});
+            } else {
+                $uibModal.open({
+                    templateUrl: '/zeal/app/modules/albums/pictures.html',
+                    size: 'lg',
+                    controller: 'AlbumDisplayController',
+                    resolve: {
+                        album: function () {
+                            return album;
+                        }
+                    },
+                    windowClass: "modal-album-display"
+                });
+            }
         };
 
         this.delete = function (album) {
@@ -52,5 +56,17 @@
                 url: "/zeal/album/unpublish/" + album.id
             });
         };
+
+        this.showPicture = function (picture) {
+            $uibModal.open({
+                templateUrl: '/zeal/app/modules/albums/picture.html',
+                size: 'md',
+                controller: 'PictureDisplayController',
+                resolve: {
+                    picture: picture
+                }
+            });
+        };
+
     });
 })();

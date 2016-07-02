@@ -1,6 +1,7 @@
 package com.zeal.vo.album;
 
 import com.zeal.entity.Picture;
+import com.zeal.utils.ConfigureUtils;
 
 /**
  * Created by Administrator on 6/29/2016.
@@ -16,7 +17,7 @@ public class PictureVO {
     public PictureVO(Picture picture) {
         if (picture != null) {
             this.id = picture.getId();
-            this.url = picture.getUrl();
+            this.url = ConfigureUtils.getAlbumServer() + picture.getId();
             this.description = picture.getDescription();
         }
     }
@@ -24,7 +25,6 @@ public class PictureVO {
     public PictureVO() {
 
     }
-
 
     public long getId() {
         return id;

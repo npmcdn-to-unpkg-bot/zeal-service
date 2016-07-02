@@ -98,7 +98,7 @@ public class AlbumDao extends AbstractBaseDao<Album> {
      * @return
      */
     public PagedList<Album> pagedByPublishStatus(int page, int pageSize, boolean published) {
-        TypedQuery<Album> query = this.entityManager().createQuery("SELECT o FROM Album o where o.isPublished = :isPublished ORDER BY o.createDate desc ", Album.class);
+        TypedQuery<Album> query = this.entityManager().createQuery("SELECT o FROM Album o where o.isPublished = :isPublished ORDER BY o.publishDate desc ", Album.class);
         query.setFirstResult((page - 1) * pageSize);
         query.setMaxResults(pageSize);
         query.setParameter("isPublished", published);
@@ -111,7 +111,7 @@ public class AlbumDao extends AbstractBaseDao<Album> {
     }
 
     public long countByPublishStatus(boolean published) {
-        TypedQuery<Long> query = this.entityManager().createQuery("SELECT count(o) FROM Album o where o.isPublished = :isPublished ORDER BY o.createDate desc ", Long.class);
+        TypedQuery<Long> query = this.entityManager().createQuery("SELECT count(o) FROM Album o where o.isPublished = :isPublished ORDER BY o.publishDate desc ", Long.class);
         query.setParameter("isPublished", published);
         return query.getSingleResult();
     }

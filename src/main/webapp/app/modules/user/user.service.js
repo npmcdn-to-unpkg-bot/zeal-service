@@ -9,7 +9,7 @@
              */
             this.showLoginModal = function () {
                 $uibModal.open({
-                    templateUrl: 'modules/user/login.html',
+                    templateUrl: '/zeal/app/modules/user/login.html',
                     size: 'md',
                     controller: 'LoginController'
                 });
@@ -20,7 +20,7 @@
              */
             this.showRegisterModal = function () {
                 $uibModal.open({
-                    templateUrl: 'modules/user/register.html',
+                    templateUrl: '/zeal/app/modules/user/register.html',
                     size: 'md',
                     controller: 'RegisterController'
                 });

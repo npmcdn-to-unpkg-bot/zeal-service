@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -31,7 +32,7 @@ public abstract class AbstractBaseDao<T extends BaseEntity> implements BaseDao<T
     }
 
     @Override
-    public T find(Long id) {
+    public T find(long id) {
         return entityManager().find(entityClass, id);
     }
 
@@ -74,6 +75,13 @@ public abstract class AbstractBaseDao<T extends BaseEntity> implements BaseDao<T
             T attached = find(t.getId());
             this.entityManager().remove(attached);
         }
+    }
+
+    @Override
+    @Transactional
+    public void delete(long id) {
+        Query query = this.entityManager.createQuery("DELETE FROM " + entityClass.getSimpleName() + " o where o.id = :id");
+        query.executeUpdate();
     }
 
     @Override

@@ -86,7 +86,7 @@ public class UserInfoController {
     public Response reload(HttpServletRequest httpServletRequest) {
         UserInfoVO userInfo = SessionUtils.getUserInfo(httpServletRequest);
         if (userInfo == null) {
-            return new Response.Builder().authFailed().result(null).message("用户已经失效，请从新登录").build();
+            return new Response.Builder().failed().result(null).message("用户已经失效，请从新登录").build();
         }
         return new Response.Builder().success().result(userInfo).build();
     }

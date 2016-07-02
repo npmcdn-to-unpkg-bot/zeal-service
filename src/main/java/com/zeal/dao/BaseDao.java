@@ -16,7 +16,7 @@ public interface BaseDao<T extends BaseEntity> {
      * @param id 主键ID
      * @return
      */
-    T find(Long id);
+    T find(long id);
 
     /**
      * 保存实体
@@ -46,6 +46,13 @@ public interface BaseDao<T extends BaseEntity> {
      * @param t
      */
     void delete(T t);
+
+    /**
+     * 删除实体
+     *
+     * @param t
+     */
+    void delete(long id);
 
     /**
      * 获取所有实体

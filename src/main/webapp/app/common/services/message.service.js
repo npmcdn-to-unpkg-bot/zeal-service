@@ -28,7 +28,7 @@
                 settings.size = "md";
             }
             var $modalInstance = $uibModal.open({
-                templateUrl: "common/tpls/tpl-message-box.html",
+                templateUrl: "/zeal/app/common/tpls/tpl-message-box.html",
                 controller: function ($scope) {
                     $scope.title = settings.title;
                     $scope.message = settings.message;

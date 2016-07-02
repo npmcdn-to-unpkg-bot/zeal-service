@@ -7,10 +7,15 @@ import com.zeal.entity.UserInfo;
 import com.zeal.exception.BizException;
 import com.zeal.exception.BizExceptionCode;
 import com.zeal.service.PictureService;
+import com.zeal.utils.ConfigureUtils;
+import com.zeal.utils.FileUtils;
+import com.zeal.utils.PictureUtils;
 import com.zeal.vo.album.PictureVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.File;
 
 /**
  * Created by Administrator on 6/29/2016.
@@ -38,5 +43,18 @@ public class PictureServiceImpl implements PictureService {
             throw new BizException(BizExceptionCode.System.PERMISSION_INSUFFICIENT, "没有权限");
         }
         pictureDao.delete(picture);
+        PictureUtils.deleteDiskFile(picture);
+    }
+
+    @Override
+    public long findUserInfoIdByPictureId(long pictureId) {
+        Picture picture = pictureDao.find(pictureId);
+        return picture.getAlbum().getUserInfo().getId();
+    }
+
+    @Override
+    public File getDiskFile(long pictureId) {
+        Picture picture = pictureDao.find(pictureId);
+        return new File(ConfigureUtils.getAlbumRepository() + picture.getUrl());
     }
 }

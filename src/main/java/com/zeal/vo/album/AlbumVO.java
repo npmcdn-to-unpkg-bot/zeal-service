@@ -21,6 +21,8 @@ public class AlbumVO {
 
     private Date updateDate;
 
+    private Date publishDate;
+
     private String description;
 
     private String name;
@@ -41,6 +43,7 @@ public class AlbumVO {
             }
             this.createDate = album.getCreateDate();
             this.updateDate = album.getUpdateDate();
+            this.publishDate = album.getPublishDate();
             this.description = album.getDescription();
             this.name = album.getName();
             this.isPublished = album.isPublished();
@@ -117,5 +120,13 @@ public class AlbumVO {
 
     public void setPublished(boolean published) {
         isPublished = published;
+    }
+
+    public Date getPublishDate() {
+        return publishDate;
+    }
+
+    public void setPublishDate(Date publishDate) {
+        this.publishDate = publishDate;
     }
 }

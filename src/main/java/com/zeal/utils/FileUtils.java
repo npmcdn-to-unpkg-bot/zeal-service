@@ -12,8 +12,14 @@ public class FileUtils {
     public static void deleteFile(String path) {
         File file = new File(path);
         if (file.exists()) {
-            if (!file.delete()) {
+            if (file.isFile() && !file.delete()) {
                 throw new RuntimeException("can not delete file path = " + path);
+            } else if (file.isDirectory()) {
+                File[] files = file.listFiles();
+                for (File f : files) {
+                    deleteFile(f.getPath());
+                }
+                file.delete();
             }
         }
     }

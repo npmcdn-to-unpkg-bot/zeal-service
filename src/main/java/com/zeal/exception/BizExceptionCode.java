@@ -56,4 +56,16 @@ public class BizExceptionCode {
         public static final int PERMISSION_INSUFFICIENT = 200001001;
     }
 
+    public static class Album {
+        /**
+         * 相册已经发布相册无法更新
+         */
+        public static final int UPDATE_ON_PUBLISH_STATUS = 300001001;
+        /**
+         * 相册已经发布相册无法删除
+         */
+        public static final int DELETE_ON_PUBLISH_STATUS = 300001002;
+
+    }
+
 }
