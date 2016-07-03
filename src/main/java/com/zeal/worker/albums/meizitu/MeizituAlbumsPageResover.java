@@ -1,39 +1,38 @@
-package com.zeal.worker.meizitu;
+package com.zeal.worker.albums.meizitu;
 
-import com.zeal.entity.Album;
-import com.zeal.entity.Picture;
-import com.zeal.worker.AlbumWorker;
+import com.zeal.worker.albums.AbstractAlbumsPageResolver;
+import com.zeal.worker.albums.PageAlbum;
+import com.zeal.worker.albums.PicturesPageResolver;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
- * Created by yang_shoulai on 2016/6/29.
+ * Created by yang_shoulai on 2016/7/3.
  */
-public class MeizituAlbumWorker implements AlbumWorker {
+public class MeizituAlbumsPageResover extends AbstractAlbumsPageResolver {
+
 
     private static final String ROOT_URL = "http://www.meizitu.com/a/";
 
     private String subUrl;
 
-    public MeizituAlbumWorker(String subUrl) {
+    public MeizituAlbumsPageResover(String subUrl) {
         this.subUrl = subUrl;
     }
 
+    /**
+     * @param currentDocument 当前页面的文档对象
+     * @param currentUrl      当前页面的URL路径
+     * @return {@code true} 如果有下一页, {@code false} 没有下一页
+     */
     @Override
-    public String firstPageUrl() {
-        return ROOT_URL + this.subUrl;
-    }
-
-    @Override
-    public boolean hasNext(Document document) {
-        if (document == null) return false;
-        Elements navigationElement = document.select(".navigation");
+    public boolean hasNextPage(Document currentDocument, String currentUrl) {
+        if (currentDocument == null) return false;
+        Elements navigationElement = currentDocument.select(".navigation");
         if (navigationElement != null && navigationElement.size() > 0) {
             Elements elements = navigationElement.get(0).select("#wp_page_numbers > ul > li > a");
             if (elements != null) {
@@ -48,10 +47,15 @@ public class MeizituAlbumWorker implements AlbumWorker {
         return false;
     }
 
+    /**
+     * @param currentDocument 当前页面的文档对象
+     * @param currentUrl      当前页面的URL路径
+     * @return 下一页相册列表页面的URL地址，{@code null}如果没有下一页
+     */
     @Override
-    public String nextUrl(Document document, String currentUrl) {
-        if (document == null) return null;
-        Elements navigationElement = document.select(".navigation");
+    public String nextPage(Document currentDocument, String currentUrl) {
+        if (currentDocument == null) return null;
+        Elements navigationElement = currentDocument.select(".navigation");
         if (navigationElement != null && navigationElement.size() > 0) {
             Elements elements = navigationElement.get(0).select("#wp_page_numbers > ul > li > a");
             if (elements != null) {
@@ -66,10 +70,15 @@ public class MeizituAlbumWorker implements AlbumWorker {
         return null;
     }
 
+    /**
+     * @param currentDocument 当前页面的文档对象
+     * @param currentUrl      当前页面的URL路径
+     * @return 获取当前页面的所有相册的详细页面路径、相册名称
+     */
     @Override
-    public Map<String, Album> resoveAlbums(Document document, String currentUrl) {
-        Map<String, Album> map = new HashMap<>();
-        Element main = document.getElementById("maincontent");
+    public List<PageAlbum> resolve(Document currentDocument, String currentUrl) {
+        List<PageAlbum> albumList = new ArrayList<>();
+        Element main = currentDocument.getElementById("maincontent");
         if (main != null) {
             Elements lis = main.select("li");
             if (lis != null && !lis.isEmpty()) {
@@ -80,7 +89,7 @@ public class MeizituAlbumWorker implements AlbumWorker {
                         Element img = as.get(0).select("img").first();
                         if (img != null) {
                             String name = img.attr("alt");
-                            Album album = new Album();
+                            PageAlbum album = new PageAlbum();
                             if (name != null) {
                                 if (name.startsWith("<b>")) {
                                     name = name.substring(3);
@@ -88,32 +97,34 @@ public class MeizituAlbumWorker implements AlbumWorker {
                                 if (name.endsWith("</b>")) {
                                     name = name.substring(0, name.length() - 4);
                                 }
-                                album.setName(name);
-                                map.put(key, album);
+                                album.name = name;
+                                album.picturesPage = key;
+                                albumList.add(album);
                             }
                         }
                     }
                 }
             }
         }
-        return map;
+        return albumList;
     }
 
     @Override
-    public List<Picture> resovePictures(Document document, String currentUrl) {
-        List<Picture> pictures = new ArrayList<>();
-        Elements elements = document.select("#picture img");
-        if (elements == null || elements.isEmpty()) {
-            elements = document.select(".postContent img");
-        }
-        if (elements != null && !elements.isEmpty()) {
-            for (Element img : elements) {
-                String src = img.attr("src");
-                Picture picture = new Picture();
-                picture.setUrl(src);
-                pictures.add(picture);
-            }
-        }
-        return pictures;
+    public PicturesPageResolver newPicturePageResolver(PageAlbum pageAlbum) {
+        return new MeizituPicturesPageResolver(pageAlbum);
     }
+
+    /**
+     * 获取相册详细页面的解析器
+     *
+     * @return
+     */
+
+
+    @Override
+    public String getEntrance() {
+        return ROOT_URL + subUrl;
+    }
+
+
 }

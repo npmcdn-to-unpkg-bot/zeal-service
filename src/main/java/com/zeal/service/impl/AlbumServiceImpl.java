@@ -12,6 +12,8 @@ import com.zeal.exception.BizExceptionCode;
 import com.zeal.service.AlbumService;
 import com.zeal.utils.*;
 import com.zeal.vo.album.AlbumVO;
+import com.zeal.worker.albums.PageAlbum;
+import com.zeal.worker.albums.PagePicture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -119,7 +121,7 @@ public class AlbumServiceImpl implements AlbumService {
             }
         }
         albumDao.delete(album);
-        FileUtils.deleteFile(ConfigureUtils.getAlbumRepository() + album.getId());
+        FileUtils.deleteFile(getDiskFolder(album).getPath());
     }
 
     @Override
@@ -198,6 +200,62 @@ public class AlbumServiceImpl implements AlbumService {
             }
             throw new BizException("更新相册失败");
         }
+    }
+
+    /**
+     * 获取相册所在的硬盘文件夹
+     *
+     * @param album
+     * @return
+     */
+    @Override
+    public File getDiskFolder(Album album) {
+
+        return new File(ConfigureUtils.getAlbumRepository() + album.getUserInfo().getId() + File.separator + album.getId());
+    }
+
+    @Override
+    @Transactional
+    public void save(PageAlbum pageAlbum, UserInfo userInfo) {
+        List<PagePicture> pictures = pageAlbum.pictures;
+        Album album = new Album();
+        album.setName(pageAlbum.name);
+        album.setUserInfo(userInfo);
+        album.setUpdateDate(new Date());
+        album.setCreateDate(new Date());
+        album.setPublished(false);
+        albumDao.insert(album);
+        if (pictures != null) {
+            for (PagePicture picture : pictures) {
+                Picture pic = new Picture();
+                pic.setAlbum(album);
+                String name = picture.src.substring(picture.src.lastIndexOf("/") + 1, picture.src.length());
+                pic.setUrl(userInfo.getId() + File.separator + album.getId() + File.separator + name);
+                pictureDao.insert(pic);
+            }
+        }
+        List<File> files = download(pictures, userInfo.getId(), album.getId());
+        if (files.isEmpty()) {
+            throw new BizException("保存失败");
+        }
+
+    }
+
+    private List<File> download(List<PagePicture> pictures, long userInfoId, long albumId) {
+        List<File> downloads = new ArrayList<>();
+        try {
+            for (PagePicture pagePicture : pictures) {
+                String name = pagePicture.src.substring(pagePicture.src.lastIndexOf("/") + 1, pagePicture.src.length());
+                File file = DownloadUtils.downloadFile(pagePicture.src, ConfigureUtils.getAlbumRepository() + userInfoId + File.separator + albumId + File.separator + name);
+                downloads.add(file);
+            }
+        } catch (Exception e) {
+            if (!downloads.isEmpty()) {
+                FileUtils.deleteFile(downloads.get(0).getParentFile().getPath());
+            }
+            downloads.clear();
+        }
+        return downloads;
     }
 
     private PagedList<AlbumVO> convert(PagedList<Album> albumPagedList) {

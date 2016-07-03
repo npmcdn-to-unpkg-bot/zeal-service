@@ -3,22 +3,22 @@ package com.zeal.worker;
 import com.zeal.dao.AlbumDao;
 import com.zeal.dao.PictureDao;
 import com.zeal.dao.UserInfoDao;
-import com.zeal.entity.Album;
-import com.zeal.entity.Picture;
 import com.zeal.entity.UserInfo;
+import com.zeal.service.AlbumService;
 import com.zeal.utils.LogUtils;
-import com.zeal.utils.StringUtils;
+import com.zeal.worker.albums.AlbumsPageResolver;
+import com.zeal.worker.albums.PageAlbum;
+import com.zeal.worker.albums.PagePicture;
+import com.zeal.worker.albums.PicturesPageResolver;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by yang_shoulai on 2016/6/29.
@@ -27,8 +27,17 @@ import java.util.Map;
 @Component
 public class AlbumWorkerExecutor {
 
+    private static int POOL_SIZE = 10;
+
+    private static int TIMEOUT = 5000;
+
+    private ExecutorService workersPool = Executors.newFixedThreadPool(POOL_SIZE);
+
     @Autowired
     private AlbumDao albumDao;
+
+    @Autowired
+    private AlbumService albumService;
 
     @Autowired
     private PictureDao pictureDao;
@@ -37,83 +46,61 @@ public class AlbumWorkerExecutor {
     private UserInfoDao userInfoDao;
 
 
-    public void execute(AlbumWorker albumWorker) {
-        List<Album> albumList = new ArrayList<>();
-        String url = albumWorker.firstPageUrl();
-        while (true) {
+    public void execute(AlbumsPageResolver albumsPageResolver) {
+        UserInfo userInfo = userInfoDao.find(1);
+        LogUtils.info(this.getClass(), "开始解析....");
+        String entranceUrl = albumsPageResolver.getEntrance();
+        LogUtils.info(this.getClass(), "入口地址 = " + entranceUrl);
+        do {
             try {
-                Document document = Jsoup.connect(url).timeout(10000).get();
-                if (document != null) {
-                    Map<String, Album> albumMap = albumWorker.resoveAlbums(document, url);
-                    if (albumMap != null && !albumMap.isEmpty()) {
-                        for (Map.Entry<String, Album> entry : albumMap.entrySet()) {
-                            Document picDoc = Jsoup.connect(entry.getKey()).timeout(10000).get();
-                            if (picDoc != null) {
-                                List<Picture> pictures = albumWorker.resovePictures(picDoc, entry.getKey());
-                                if (pictures != null && !pictures.isEmpty()) {
-                                    entry.getValue().setPictures(pictures);
-                                    albumList.add(entry.getValue());
-                                } else {
-                                    LogUtils.error(this.getClass(), "无法解析图片列表");
-                                }
-                            } else {
-                                LogUtils.error(this.getClass(), "无法获取图片列表页面");
-                                break;
-                            }
-                        }
-                    } else {
-                        LogUtils.error(this.getClass(), "无法解析相册列表");
-                    }
-                    if (!albumList.isEmpty()) {
-                        saveAlbum(albumList);
-                        albumList.clear();
-                    }
-                    if (albumWorker.hasNext(document)) {
-                        url = albumWorker.nextUrl(document, url);
-                        if (StringUtils.isEmpty(url)) {
-                            break;
-                        }
-                    } else {
-                        break;
-                    }
-
+                Document albumsDocument = Jsoup.connect(entranceUrl).timeout(TIMEOUT).get();
+                List<PageAlbum> pageAlbumList = albumsPageResolver.resolve(albumsDocument, entranceUrl);
+                if (pageAlbumList.isEmpty()) {
+                    LogUtils.error(this.getClass(), "获取相册列表页面" + entranceUrl + "失败");
+                }
+                for (PageAlbum pageAlbum : pageAlbumList) {
+                    PicturesPageResolver picturesPageResolver = albumsPageResolver.newPicturePageResolver(pageAlbum);
+                    workersPool.execute(new Worker(picturesPageResolver, userInfo));
+                }
+                if (albumsPageResolver.hasNextPage(albumsDocument, entranceUrl)) {
+                    entranceUrl = albumsPageResolver.nextPage(albumsDocument, entranceUrl);
                 } else {
                     break;
                 }
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                LogUtils.error(this.getClass(), "连接相册列表地址" + entranceUrl + "失败, 退出！", e);
+                break;
             }
-        }
+
+        } while (true);
     }
 
-    private void saveAlbum(List<Album> albums) {
-        if (albums.isEmpty()) return;
-        UserInfo userInfo = userInfoDao.find(1L);
-        for (Album album : albums) {
-            saveAlbum(album, userInfo);
+    private class Worker implements Runnable {
+
+        public PicturesPageResolver picturesPageResolver;
+
+        public UserInfo userInfo;
+
+        public Worker(PicturesPageResolver picturesPageResolver, UserInfo userInfo) {
+            this.picturesPageResolver = picturesPageResolver;
+            this.userInfo = userInfo;
         }
 
-    }
-
-
-    @Transactional
-    private void saveAlbum(Album album, UserInfo userInfo) {
-        List<Picture> pictures = album.getPictures();
-        if (pictures == null || pictures.isEmpty()) return;
-        Album toSave = new Album();
-        toSave.setName(album.getName());
-        toSave.setCreateDate(new Date());
-        toSave.setPublished(true);
-        toSave.setUpdateDate(new Date());
-        toSave.setUserInfo(userInfo);
-
-        albumDao.insert(toSave);
-        for (Picture picture : pictures) {
-            picture.setAlbum(toSave);
+        @Override
+        public void run() {
+            PageAlbum pageAlbum = picturesPageResolver.getPageAlbum();
+            Document document = null;
+            List<PagePicture> pictures = null;
+            try {
+                document = Jsoup.connect(pageAlbum.picturesPage).timeout(5000).get();
+                pictures = picturesPageResolver.resolve(document, pageAlbum.picturesPage);
+                pageAlbum.pictures = pictures;
+            } catch (IOException e) {
+                LogUtils.error(this.getClass(), "无法获取页面" + pageAlbum.picturesPage + "的图片信息");
+                return;
+            }
+            albumService.save(pageAlbum, userInfo);
         }
-        pictureDao.batchInsert(pictures);
     }
 
 }

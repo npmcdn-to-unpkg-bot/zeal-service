@@ -2,9 +2,12 @@ package com.zeal.service;
 
 import com.zeal.common.PagedList;
 import com.zeal.entity.Album;
+import com.zeal.entity.UserInfo;
 import com.zeal.vo.album.AlbumVO;
+import com.zeal.worker.albums.PageAlbum;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -41,4 +44,17 @@ public interface AlbumService {
      * @param userInfoId    用户ID
      */
     void update(long id, String name, String description, int[] deleteIdArray, List<MultipartFile> newFiles, long userInfoId);
+
+
+    /**
+     * 获取相册所在的硬盘文件夹
+     *
+     * @param albumId
+     * @return
+     */
+    File getDiskFolder(Album albumId);
+
+
+    void save(PageAlbum pageAlbum, UserInfo userInfo);
+
 }

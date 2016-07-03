@@ -5,6 +5,8 @@ import com.zeal.service.AlbumService;
 import com.zeal.utils.SessionUtils;
 import com.zeal.utils.StringUtils;
 import com.zeal.vo.user.UserInfoVO;
+import com.zeal.worker.AlbumWorkerExecutor;
+import com.zeal.worker.albums.meizitu.MeizituAlbumsPageResover;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -89,7 +91,6 @@ public class AlbumController {
         albumService.create(name, description, files, SessionUtils.getUserInfo(httpServletRequest).getId());
         return new Response.Builder().success().build();
     }
-
 
     @RequestMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
