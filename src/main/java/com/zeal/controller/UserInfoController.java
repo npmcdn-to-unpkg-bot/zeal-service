@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RequestMapping("/userinfo")
 @Controller
-public class UserInfoController {
+public class UserInfoController extends AbstractController {
 
     @Autowired
     private UserInfoService userInfoService;

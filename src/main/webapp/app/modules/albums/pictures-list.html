@@ -1,0 +1,21 @@
+<div class="container" style="max-width: 1000px;">
+    <h2 class="text-center picture-name">{{album.name}}</h2>
+
+    <div class="row">
+        <div class="col-lg-offset-7 col-lg-3 text-right">
+            <span ng-show="album.published" class="text-info">发布日期：</span> {{album.publishDate | date:'yyyy-MM-dd'}}
+        </div>
+        <div class="col-lg-2 text-right">
+            <span class="text-info">作者：</span>{{album.userInfo.nickName}}
+        </div>
+    </div>
+    <hr/>
+    <div style="margin-top: 10px;">
+        <ul class="list-inline text-center">
+            <li ng-repeat="picture in album.pictures" class="text-left" style="margin-bottom: 8px;">
+                <img ng-src="{{picture.url}}" style="height: 240px;" class="img-responsive img-thumbnail">
+            </li>
+        </ul>
+    </div>
+    <div class="footer" style="margin-top: 20px;"></div>
+</div>

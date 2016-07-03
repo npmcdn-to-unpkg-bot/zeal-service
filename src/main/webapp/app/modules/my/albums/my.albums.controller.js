@@ -7,8 +7,9 @@
         $scope.pageSize = 10;
         $scope.albums = [];
         $scope.totalSize = 0;
+        $scope.keyword = "";
         var pagedAlbums = function () {
-            AlbumService.getMyAlbums($scope.page, $scope.pageSize)
+            AlbumService.getMyAlbums($scope.page, $scope.pageSize, $scope.keyword)
                 .success(function (data) {
                     $scope.albums = data.list;
                     $scope.page = data.page;
@@ -28,9 +29,13 @@
         };
         pagedAlbums();
         $scope.onAlbumClick = function (album) {
-            AlbumService.showAlbumModal(album);
+            AlbumService.showAlbumListModal(album);
         };
         $scope.onPageChanged = function () {
+            pagedAlbums();
+        };
+        $scope.search = function () {
+            $scope.page = 1;
             pagedAlbums();
         };
         $scope.updateModal = function (album) {

@@ -1,5 +1,6 @@
 package com.zeal.service;
 
+import com.zeal.vo.album.AlbumVO;
 import com.zeal.vo.album.PictureVO;
 
 import java.io.File;
@@ -16,4 +17,9 @@ public interface PictureService {
     long findUserInfoIdByPictureId(long pictureId);
 
     File getDiskFile(long pictureId);
+
+    AlbumVO findAlbumByPictureId(long pictureId);
+
+    void checkAuthority(long pictureId, long userId);
+
 }

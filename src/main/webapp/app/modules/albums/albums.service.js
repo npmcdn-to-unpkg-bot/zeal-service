@@ -11,10 +11,11 @@
             });
         };
 
-        this.getMyAlbums = function (page, pageSize) {
+        this.getMyAlbums = function (page, pageSize, keyword) {
+            keyword = escape(encodeURI(keyword));
             return HttpService.http({
                 method: "GET",
-                url: "/zeal/my/albums?page=" + page + "&pageSize=" + pageSize
+                url: "/zeal/my/albums?page=" + page + "&pageSize=" + pageSize + "&keyword=" + keyword
             });
         };
 
@@ -26,6 +27,24 @@
                     templateUrl: '/zeal/app/modules/albums/pictures.html',
                     size: 'lg',
                     controller: 'AlbumDisplayController',
+                    resolve: {
+                        album: function () {
+                            return album;
+                        }
+                    },
+                    windowClass: "modal-album-display"
+                });
+            }
+        };
+
+        this.showAlbumListModal = function (album) {
+            if (!album.pictures || album.pictures.length <= 0) {
+                MessageService.info({message: "相册为空", size: "sm"});
+            } else {
+                $uibModal.open({
+                    templateUrl: '/zeal/app/modules/albums/pictures-list.html',
+                    size: 'lg',
+                    controller: 'AlbumListDisplayController',
                     resolve: {
                         album: function () {
                             return album;

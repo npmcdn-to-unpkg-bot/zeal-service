@@ -1,18 +1,20 @@
 <div class="text-center">
-    <div class="row" ng-repeat="albumRow in albums">
-        <div class="col-md-3" ng-repeat="album in albumRow">
-            <div class="album">
-                <div style="height: 360px;">
-                    <div class="pointer" ng-click="onClickAlbum(album)" style="height: 340px;">
-                        <img ng-src="{{album.url}}">
+    <div>
+        <ul class="list-inline">
+            <li ng-repeat="album in targetAlbums" style="width:260px;margin-top: 5px; margin-bottom: 10px;">
+                <dv class="center-block">
+                    <div class="pointer" ng-click="onClickAlbum(album)">
+                        <img ng-src="{{album.url}}" class="img-responsive img-thumbnail" title="{{album.name}}"
+                             style="width: 240px;height: 240px;">
                     </div>
-                    <div class="text-left  album-label">
-                        <span class="text-muted pointer" ng-click="onClickAlbum(album)">{{album.name}}</span>
-                    </div>
+                </dv>
+                <div class="text-left  album-label">
+                    <span class="text-muted pointer" ng-click="onClickAlbum(album)">{{album.name}}</span>
                 </div>
-            </div>
-        </div>
+            </li>
+        </ul>
     </div>
+
     <div ng-hide="totalSize <= 0">
         <uib-pagination total-items="totalSize" ng-model="page" ng-change="onPageChanged()" first-text="第一页"
                         last-text="最后一页" next-text="下一页" previous-text="上一页" max-size="10" boundary-links="true"

@@ -55,6 +55,7 @@
                 /album/list
                 /album/published
                 /album/\d{1,}
+                /album/thumbnail/.*
                 /picture/\d{1,}
             </param-value>
         </init-param>

@@ -116,4 +116,26 @@ public class AlbumDao extends AbstractBaseDao<Album> {
         return query.getSingleResult();
     }
 
+
+    public PagedList<Album> pagedByUserInfoIdAndKeywordLike(long userInfoId, int page, int pageSize, String keyword) {
+        TypedQuery<Album> query = this.entityManager().createQuery("SELECT o FROM Album o where o.userInfo.id = :userInfoId and (o.name like :keyword or o.description like :keyword) ORDER BY o.createDate desc ", Album.class);
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
+        query.setParameter("userInfoId", userInfoId);
+        query.setParameter("keyword", "%" + keyword + "%");
+        PagedList<Album> pagedList = new PagedList<>();
+        pagedList.setList(query.getResultList());
+        pagedList.setSize(pageSize);
+        pagedList.setPage(page);
+        pagedList.setTotalSize(countByUserInfoIdAndKeywordLike(userInfoId, keyword));
+        return pagedList;
+
+    }
+
+    private long countByUserInfoIdAndKeywordLike(long userInfoId, String keyword) {
+        TypedQuery<Long> query = this.entityManager().createQuery("SELECT count(o) FROM Album o where o.userInfo.id = :userInfoId and (o.name like :keyword or o.description like :keyword) ORDER BY o.createDate desc ", Long.class);
+        query.setParameter("userInfoId", userInfoId);
+        query.setParameter("keyword", "%" + keyword + "%");
+        return query.getSingleResult();
+    }
 }

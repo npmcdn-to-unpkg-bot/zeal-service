@@ -29,6 +29,8 @@ public interface AlbumService {
 
     PagedList<AlbumVO> pagedByUserInfoId(int page, int pageSize, long userInfoId);
 
+    PagedList<AlbumVO> pagedByUserInfoIdAndKeywordLike(int page, int pageSize, long userInfoId, String keyword);
+
     void delete(long id, long userInfoId);
 
     void create(String name, String description, List<MultipartFile> files, long userInfoId);
@@ -49,12 +51,37 @@ public interface AlbumService {
     /**
      * 获取相册所在的硬盘文件夹
      *
+     * @param album
+     * @return
+     */
+    File getDiskFolder(Album album);
+
+    /**
+     * 获取相册所在的硬盘文件夹
+     *
      * @param albumId
      * @return
      */
-    File getDiskFolder(Album albumId);
+    File getDiskFolder(long albumId);
 
 
     void save(PageAlbum pageAlbum, UserInfo userInfo);
 
+    /**
+     * 创建相册的缩略图
+     *
+     * @param albumId
+     * @return
+     */
+    File createThumbnail(long albumId);
+
+    /**
+     * 获取相册的缩略图
+     *
+     * @param albumId
+     * @return
+     */
+    File getThumbnail(long albumId);
+
+    void checkAuthority(long albumId, long userId);
 }

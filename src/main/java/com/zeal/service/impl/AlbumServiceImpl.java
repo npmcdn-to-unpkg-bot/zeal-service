@@ -9,13 +9,13 @@ import com.zeal.entity.Picture;
 import com.zeal.entity.UserInfo;
 import com.zeal.exception.BizException;
 import com.zeal.exception.BizExceptionCode;
+import com.zeal.exception.NoAuthorityException;
 import com.zeal.service.AlbumService;
 import com.zeal.utils.*;
 import com.zeal.vo.album.AlbumVO;
 import com.zeal.worker.albums.PageAlbum;
 import com.zeal.worker.albums.PagePicture;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -71,25 +71,17 @@ public class AlbumServiceImpl implements AlbumService {
 
     @Override
     public void publish(long id, long userId) {
-        Album album = albumDao.findByIdAndUserId(id, userId);
-        if (album != null) {
-            album.setPublished(true);
-            album.setPublishDate(new Date());
-        } else {
-            throw new BizException(BizExceptionCode.System.PERMISSION_INSUFFICIENT, "权限不足");
-        }
+        Album album = albumDao.find(id);
+        album.setPublished(true);
+        album.setPublishDate(new Date());
         albumDao.update(album);
     }
 
     @Override
     public void unPublish(long id, long userId) {
-        Album album = albumDao.findByIdAndUserId(id, userId);
-        if (album != null) {
-            album.setPublished(false);
-            album.setPublishDate(null);
-        } else {
-            throw new BizException(BizExceptionCode.System.PERMISSION_INSUFFICIENT, "权限不足");
-        }
+        Album album = albumDao.find(id);
+        album.setPublished(false);
+        album.setPublishDate(null);
         albumDao.update(album);
     }
 
@@ -104,13 +96,14 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
+    public PagedList<AlbumVO> pagedByUserInfoIdAndKeywordLike(int page, int pageSize, long userInfoId, String keyword) {
+        return convert(albumDao.pagedByUserInfoIdAndKeywordLike(userInfoId, page, pageSize,keyword));
+    }
+
+    @Override
     @Transactional
     public void delete(long id, long userInfoId) {
         Album album = albumDao.find(id);
-        UserInfo userInfo = album.getUserInfo();
-        if (userInfo.getId() != userInfoId) {
-            throw new BizException(BizExceptionCode.System.PERMISSION_INSUFFICIENT, "没有权限");
-        }
         if (album.isPublished()) {
             throw new BizException(BizExceptionCode.Album.DELETE_ON_PUBLISH_STATUS, "相册已经发布，请先取消发布");
         }
@@ -172,7 +165,6 @@ public class AlbumServiceImpl implements AlbumService {
         if (album.isPublished()) {
             throw new BizException(BizExceptionCode.Album.UPDATE_ON_PUBLISH_STATUS, "相册已经发布，请先取消发布再更新");
         }
-
         if (!StringUtils.isEmpty(name)) {
             album.setName(name);
         }
@@ -214,6 +206,17 @@ public class AlbumServiceImpl implements AlbumService {
         return new File(ConfigureUtils.getAlbumRepository() + album.getUserInfo().getId() + File.separator + album.getId());
     }
 
+    /**
+     * 获取相册所在的硬盘文件夹
+     *
+     * @param albumId
+     * @return
+     */
+    @Override
+    public File getDiskFolder(long albumId) {
+        return getDiskFolder(albumDao.find(albumId));
+    }
+
     @Override
     @Transactional
     public void save(PageAlbum pageAlbum, UserInfo userInfo) {
@@ -239,6 +242,46 @@ public class AlbumServiceImpl implements AlbumService {
             throw new BizException("保存失败");
         }
 
+    }
+
+    /**
+     * 创建相册的缩略图
+     *
+     * @param albumId
+     * @return
+     */
+    @Override
+    public File createThumbnail(long albumId) {
+        Album album = albumDao.find(albumId);
+        File albumFolder = getDiskFolder(album);
+        File thumbnailFile = FileUtils.createFile(albumFolder.getPath() + File.separator + "thumbnail" + File.separator + "thumbnail.jpeg");
+        List<Picture> pictures = album.getPictures();
+        File picFile = PictureUtils.getDiskFile(pictures.get(0));
+        ImageUtils.createThumbnail(picFile, thumbnailFile);
+        return thumbnailFile;
+    }
+
+    /**
+     * 获取相册的缩略图
+     *
+     * @param albumId
+     * @return
+     */
+    @Override
+    public File getThumbnail(long albumId) {
+        Album album = albumDao.find(albumId);
+        File albumFolder = getDiskFolder(album);
+        File file = new File(albumFolder.getPath() + File.separator + "thumbnail" + File.separator + "thumbnail.jpeg");
+        if (!file.exists()) return null;
+        return file;
+    }
+
+    @Override
+    public void checkAuthority(long albumId, long userId) {
+        Album album = albumDao.find(albumId);
+        if (album.getUserInfo().getId() != userId) {
+            throw new NoAuthorityException();
+        }
     }
 
     private List<File> download(List<PagePicture> pictures, long userInfoId, long albumId) {

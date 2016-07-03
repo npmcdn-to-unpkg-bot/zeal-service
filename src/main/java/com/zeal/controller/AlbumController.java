@@ -4,6 +4,7 @@ import com.zeal.http.response.Response;
 import com.zeal.service.AlbumService;
 import com.zeal.utils.SessionUtils;
 import com.zeal.utils.StringUtils;
+import com.zeal.vo.album.AlbumVO;
 import com.zeal.vo.user.UserInfoVO;
 import com.zeal.worker.AlbumWorkerExecutor;
 import com.zeal.worker.albums.meizitu.MeizituAlbumsPageResover;
@@ -18,7 +19,11 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -28,34 +33,17 @@ import java.util.List;
  */
 @RequestMapping("/album")
 @Controller
-public class AlbumController {
+public class AlbumController extends AbstractController {
 
     @Autowired
     private AlbumService albumService;
 
-    @RequestMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Response pagedList(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
-                              @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        return new Response.Builder().success().result(albumService.paged(page, pageSize)).build();
-    }
-
-    @RequestMapping(value = "/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Response all() {
-        return new Response.Builder().success().result(albumService.findAll()).build();
-    }
-
-    @RequestMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Response find(@PathVariable("id") long id) {
-        return new Response.Builder().success().result(albumService.find(id)).build();
-    }
 
     @RequestMapping(value = "/publish/{id}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Response publish(@PathVariable("id") long id, HttpServletRequest request) {
         UserInfoVO userInfo = SessionUtils.getUserInfo(request);
+        albumService.checkAuthority(id, userInfo.getId());
         albumService.publish(id, userInfo.getId());
         return new Response.Builder().success().result(albumService.find(id)).build();
     }
@@ -64,6 +52,7 @@ public class AlbumController {
     @ResponseBody
     public Response unPublish(@PathVariable("id") long id, HttpServletRequest request) {
         UserInfoVO userInfo = SessionUtils.getUserInfo(request);
+        albumService.checkAuthority(id, userInfo.getId());
         albumService.unPublish(id, userInfo.getId());
         return new Response.Builder().success().result(albumService.find(id)).build();
     }
@@ -78,6 +67,7 @@ public class AlbumController {
     @RequestMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Response delete(@PathVariable("id") long id, HttpServletRequest httpServletRequest) {
+        albumService.checkAuthority(id, SessionUtils.getUserInfo(httpServletRequest).getId());
         albumService.delete(id, SessionUtils.getUserInfo(httpServletRequest).getId());
         return new Response.Builder().success().build();
     }
@@ -99,6 +89,7 @@ public class AlbumController {
                            @RequestParam(value = "deletes", required = false) String deleteIdArray,
                            @RequestParam(value = "id") long id,
                            DefaultMultipartHttpServletRequest httpServletRequest) {
+        albumService.checkAuthority(id, SessionUtils.getUserInfo(httpServletRequest).getId());
         List<MultipartFile> newFiles = resolveMultipartFiles(httpServletRequest);
         int[] deletes = null;
         if (!StringUtils.isEmpty(deleteIdArray)) {
@@ -110,6 +101,26 @@ public class AlbumController {
         }
         albumService.update(id, name, description, deletes, newFiles, SessionUtils.getUserInfo(httpServletRequest).getId());
         return new Response.Builder().success().build();
+    }
+
+    /**
+     * 相册封面图片
+     *
+     * @param id
+     * @param response
+     */
+    @RequestMapping(value = "/thumbnail/{id}")
+    public void thumbnail(@PathVariable("id") long id, HttpServletRequest request, HttpServletResponse response) {
+        AlbumVO albumVO = albumService.find(id);
+        if (!albumVO.isPublished()) {
+            UserInfoVO userInfoVO = SessionUtils.getUserInfo(request);
+            albumService.checkAuthority(id, userInfoVO == null ? 0L : userInfoVO.getId());
+        }
+        File file = albumService.getThumbnail(id);
+        if (file == null || !file.exists()) {
+            file = albumService.createThumbnail(id);
+        }
+        returnFile(response, file);
     }
 
 
@@ -126,5 +137,6 @@ public class AlbumController {
         }
         return files;
     }
+
 
 }

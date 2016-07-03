@@ -6,10 +6,11 @@ import com.zeal.entity.Picture;
 import com.zeal.entity.UserInfo;
 import com.zeal.exception.BizException;
 import com.zeal.exception.BizExceptionCode;
+import com.zeal.exception.NoAuthorityException;
 import com.zeal.service.PictureService;
 import com.zeal.utils.ConfigureUtils;
-import com.zeal.utils.FileUtils;
 import com.zeal.utils.PictureUtils;
+import com.zeal.vo.album.AlbumVO;
 import com.zeal.vo.album.PictureVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,5 +57,17 @@ public class PictureServiceImpl implements PictureService {
     public File getDiskFile(long pictureId) {
         Picture picture = pictureDao.find(pictureId);
         return new File(ConfigureUtils.getAlbumRepository() + picture.getUrl());
+    }
+
+    @Override
+    public AlbumVO findAlbumByPictureId(long pictureId) {
+        return new AlbumVO(pictureDao.find(pictureId).getAlbum());
+    }
+
+    @Override
+    public void checkAuthority(long pictureId, long userId) {
+        Picture picture = pictureDao.find(pictureId);
+        Album album = picture.getAlbum();
+        if (album.getUserInfo().getId() != userId) throw new NoAuthorityException();
     }
 }

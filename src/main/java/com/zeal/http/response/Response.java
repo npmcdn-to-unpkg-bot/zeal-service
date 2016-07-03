@@ -55,6 +55,8 @@ public final class Response {
 
     public static final Response FAILED = new Response(Status.Failed.getCode(), "失败", null);
 
+    public static final Response NO_AUTHORITY = new Response(Status.NO_Authority.getCode(), "没有权限进行此操作", null);
+
     public enum Status {
         /**
          * 成功
@@ -79,7 +81,12 @@ public final class Response {
         /**
          * 异常
          */
-        Exception(5);
+        Exception(5),
+
+        /**
+         * 没有权限
+         */
+        NO_Authority(6);
 
         private int code;
 
@@ -127,10 +134,12 @@ public final class Response {
             this.status = Status.AuthFailed.getCode();
             return this;
         }
+
         public Builder exception() {
             this.status = Status.Exception.getCode();
             return this;
         }
+
         public Builder message(String message) {
             this.message = message;
             return this;

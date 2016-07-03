@@ -1,7 +1,10 @@
 package com.zeal.utils;
 
-import java.io.File;
-import java.io.IOException;
+import org.aspectj.util.FileUtil;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 
 /**
  * Created by Administrator on 6/29/2016.
@@ -41,4 +44,47 @@ public class FileUtils {
         return file;
     }
 
+
+    public static void copyFile(File srcFile, File targetFile) {
+        if (!srcFile.exists()) {
+            throw new IllegalArgumentException("Src file not exist!");
+        }
+        if (targetFile.exists()) {
+            deleteFile(targetFile.getPath());
+        }
+        targetFile = createFile(targetFile.getPath());
+        FileInputStream inputStream = null;
+        FileOutputStream outputStream = null;
+        try {
+            inputStream = new FileInputStream(srcFile);
+            outputStream = new FileOutputStream(targetFile);
+            copyStream(inputStream, outputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
+    private static void copyStream(InputStream in, OutputStream out) throws IOException {
+        byte[] buf = new byte[4096];
+        for (int bytesRead = in.read(buf, 0, 4096); bytesRead != -1; bytesRead = in.read(buf, 0, 4096)) {
+            out.write(buf, 0, bytesRead);
+        }
+
+    }
 }

@@ -70,4 +70,14 @@ public class GlobalExceptionHandlerAdvice {
                 .message(exception.getMessage())
                 .result(null).build();
     }
+
+
+    @ExceptionHandler(value = NoAuthorityException.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Response noAuthorityException (NoAuthorityException exception, HttpServletResponse httpServletResponset) {
+        LogUtils.error(GlobalExceptionHandlerAdvice.class, "NoAuthorityException ：" + exception.getMessage());
+        httpServletResponset.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        return Response.NO_AUTHORITY;
+    }
 }

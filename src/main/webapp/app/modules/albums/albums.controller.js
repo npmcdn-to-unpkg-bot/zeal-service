@@ -6,6 +6,8 @@
     angular.module("app").controller('AlbumController', ['$scope', 'HttpService', '$log', '$state', '$uibModal', 'AlbumService',
         function ($scope, HttpService, $log, $state, $uibModal, AlbumService) {
 
+            $scope.targetAlbums = [];
+
             $scope.albums = [];
             $scope.rowSize = 4;
             $scope.row = 10;
@@ -15,24 +17,21 @@
 
             $scope.getAlbums = function () {
                 AlbumService.getPublishedAlbums($scope.page, $scope.pageSize).success(function (data) {
-                    $scope.albums = [];
+                    $scope.targetAlbums = [];
                     $scope.page = data.page;
                     $scope.totalSize = data.totalSize;
                     $scope.pageSize = data.size;
                     var albums = data.list;
                     if (albums && albums.length > 0) {
                         for (var i = 0; i < albums.length; i++) {
-                            if (i % $scope.rowSize == 0) {
-                                $scope.albums.push([]);
-                            }
                             var album = albums[i];
-                            $scope.albums[(i - i % $scope.rowSize) / $scope.rowSize].push(
+                            $scope.targetAlbums.push(
                                 {
                                     id: album.id,
                                     name: album.name,
                                     size: album.pictures.length,
                                     pictures: album.pictures,
-                                    url: album.pictures[0].url,
+                                    url: "/zeal/album/thumbnail/" + album.id,
                                     createDate: album.createDate,
                                     userInfo: album.userInfo,
                                     publishDate: album.publishDate
@@ -66,6 +65,11 @@
             $scope.active = 0;
             $scope.interval = 2000;
             $scope.noWrapMode = false;
+        }]);
+
+    angular.module("app").controller('AlbumListDisplayController', ['$scope', 'HttpService', '$log', '$stateParams', 'CookieService', 'album',
+        function ($scope, HttpService, $log, $stateParams, CookieService, album) {
+            $scope.album = album;
         }]);
 
     angular.module("app").controller('PictureDisplayController', function ($scope, picture) {
