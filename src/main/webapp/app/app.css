@@ -47,3 +47,103 @@ body {
 .picture-name {
     margin-top: 40px;
 }
+
+.album-container {
+    background-color: #0f0f0f;
+}
+
+.album-head {
+    background-color: rebeccapurple;
+}
+
+.album-body {
+    min-height: 420px;
+    text-align: center;
+    line-height: 420px;
+    height: 420px;
+}
+
+.album-range {
+    background-color: #0f0f0f;
+}
+
+.album-range img {
+    height: 400px;
+}
+
+.album-footer {
+    width: 100%;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.album-footer img {
+    height: 48px;
+    width: 64px;
+}
+
+.album-footer ul {
+    overflow: hidden;
+    height: 60px;
+    vertical-align: middle;
+    list-style: none;
+}
+
+.album-footer ul li {
+    display: block;
+    height: 60px;
+    cursor: pointer;
+    line-height: 60px;
+}
+
+.album-footer ul li.active {
+    cursor: auto;
+}
+
+.album-footer img {
+    height: 48px;
+    width: 64px;
+}
+
+.album-footer img:hover {
+    height: 60px;
+    width: 80px;
+}
+
+.album-footer ul li.active img {
+    height: 60px;
+    width: 80px;
+    padding: 4px;
+    border: 2px whitesmoke solid;
+}
+
+.album-slider {
+    width: 100%;
+    height: 100%;
+    font-size: 40px;
+    color: #575a61;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.album-slider:hover {
+    color: #000;
+    background-color: #333;
+}
+
+.album-subslider {
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 24px;
+    color: #575a61;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.album-subslider:hover {
+    color: #000;
+    background-color: #333;
+}
