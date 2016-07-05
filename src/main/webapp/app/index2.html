@@ -12,43 +12,68 @@
     <script src="/zeal/app/lib/ng-file-upload/ng-file-upload.min.js"></script>
 
     <script>
-        var app = angular.module("app", []);
-        app.controller('AlbumController', function ($scope) {
-            $scope.pictures = [
-                {src: "http://localhost:8080/zeal/picture/111"},
-                {src: "http://localhost:8080/zeal/picture/211"},
-                {src: "http://localhost:8080/zeal/picture/311"},
-                {src: "http://localhost:8080/zeal/picture/411"},
-                {src: "http://localhost:8080/zeal/picture/511"},
-                {src: "http://localhost:8080/zeal/picture/611"},
-                {src: "http://localhost:8080/zeal/picture/711"},
-                {src: "http://localhost:8080/zeal/picture/121"},
-                {src: "http://localhost:8080/zeal/picture/567"},
-                {src: "http://localhost:8080/zeal/picture/325"},
-                {src: "http://localhost:8080/zeal/picture/132"}
-            ];
-            $scope.index = 0;
-            $scope.subIndex = 0;
-            $scope.subPictures = [];
-            if ($scope.pictures.length <= 6) {
-                $scope.subPictures = $scope.pictures;
-            }else{
+        var app = angular.module("app", [], function ($compileProvider) {
 
-            }
-
-
+        });
+        app.controller('TestController', function ($scope, $http, $compile) {
+            $scope.aaaa = "sadsad";
             $scope.fullScreen = function () {
                 document.documentElement.webkitRequestFullScreen();
             };
-
+            $scope.pictures = [
+                {src: "http://localhost:8080/zeal/picture/1"},
+                {src: "http://localhost:8080/zeal/picture/2"},
+                {src: "http://localhost:8080/zeal/picture/3"},
+                {src: "http://localhost:8080/zeal/picture/4"},
+                {src: "http://localhost:8080/zeal/picture/5"},
+                {src: "http://localhost:8080/zeal/picture/6"},
+                {src: "http://localhost:8080/zeal/picture/7"},
+                {src: "http://localhost:8080/zeal/picture/8"},
+                {src: "http://localhost:8080/zeal/picture/9"},
+                {src: "http://localhost:8080/zeal/picture/10"},
+                {src: "http://localhost:8080/zeal/picture/11"},
+                {src: "http://localhost:8080/zeal/picture/1"},
+                {src: "http://localhost:8080/zeal/picture/2"},
+                {src: "http://localhost:8080/zeal/picture/3"},
+                {src: "http://localhost:8080/zeal/picture/4"},
+                {src: "http://localhost:8080/zeal/picture/5"},
+                {src: "http://localhost:8080/zeal/picture/6"},
+                {src: "http://localhost:8080/zeal/picture/7"},
+                {src: "http://localhost:8080/zeal/picture/8"},
+                {src: "http://localhost:8080/zeal/picture/9"},
+                {src: "http://localhost:8080/zeal/picture/10"},
+                {src: "http://localhost:8080/zeal/picture/11"}
+            ];
+            $scope.index = 0;
+            $scope.subIndex = 0;
             $scope.pre = function () {
                 if ($scope.index > 0) {
                     $scope.index--;
+                    if ($scope.index >= 5) {
+                        if ($scope.subIndex > $scope.index) {
+                            $scope.subIndex = $scope.index - 5;
+                        } else if ($scope.subIndex + 6 < $scope.index) {
+                            $scope.subIndex = $scope.index - 5;
+                        }
+                    } else {
+                        $scope.subIndex = 0;
+                    }
+                } else {
+                    $scope.subIndex = 0;
                 }
             };
             $scope.next = function () {
                 if ($scope.index < $scope.pictures.length - 1) {
                     $scope.index++;
+                    if ($scope.index - 6 >= $scope.subIndex) {
+                        if ($scope.subIndex + 6 <= $scope.pictures.length) {
+                            $scope.subIndex = $scope.index;
+                        } else {
+                            $scope.subIndex = $scope.pictures.length - 6;
+                        }
+                    } else if ($scope.index < $scope.subIndex) {
+                        $scope.subIndex = $scope.index;
+                    }
                 }
             };
             $scope.select = function (index) {
@@ -56,61 +81,67 @@
             };
 
             $scope.subIndexPre = function () {
-
+                if ($scope.subIndex > 0) {
+                    $scope.subIndex--;
+                }
             };
 
             $scope.subIndexNext = function () {
-
+                if ($scope.subIndex < $scope.pictures.length - 6) {
+                    $scope.subIndex++;
+                }
             };
+
+            $scope.close = function () {
+                var div = document.getElementById("zeal-modal-container");
+                if (div) {
+                    document.getElementsByTagName("body")[0].removeChild(div);
+                }
+            };
+
+        });
+
+        app.controller('AlbumController', function ($scope, $http, $compile) {
+            $scope.show = function () {
+                var div = document.createElement("div");
+                div.id = "zeal-modal-container";
+                div.style.backgroundColor = "#000000";
+                div.style.width = "100%";
+                div.style.height = "100%";
+                div.style.position = "fixed";
+                div.style.top = "0";
+                div.style.left = "0";
+                div.style.zIndex = "2000";
+                div.style.opacity = "1.0";
+                div.style.filter = "Alpha(opacity=100)";
+                document.body.appendChild(div);
+                document.body.style.overflow = "hidden";
+                var html = $http.get("/zeal/app/index3.html").success(function (data) {
+                    var remote = angular.element(data)[0];
+                    remote.style.marginLeft = "auto";
+                    remote.style.marginRight = "auto";
+                    remote.setAttribute("ng-controller", 'TestController');
+                    div.appendChild(remote);
+                    $compile(div)($scope);
+                });
+            };
+
+            $scope.close = function () {
+                var div = document.getElementById("zeal-modal-container");
+                if (div) {
+                    document.getElementsByTagName("body")[0].removeChild(div);
+                }
+            };
+
         });
 
 
     </script>
 
 </head>
-<body style="padding-top: 0px;background-color: #0f0f0f;width: 100%;height: 100%;min-height: 640px;"
+<body style="padding-top: 0px;width: 100%;height: 100%;min-height: 640px;"
       ng-controller="AlbumController">
 
-<div class="container album-container text-center" style="margin: 0 auto;">
-    <div class="album-head">
-        w
-    </div>
-    <div class="album-body">
-        <div class="col-sm-2">
-            <div class="album-slider" ng-click="pre()">
-                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-            </div>
-        </div>
-
-        <div class="album-range col-sm-8 text-center">
-            <img ng-src="{{pictures[index].src}}">
-        </div>
-        <div class="col-sm-2" ng-click="next()">
-            <div class="album-slider"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-            </div>
-        </div>
-    </div>
-    <div class="album-footer">
-        <div class="col-sm-2">
-            <div class="pull-right album-subslider" ng-click="subIndexPre()" ng-hide="pictures.length <= 6">
-                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-            </div>
-        </div>
-        <div class="col-sm-8 text-center">
-            <ul class="list-inline">
-                <li ng-repeat="picture in pictures" class="col-sm-2" ng-class="{'active':$index == index}"
-                    ng-click="select($index)">
-                    <img ng-src="{{picture.src}}">
-                </li>
-            </ul>
-        </div>
-        <div class="col-sm-2">
-            <div class="pull-left album-subslider" ng-click="subIndexNext()" ng-hide="pictures.length <= 6">
-                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-            </div>
-        </div>
-    </div>
-</div>
-
+<button class="btn btn-primary" ng-click="show()">展示</button>
 </body>
 </html>
