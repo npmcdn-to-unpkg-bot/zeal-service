@@ -10,98 +10,45 @@
     <script src="/zeal/app/lib/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="/zeal/app/lib/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="/zeal/app/lib/ng-file-upload/ng-file-upload.min.js"></script>
-
+    <script src="/zeal/app/app.js"></script>
+    <script src="/zeal/app/common/services/cookie.service.js"></script>
+    <script src="/zeal/app/common/interceptors/http.interceptor.js"></script>
+    <script src="/zeal/app/common/services/http.service.js"></script>
+    <script src="/zeal/app/common/services/message.service.js"></script>
+    <script src="/zeal/app/modules/user/user.controller.js"></script>
+    <script src="/zeal/app/modules/user/user.service.js"></script>
+    <script src="/zeal/app/modules/albums/albums.controller.js"></script>
+    <script src="/zeal/app/modules/albums/albums.service.js"></script>
+    <script src="/zeal/app/modules/my/my.controller.js"></script>
+    <script src="/zeal/app/modules/my/albums/my.albums.controller.js"></script>
+    <script src="/zeal/app/common/directives/album.gallery.directive.js"></script>
     <script>
-        var app = angular.module("app", [], function ($compileProvider) {
-
-        });
-        app.controller('TestController', function ($scope, $http, $compile) {
-            $scope.aaaa = "sadsad";
-            $scope.fullScreen = function () {
-                document.documentElement.webkitRequestFullScreen();
-            };
+        angular.module("app").controller('TestController', function ($scope, $http, $compile) {
             $scope.pictures = [
-                {src: "http://localhost:8080/zeal/picture/1"},
-                {src: "http://localhost:8080/zeal/picture/2"},
-                {src: "http://localhost:8080/zeal/picture/3"},
-                {src: "http://localhost:8080/zeal/picture/4"},
-                {src: "http://localhost:8080/zeal/picture/5"},
-                {src: "http://localhost:8080/zeal/picture/6"},
-                {src: "http://localhost:8080/zeal/picture/7"},
-                {src: "http://localhost:8080/zeal/picture/8"},
-                {src: "http://localhost:8080/zeal/picture/9"},
-                {src: "http://localhost:8080/zeal/picture/10"},
-                {src: "http://localhost:8080/zeal/picture/11"},
-                {src: "http://localhost:8080/zeal/picture/1"},
-                {src: "http://localhost:8080/zeal/picture/2"},
-                {src: "http://localhost:8080/zeal/picture/3"},
-                {src: "http://localhost:8080/zeal/picture/4"},
-                {src: "http://localhost:8080/zeal/picture/5"},
-                {src: "http://localhost:8080/zeal/picture/6"},
-                {src: "http://localhost:8080/zeal/picture/7"},
-                {src: "http://localhost:8080/zeal/picture/8"},
-                {src: "http://localhost:8080/zeal/picture/9"},
-                {src: "http://localhost:8080/zeal/picture/10"},
-                {src: "http://localhost:8080/zeal/picture/11"}
+                {url: "http://localhost:8080/zeal/picture/1"},
+                {url: "http://localhost:8080/zeal/picture/2"},
+                {url: "http://localhost:8080/zeal/picture/3"},
+                {url: "http://localhost:8080/zeal/picture/4"},
+                {url: "http://localhost:8080/zeal/picture/5"},
+                {url: "http://localhost:8080/zeal/picture/6"},
+                {url: "http://localhost:8080/zeal/picture/7"},
+                {url: "http://localhost:8080/zeal/picture/8"},
+                {url: "http://localhost:8080/zeal/picture/9"},
+                {url: "http://localhost:8080/zeal/picture/10"},
+                {url: "http://localhost:8080/zeal/picture/11"},
+                {url: "http://localhost:8080/zeal/picture/1"},
+                {url: "http://localhost:8080/zeal/picture/2"},
+                {url: "http://localhost:8080/zeal/picture/3"},
+                {url: "http://localhost:8080/zeal/picture/4"},
+                {url: "http://localhost:8080/zeal/picture/5"},
+                {url: "http://localhost:8080/zeal/picture/6"},
+                {url: "http://localhost:8080/zeal/picture/7"},
+                {url: "http://localhost:8080/zeal/picture/8"},
+                {url: "http://localhost:8080/zeal/picture/9"},
+                {url: "http://localhost:8080/zeal/picture/10"},
+                {url: "http://localhost:8080/zeal/picture/11"}
             ];
-            $scope.index = 0;
-            $scope.subIndex = 0;
-            $scope.pre = function () {
-                if ($scope.index > 0) {
-                    $scope.index--;
-                    if ($scope.index >= 5) {
-                        if ($scope.subIndex > $scope.index) {
-                            $scope.subIndex = $scope.index - 5;
-                        } else if ($scope.subIndex + 6 < $scope.index) {
-                            $scope.subIndex = $scope.index - 5;
-                        }
-                    } else {
-                        $scope.subIndex = 0;
-                    }
-                } else {
-                    $scope.subIndex = 0;
-                }
-            };
-            $scope.next = function () {
-                if ($scope.index < $scope.pictures.length - 1) {
-                    $scope.index++;
-                    if ($scope.index - 6 >= $scope.subIndex) {
-                        if ($scope.subIndex + 6 <= $scope.pictures.length) {
-                            $scope.subIndex = $scope.index;
-                        } else {
-                            $scope.subIndex = $scope.pictures.length - 6;
-                        }
-                    } else if ($scope.index < $scope.subIndex) {
-                        $scope.subIndex = $scope.index;
-                    }
-                }
-            };
-            $scope.select = function (index) {
-                $scope.index = index;
-            };
 
-            $scope.subIndexPre = function () {
-                if ($scope.subIndex > 0) {
-                    $scope.subIndex--;
-                }
-            };
-
-            $scope.subIndexNext = function () {
-                if ($scope.subIndex < $scope.pictures.length - 6) {
-                    $scope.subIndex++;
-                }
-            };
-
-            $scope.close = function () {
-                var div = document.getElementById("zeal-modal-container");
-                if (div) {
-                    document.getElementsByTagName("body")[0].removeChild(div);
-                }
-            };
-
-        });
-
-        app.controller('AlbumController', function ($scope, $http, $compile) {
             $scope.show = function () {
                 var div = document.createElement("div");
                 div.id = "zeal-modal-container";
@@ -125,23 +72,14 @@
                     $compile(div)($scope);
                 });
             };
-
-            $scope.close = function () {
-                var div = document.getElementById("zeal-modal-container");
-                if (div) {
-                    document.getElementsByTagName("body")[0].removeChild(div);
-                }
-            };
-
         });
-
-
     </script>
 
 </head>
-<body style="padding-top: 0px;width: 100%;height: 100%;min-height: 640px;"
-      ng-controller="AlbumController">
-
-<button class="btn btn-primary" ng-click="show()">展示</button>
+<body ng-controller="TestController" style="padding-top: 0px;">
+<div>
+    <button class="btn btn-primary" ng-click="show()">展示</button>
+    <album-gallery pictures="pictures"></album-gallery>
+</div>
 </body>
 </html>
