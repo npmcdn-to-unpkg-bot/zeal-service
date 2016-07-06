@@ -34,11 +34,11 @@
                 $scope.pre = function () {
                     if ($scope.index > 0) {
                         $scope.index--;
-                        if ($scope.index >= 5) {
+                        if ($scope.index >= 8) {
                             if ($scope.subIndex > $scope.index) {
-                                $scope.subIndex = $scope.index - 5;
-                            } else if ($scope.subIndex + 6 <= $scope.index) {
-                                $scope.subIndex = $scope.index - 5;
+                                $scope.subIndex = $scope.index - 8;
+                            } else if ($scope.subIndex + 9 <= $scope.index) {
+                                $scope.subIndex = $scope.index - 8;
                             }
                         } else {
                             $scope.subIndex = 0;
@@ -51,11 +51,11 @@
                     console.log(1);
                     if ($scope.index < $scope.pictures.length - 1) {
                         $scope.index++;
-                        if ($scope.index - 6 >= $scope.subIndex) {
-                            if ($scope.subIndex + 6 <= $scope.pictures.length) {
+                        if ($scope.index - 9 >= $scope.subIndex) {
+                            if ($scope.subIndex + 9 <= $scope.pictures.length) {
                                 $scope.subIndex = $scope.index;
                             } else {
-                                $scope.subIndex = $scope.pictures.length - 6;
+                                $scope.subIndex = $scope.pictures.length - 9;
                             }
                         } else if ($scope.index < $scope.subIndex) {
                             $scope.subIndex = $scope.index;
@@ -73,7 +73,7 @@
                 };
 
                 $scope.subIndexNext = function () {
-                    if ($scope.subIndex < $scope.pictures.length - 6) {
+                    if ($scope.subIndex < $scope.pictures.length - 9) {
                         $scope.subIndex++;
                     }
                 };

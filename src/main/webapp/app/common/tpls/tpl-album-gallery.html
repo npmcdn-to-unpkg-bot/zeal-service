@@ -1,50 +1,29 @@
 <div class="album-container" onselectstart="return false">
-    <div class="album-head">
-        <div ng-click="fullScreen()" class="album-btn">
-            <span class="glyphicon glyphicon-fullscreen"></span>
-        </div>
-        <div ng-click="close()" class="album-btn">
-            <span class="glyphicon glyphicon-remove"></span>
-        </div>
+    <div class="album-btn-fullScreen" ng-click="fullScreen()">
+        <span class="glyphicon glyphicon-fullscreen"></span>
     </div>
-
     <div class="album-body">
-        <div class="col-sm-2">
-            <div ng-click="pre()" class="album-slider">
-                <span class="glyphicon glyphicon-chevron-left"></span>
-            </div>
+        <div class="album-slider-left" ng-click="pre()">
+            <div></div>
         </div>
-        <div class="album-range col-sm-8 text-center">
+        <!--  <img src="/zeal/picture/1">-->
+        <div class="album-pic">
             <img ng-src="{{pictures[index].url}}">
         </div>
-        <div class="col-sm-2">
-            <div ng-click="next()"  class="album-slider">
-                <span class="glyphicon glyphicon-chevron-right"></span>
-            </div>
+        <div class="album-slider-right" ng-click="next()">
+            <div></div>
         </div>
-
     </div>
     <div class="album-footer">
-        <div>
-            <div class="col-sm-2">
-                <div class="album-subslider pull-right" ng-click="subIndexPre()" ng-hide="pictures.length <= 6">
-                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                </div>
-            </div>
-            <div class="col-sm-8 text-center">
-                <ul class="list-inline">
-                    <li ng-repeat="picture in pictures" ng-hide="$index < subIndex || ($index > subIndex + 6)"
-                        class="col-sm-2" ng-class="{'active':$index == index}"
-                        ng-click="select($index)">
-                        <img ng-src="{{picture.url}}">
-                    </li>
-                </ul>
-            </div>
-            <div class="col-sm-2">
-                <div class="album-subslider" ng-click="subIndexNext()" ng-hide="pictures.length <= 6">
-                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                </div>
-            </div>
+        <div class="sub-slider-left" ng-click="subIndexPre()">
+            <span class="glyphicon glyphicon-triangle-left"></span>
+        </div>
+        <div class="album-thumbnails">
+            <img ng-src="{{picture.url}}" ng-class="{'active':$index == index}" ng-repeat="picture in pictures"
+                 ng-hide="$index < subIndex || $index >= subIndex+9" ng-click="select($index)">
+        </div>
+        <div class="sub-slider-right" ng-click="subIndexNext()">
+            <span class="glyphicon glyphicon-triangle-right"></span>
         </div>
     </div>
 </div>

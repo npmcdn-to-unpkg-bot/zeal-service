@@ -34,19 +34,19 @@
                 {url: "http://localhost:8080/zeal/picture/7"},
                 {url: "http://localhost:8080/zeal/picture/8"},
                 {url: "http://localhost:8080/zeal/picture/9"},
-                {url: "http://localhost:8080/zeal/picture/10"},
-                {url: "http://localhost:8080/zeal/picture/11"},
-                {url: "http://localhost:8080/zeal/picture/1"},
-                {url: "http://localhost:8080/zeal/picture/2"},
-                {url: "http://localhost:8080/zeal/picture/3"},
-                {url: "http://localhost:8080/zeal/picture/4"},
-                {url: "http://localhost:8080/zeal/picture/5"},
-                {url: "http://localhost:8080/zeal/picture/6"},
-                {url: "http://localhost:8080/zeal/picture/7"},
-                {url: "http://localhost:8080/zeal/picture/8"},
-                {url: "http://localhost:8080/zeal/picture/9"},
-                {url: "http://localhost:8080/zeal/picture/10"},
-                {url: "http://localhost:8080/zeal/picture/11"}
+                 {url: "http://localhost:8080/zeal/picture/10"},
+                 {url: "http://localhost:8080/zeal/picture/11"},
+                 {url: "http://localhost:8080/zeal/picture/1"},
+                 {url: "http://localhost:8080/zeal/picture/2"},
+                 {url: "http://localhost:8080/zeal/picture/3"},
+                 {url: "http://localhost:8080/zeal/picture/4"},
+                 {url: "http://localhost:8080/zeal/picture/5"},
+                 {url: "http://localhost:8080/zeal/picture/6"},
+                 {url: "http://localhost:8080/zeal/picture/7"},
+                 {url: "http://localhost:8080/zeal/picture/8"},
+                 {url: "http://localhost:8080/zeal/picture/9"},
+                 {url: "http://localhost:8080/zeal/picture/10"},
+                 {url: "http://localhost:8080/zeal/picture/11"}
             ];
 
             $scope.show = function () {
@@ -79,7 +79,10 @@
 <body ng-controller="TestController" style="padding-top: 0px;">
 <div>
     <button class="btn btn-primary" ng-click="show()">展示</button>
-    <album-gallery pictures="pictures"></album-gallery>
+    <div style="width: 900px;margin: 0 auto;">
+        <album-gallery pictures="pictures"></album-gallery>
+    </div>
+
 </div>
 </body>
 </html>

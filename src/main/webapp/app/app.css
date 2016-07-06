@@ -50,127 +50,161 @@ body {
 
 .album-container {
     text-align: center;
+    position: relative;
     color: white;
     overflow: auto;
-    height: 580px;
     width: 100%;
+    height: 100%;
+    min-height: 560px;
     margin: 0 auto;
-    background-color: #000000;
-}
-
-.album-head {
-    height: 40px;
-    width: 100%;
-    line-height: 40px;
-    z-index: 1000;
+    background-color: #000;
 }
 
 .album-body {
+    position: absolute;
+    top: 0;
     width: 100%;
-    margin: 0 auto;
-    height: 420px;
-    line-height: 420px;
-    z-index: 50;
+    bottom: 20%;
 }
 
-.album-range {
-    background-color: #000;
-    float: left;
+.album-pic img {
+    width: 80%;
+    height: 90%;
+    bottom: 0;
+    left: 10%;
+    right: 10%;
+    position: absolute;
+    border: 2px solid white;
 }
 
-.album-range img {
-    height: 420px;
-    display: inline;
+.album-pic {
+    max-width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0%;
+    right: 0%;
+    z-index: 1;
+}
+
+.album-slider-left {
+    position: absolute;
+    width: 10%;
+    z-index: 100;
+    top: 220px;
+    left: 20px;
+    cursor: pointer;
+}
+
+.album-slider-right {
+    position: absolute;
+    width: 10%;
+    right: 20px;
+    top: 220px;
+    z-index: 100;
+    cursor: pointer;
+}
+
+.album-slider-left div {
+    width: 15px;
+    height: 30px;
+    background-image: url("/zeal/resources/app/icons/slider_arrow_left.png");
+    opacity: 0.5;
+filter(alpha = 50)
+}
+
+.album-slider-right div {
+    float: right;
+    width: 15px;
+    height: 30px;
+    background-image: url('/zeal/resources/app/icons/slider_arrow_right.png');
+    opacity: 0.5;
+filter(alpha = 50)
+}
+
+.album-slider-left div:hover, .album-slider-right div:hover {
+    opacity: 1;
+filter(alpha = 100)
 }
 
 .album-footer {
+    position: absolute;
     width: 100%;
-    margin-top: 30px;
-    z-index: 100;
-    height: 80px;
-    line-height: 80px;
+    height: 20%;
+    bottom: 0;
 }
 
-.album-footer > div {
-    width: 100%;
-    margin: 0 auto;
+.album-thumbnails {
+    position: absolute;
+    left: 5%;
+    right: 5%;
+    height: 50%;
+    bottom: 25%;
 }
 
-.album-footer img {
-    height: 48px;
-    width: 64px;
-}
-
-.album-footer ul {
-    overflow: hidden;
-    height: 60px;
-    vertical-align: middle;
-    list-style: none;
-}
-
-.album-footer ul li {
-    display: block;
-    height: 60px;
+.album-thumbnails img {
+    height: 100%;
+    width: 10.11111111%;
+    margin-right: 0.5%;
+    margin-left: 0.5%;
     cursor: pointer;
-    line-height: 60px;
+    opacity: 0.5;
 }
 
-.album-footer ul li.active {
-    cursor: auto;
+.album-thumbnails img:hover {
+    opacity: 1;
 }
 
-.album-footer img {
-    height: 48px;
-    width: 64px;
+.album-thumbnails img.active {
+    opacity: 1;
+    border: 1px solid white;
 }
 
-.album-footer img:hover {
-    height: 60px;
-    width: 80px;
-}
-
-.album-footer ul li.active img {
-    height: 60px;
-    width: 80px;
-    padding: 4px;
-    border: 2px whitesmoke solid;
-}
-
-.album-slider {
-    width: 100%;
-    font-size: 36px;
+.sub-slider-left {
+    position: absolute;
+    right: 95%;
+    height: 50%;
+    bottom: 25%;
+    width: 5%;
     cursor: pointer;
 }
 
-.album-slider:hover {
-    color: #333;
-}
-
-
-.album-subslider {
-    width: 60px;
-    height: 60px;
-    line-height: 60px;
-    font-size: 24px;
-    color: #575a61;
-    background: none;
-    border: none;
+.sub-slider-right {
+    position: absolute;
+    left: 95%;
+    height: 50%;
+    width: 5%;
+    bottom: 25%;
     cursor: pointer;
 }
 
-.album-subslider:hover {
-    color: #333;
+.sub-slider-right span {
+    position: absolute;
+    left: 10px;
+    top: 35%;
+    opacity: 0.5;
 }
 
-.album-btn {
-    width: 40px;
-    height: 40px;
+.sub-slider-left span {
+    position: absolute;
+    top: 35%;
+    right: 10px;
+    opacity: 0.5;
+}
+
+.sub-slider-right span:hover, .sub-slider-left span:hover {
+    opacity: 1;
+}
+
+.album-btn-fullScreen {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    z-index: 10000;
     cursor: pointer;
-    line-height: 40px;
-    float: right;
-    color: #fff;
+    font-size: 20px;
+    opacity: 0.5;
 }
 
-.album-btn:hover {
-    color: #333;
+.album-btn-fullScreen:hover {
+    opacity: 1;
 }
