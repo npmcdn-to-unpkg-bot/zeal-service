@@ -57,7 +57,7 @@ body {
     height: 100%;
     min-height: 560px;
     margin: 0 auto;
-    background-color: #000;
+    background-color: #222a34;
 }
 
 .album-body {
@@ -68,13 +68,12 @@ body {
 }
 
 .album-pic img {
-    width: 80%;
-    height: 90%;
+    width: 100%;
+    height: 100%;
     bottom: 0;
-    left: 10%;
-    right: 10%;
+    left: 0;
+    right: 0;
     position: absolute;
-    border: 2px solid white;
 }
 
 .album-pic {
@@ -88,42 +87,50 @@ body {
 
 .album-slider-left {
     position: absolute;
-    width: 10%;
+    width: 50%;
     z-index: 100;
-    top: 220px;
-    left: 20px;
+    height: 100%;
     cursor: pointer;
+
+}
+
+.album-slider-left span {
+    top: 50%;
+    width: 32px;
+    height: 32px;
+    left: 50px;
+    margin-top: -16px;
+    cursor: pointer;
+    position: absolute;
+    background-size: 32px 32px;
+    opacity: 0.5;
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABqUlEQVR4Xt3b0U3EMBCE4XEFUAolHB0clUFHUAJ0cldBkKUgnRDh7PWsd9Z5Tpz8nyxFspOCJMe2bU8AXgG8lFIurMcurIE8x9nj3wE8AvgE8MxCkAf4Ff/jTEOQBjiIpyLIAtyJpyFIAjTGUxDkADrjhxGkAIzxQwgyAIPxZgQJAFJ8RbgCOJVS6muy6QgHiIyvQqEA0fGhAArxYQAq8SEASvHTAdTipwIoxk8DUI2fAqAc7w6gHu8KkCHeDSBLvAtApng6QLZ4KkDGeBpA1ngKQOb4YYDs8UMAK8SbAVaJNwGsFN8NsFq8FeADwEPTmvPxSXV/v25xNy9fD97v8PLuVeF9FiyD0A1QKVdCMAGshGAGWAVhCGAFhGGA7AgUgMwINICsCFSAjAh0gGwILgCZENwAsiC4AmRAcAdQR5gCoIwwDUAVYSqAIsJ0ADWEEAAlhDAAFYRQAAWEcIBoBAkAIsLX/rV48291MgAEhO747o0Rr82J23GNS+6meEkAw0wwx8sCdCAMxUsDNCAMx8sD/INAiU8B8AcCLT4NwA3CG4Az68/xOu43keZ+UGLOkN4AAAAASUVORK5CYII=");
+}
+
+.album-slider-left span:hover, .album-slider-right span:hover {
+    opacity: 1;
 }
 
 .album-slider-right {
     position: absolute;
-    width: 10%;
-    right: 20px;
-    top: 220px;
+    width: 50%;
+    height: 100%;
     z-index: 100;
+    right: 0;
     cursor: pointer;
 }
 
-.album-slider-left div {
-    width: 15px;
-    height: 30px;
-    background-image: url("/zeal/resources/app/icons/slider_arrow_left.png");
+.album-slider-right span {
+    top: 50%;
+    width: 32px;
+    height: 32px;
+    right: 50px;
+    margin-top: -16px;
+    cursor: pointer;
+    position: absolute;
+    background-size: 32px 32px;
     opacity: 0.5;
-filter(alpha = 50)
-}
-
-.album-slider-right div {
-    float: right;
-    width: 15px;
-    height: 30px;
-    background-image: url('/zeal/resources/app/icons/slider_arrow_right.png');
-    opacity: 0.5;
-filter(alpha = 50)
-}
-
-.album-slider-left div:hover, .album-slider-right div:hover {
-    opacity: 1;
-filter(alpha = 100)
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABqElEQVR4Xt3b7U3AMAyE4csGbAIjwCQwAkwAm8AGsAGMwCgwgVGlIiHER+048V36u031PqpaqVYakg4zOwHwCOCmtfaatOzwZVrGHfb4ZwBnAN4AXKggdAN8i//0lEHoAvglXgohDPBPvAxCCOBgvASCG8AZT48QAbgDcBv4elC+GN0AW7iZPQC4XAEhBLASQhhgFYQugBUQugHUEVIAlBHSAFQRUgEUEdIB1BCGACghDANQQRgKoIAwHIAdYQoAM8I0AFaEqQCMCNMB2BBKAJgQygBYEEoBGBDKAaoRKAAqEWgAqhCoACoQGAHuAVwFZg7vAM69Y3kqADObGr8h0wBUxNMAVMVTAFTGlwNUx5cCMMSXAbDElwAwxU8HYIufCsAYPw2ANX4KAHP8cAD2+KEACvHDAFTihwAoxacDqMWnAijGpwGoxqcAKMd3A6jHdwGsEB8GWCU+BGBm0Q0Tof/2gfmA6xL3b/F9y8wLgFPHnSjjQ0/APr7adokeRaCNDwM4EKjjuwAOINDHdwP8gSARnwLwA4JMfBrAF4QnANfeEbXja5J+6gcWEX5QlySXfwAAAABJRU5ErkJggg==");
 }
 
 .album-footer {
@@ -131,6 +138,7 @@ filter(alpha = 100)
     width: 100%;
     height: 20%;
     bottom: 0;
+    background-color: #000;
 }
 
 .album-thumbnails {
