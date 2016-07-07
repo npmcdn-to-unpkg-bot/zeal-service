@@ -20,7 +20,7 @@
         <img ng-src="{{picture.url}}" style="max-width: 900px;">
     </div>
     <div ng-show="carouselMode" class="text-center" style="height: 480px;margin-top: 10px;">
-        <uib-carousel active="active" interval="interval" no-wrap="noWrapMode">
+        <!--<uib-carousel active="active" interval="interval" no-wrap="noWrapMode">
             <uib-slide ng-repeat="slide in slides" index="$index">
                 <img ng-src="{{slide.url}}" style="margin:auto;max-height: 460px;min-height: 400px;">
                 <div class="carousel-caption">
@@ -28,7 +28,8 @@
                     <p>{{slide.description}}</p>
                 </div>
             </uib-slide>
-        </uib-carousel>
+        </uib-carousel>-->
+        <album-gallery pictures="slides"></album-gallery>
     </div>
     <div class="footer" style="margin-top: 20px;"></div>
 </div>
