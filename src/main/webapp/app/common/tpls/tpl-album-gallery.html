@@ -15,14 +15,14 @@
     </div>
     <div class="album-footer">
         <div class="sub-slider-left" ng-click="subIndexPre()">
-            <span class="glyphicon glyphicon-triangle-left"></span>
+            <span></span>
         </div>
         <div class="album-thumbnails">
             <img ng-src="{{picture.url}}" ng-class="{'active':$index == index}" ng-repeat="picture in pictures"
                  ng-hide="$index < subIndex || $index >= subIndex+9" ng-click="select($index)">
         </div>
         <div class="sub-slider-right" ng-click="subIndexNext()">
-            <span class="glyphicon glyphicon-triangle-right"></span>
+            <span></span>
         </div>
     </div>
 </div>

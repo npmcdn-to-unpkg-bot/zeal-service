@@ -9,15 +9,19 @@
             </button>
         </p>
         <div class="col-lg-offset-7 col-lg-3 text-right">
-            <p ng-show="album.published"><span class="text-info">发布日期：</span> {{album.publishDate | date:'yyyy-MM-dd'}}</p>
+            <p ng-show="album.published"><span class="text-info">发布日期：</span> {{album.publishDate | date:'yyyy-MM-dd'}}
+            </p>
         </div>
         <div class="col-lg-2 text-right">
             <span class="text-info">作者：</span>{{album.userInfo.nickName}}
         </div>
     </div>
     <hr/>
-    <div ng-hide="carouselMode" class="text-center" ng-repeat="picture in album.pictures" style="margin-top: 10px;">
+    <!--<div ng-hide="carouselMode" class="text-center" ng-repeat="picture in album.pictures" style="margin-top: 10px;">
         <img ng-src="{{picture.url}}" style="max-width: 900px;">
+    </div>-->
+    <div ng-hide="carouselMode">
+        <album-list pictures="slides"></album-list>
     </div>
     <div ng-show="carouselMode" class="text-center" style="height: 480px;margin-top: 10px;">
         <!--<uib-carousel active="active" interval="interval" no-wrap="noWrapMode">

@@ -22,6 +22,7 @@
     <script src="/zeal/app/modules/my/my.controller.js"></script>
     <script src="/zeal/app/modules/my/albums/my.albums.controller.js"></script>
     <script src="/zeal/app/common/directives/album.gallery.directive.js"></script>
+    <script src="/zeal/app/common/directives/album.list.directive.js"></script>
     <script>
         angular.module("app").controller('TestController', function ($scope, $http, $compile) {
             $scope.pictures = [
@@ -34,19 +35,19 @@
                 {url: "http://localhost:8080/zeal/picture/7"},
                 {url: "http://localhost:8080/zeal/picture/8"},
                 {url: "http://localhost:8080/zeal/picture/9"},
-                 {url: "http://localhost:8080/zeal/picture/10"},
-                 {url: "http://localhost:8080/zeal/picture/11"},
-                 {url: "http://localhost:8080/zeal/picture/1"},
-                 {url: "http://localhost:8080/zeal/picture/2"},
-                 {url: "http://localhost:8080/zeal/picture/3"},
-                 {url: "http://localhost:8080/zeal/picture/4"},
-                 {url: "http://localhost:8080/zeal/picture/5"},
-                 {url: "http://localhost:8080/zeal/picture/6"},
-                 {url: "http://localhost:8080/zeal/picture/7"},
-                 {url: "http://localhost:8080/zeal/picture/8"},
-                 {url: "http://localhost:8080/zeal/picture/9"},
-                 {url: "http://localhost:8080/zeal/picture/10"},
-                 {url: "http://localhost:8080/zeal/picture/11"}
+                {url: "http://localhost:8080/zeal/picture/10"},
+                {url: "http://localhost:8080/zeal/picture/11"},
+                {url: "http://localhost:8080/zeal/picture/1"},
+                {url: "http://localhost:8080/zeal/picture/2"},
+                {url: "http://localhost:8080/zeal/picture/3"},
+                {url: "http://localhost:8080/zeal/picture/4"},
+                {url: "http://localhost:8080/zeal/picture/5"},
+                {url: "http://localhost:8080/zeal/picture/6"},
+                {url: "http://localhost:8080/zeal/picture/7"},
+                {url: "http://localhost:8080/zeal/picture/8"},
+                {url: "http://localhost:8080/zeal/picture/9"},
+                {url: "http://localhost:8080/zeal/picture/10"},
+                {url: "http://localhost:8080/zeal/picture/11"}
             ];
 
             $scope.show = function () {
@@ -59,7 +60,7 @@
                 div.style.top = "0";
                 div.style.left = "0";
                 div.style.zIndex = "2000";
-                div.style.opacity = "1.0";
+                div.style.opacity = "07";
                 div.style.filter = "Alpha(opacity=100)";
                 document.body.appendChild(div);
                 document.body.style.overflow = "hidden";
@@ -78,10 +79,10 @@
 </head>
 <body ng-controller="TestController" style="padding-top: 0px;">
 <div>
-    <button class="btn btn-primary" ng-click="show()">展示</button>
-    <div style="width: 900px;margin: 0 auto;">
-        <album-gallery pictures="pictures"></album-gallery>
-    </div>
+     <button class="btn btn-primary" ng-click="show()">展示</button>
+     <div style="width: 900px;margin: 0 auto;">
+         <album-list pictures="pictures"></album-list>
+     </div>
 
 </div>
 </body>
