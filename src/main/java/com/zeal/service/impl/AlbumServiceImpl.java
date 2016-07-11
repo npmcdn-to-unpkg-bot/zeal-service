@@ -2,9 +2,11 @@ package com.zeal.service.impl;
 
 import com.zeal.common.PagedList;
 import com.zeal.dao.AlbumDao;
+import com.zeal.dao.AlbumTagDao;
 import com.zeal.dao.PictureDao;
 import com.zeal.dao.UserInfoDao;
 import com.zeal.entity.Album;
+import com.zeal.entity.AlbumTag;
 import com.zeal.entity.Picture;
 import com.zeal.entity.UserInfo;
 import com.zeal.exception.BizException;
@@ -22,9 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Administrator on 6/28/2016.
@@ -41,6 +41,9 @@ public class AlbumServiceImpl implements AlbumService {
 
     @Autowired
     private UserInfoDao userInfoDao;
+
+    @Autowired
+    private AlbumTagDao albumTagDao;
 
     @Override
     public PagedList<AlbumVO> paged(int page, int pageSize) {
@@ -86,8 +89,8 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public PagedList<AlbumVO> published(int page, int pageSize) {
-        return convert(albumDao.pagedByPublishStatus(page, pageSize, true));
+    public PagedList<AlbumVO> published(int page, int pageSize, long tagId) {
+        return convert(albumDao.pagedByPublishStatus(page, pageSize, tagId, true));
     }
 
     @Override
@@ -97,7 +100,7 @@ public class AlbumServiceImpl implements AlbumService {
 
     @Override
     public PagedList<AlbumVO> pagedByUserInfoIdAndKeywordLike(int page, int pageSize, long userInfoId, String keyword) {
-        return convert(albumDao.pagedByUserInfoIdAndKeywordLike(userInfoId, page, pageSize,keyword));
+        return convert(albumDao.pagedByUserInfoIdAndKeywordLike(userInfoId, page, pageSize, keyword));
     }
 
     @Override
@@ -160,7 +163,7 @@ public class AlbumServiceImpl implements AlbumService {
      */
     @Override
     @Transactional
-    public void update(long id, String name, String description, int[] deleteIdArray, List<MultipartFile> newFiles, long userInfoId) {
+    public void update(long id, String name, String description, int[] deleteIdArray, List<MultipartFile> newFiles, int[] tags, long userInfoId) {
         Album album = albumDao.find(id);
         if (album.isPublished()) {
             throw new BizException(BizExceptionCode.Album.UPDATE_ON_PUBLISH_STATUS, "相册已经发布，请先取消发布再更新");
@@ -169,6 +172,13 @@ public class AlbumServiceImpl implements AlbumService {
             album.setName(name);
         }
         album.setDescription(description);
+        Set<AlbumTag> albumTags = new HashSet<>();
+        if (tags != null && tags.length > 0) {
+            for (int tagId : tags) {
+                albumTags.add(albumTagDao.find(tagId));
+            }
+        }
+        album.setAlbumTags(albumTags);
         if (deleteIdArray != null && deleteIdArray.length > 0) {
             for (int deleteId : deleteIdArray) {
                 Picture picture = pictureDao.find(deleteId);
@@ -183,6 +193,7 @@ public class AlbumServiceImpl implements AlbumService {
             if (!pictures.isEmpty()) {
                 pictureDao.batchInsert(pictures);
             }
+            albumDao.update(album);
         } catch (Exception e) {
             LogUtils.error(this.getClass(), "", e);
             if (!pictureFiles.isEmpty()) {
@@ -227,6 +238,17 @@ public class AlbumServiceImpl implements AlbumService {
         album.setUpdateDate(new Date());
         album.setCreateDate(new Date());
         album.setPublished(false);
+
+        if (pageAlbum.albumTags != null && !pageAlbum.albumTags.isEmpty()) {
+            Set<AlbumTag> tags = new HashSet<>();
+            for (Long tagId : pageAlbum.albumTags) {
+                AlbumTag tag = albumTagDao.find(tagId);
+                if (tag != null) {
+                    tags.add(albumTagDao.find(tagId));
+                }
+            }
+            album.setAlbumTags(tags);
+        }
         albumDao.insert(album);
         if (pictures != null) {
             for (PagePicture picture : pictures) {
@@ -241,7 +263,6 @@ public class AlbumServiceImpl implements AlbumService {
         if (files.isEmpty()) {
             throw new BizException("保存失败");
         }
-
     }
 
     /**

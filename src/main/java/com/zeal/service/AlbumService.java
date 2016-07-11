@@ -25,7 +25,7 @@ public interface AlbumService {
 
     void unPublish(long id, long userId);
 
-    PagedList<AlbumVO> published(int page, int pageSize);
+    PagedList<AlbumVO> published(int page, int pageSize, long tagId);
 
     PagedList<AlbumVO> pagedByUserInfoId(int page, int pageSize, long userInfoId);
 
@@ -43,9 +43,10 @@ public interface AlbumService {
      * @param description   相册说明
      * @param deleteIdArray 需要删除的图片列表
      * @param newFiles      需要添加的图片
+     * @param tags          tags
      * @param userInfoId    用户ID
      */
-    void update(long id, String name, String description, int[] deleteIdArray, List<MultipartFile> newFiles, long userInfoId);
+    void update(long id, String name, String description, int[] deleteIdArray, List<MultipartFile> newFiles, int[] tags, long userInfoId);
 
 
     /**

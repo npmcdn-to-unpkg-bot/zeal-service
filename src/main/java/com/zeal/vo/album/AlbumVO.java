@@ -1,12 +1,14 @@
 package com.zeal.vo.album;
 
 import com.zeal.entity.Album;
+import com.zeal.entity.AlbumTag;
 import com.zeal.entity.Picture;
 import com.zeal.vo.user.UserInfoVO;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Administrator on 6/29/2016.
@@ -30,6 +32,8 @@ public class AlbumVO {
     private boolean isPublished;
 
     private List<PictureVO> pictures;
+
+    private List<AlbumTagVO> tags;
 
     public AlbumVO() {
 
@@ -55,6 +59,15 @@ public class AlbumVO {
                 }
                 this.pictures = pictureVOs;
             }
+            Set<AlbumTag> albumTags = album.getAlbumTags();
+            if (albumTags != null) {
+                List<AlbumTagVO> tags = new ArrayList<>();
+                for (AlbumTag albumTag : albumTags) {
+                    tags.add(new AlbumTagVO(albumTag));
+                }
+                this.tags = tags;
+            }
+
         }
     }
 
@@ -128,5 +141,13 @@ public class AlbumVO {
 
     public void setPublishDate(Date publishDate) {
         this.publishDate = publishDate;
+    }
+
+    public List<AlbumTagVO> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<AlbumTagVO> tags) {
+        this.tags = tags;
     }
 }

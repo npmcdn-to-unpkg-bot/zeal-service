@@ -3,6 +3,7 @@ package com.zeal.entity;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by yang_shoulai on 2016/6/28.
@@ -38,6 +39,12 @@ public class Album extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     private UserInfo userInfo;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "t_album_tags",
+            joinColumns = {@JoinColumn(name = "album_id")},
+            inverseJoinColumns = {@JoinColumn(name = "album_tag_id")})
+    private Set<AlbumTag> albumTags;
 
     public String getName() {
         return name;
@@ -101,5 +108,13 @@ public class Album extends BaseEntity {
 
     public void setPublishDate(Date publishDate) {
         this.publishDate = publishDate;
+    }
+
+    public void setAlbumTags(Set<AlbumTag> albumTags) {
+        this.albumTags = albumTags;
+    }
+
+    public Set<AlbumTag> getAlbumTags() {
+        return albumTags;
     }
 }

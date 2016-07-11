@@ -4,10 +4,10 @@
 (function () {
     angular.module("app").service("AlbumService", function (HttpService, $uibModal, MessageService) {
 
-        this.getPublishedAlbums = function (page, pageSize) {
+        this.getPublishedAlbums = function (page, pageSize, tag) {
             return HttpService.http({
                 method: "GET",
-                url: "/zeal/album/published?page=" + page + "&pageSize=" + pageSize
+                url: "/zeal/album/published?page=" + page + "&pageSize=" + pageSize + "&tag=" + tag
             });
         };
 
@@ -84,6 +84,20 @@
                 resolve: {
                     picture: picture
                 }
+            });
+        };
+
+        this.getChildrenTagsByTagId = function (tagId) {
+            return HttpService.http({
+                method: "GET",
+                url: "/zeal/albumTag/children?id=" + tagId
+            });
+        };
+
+        this.getAllChildrenTags = function () {
+            return HttpService.http({
+                method: "GET",
+                url: "/zeal/albumTag/all"
             });
         };
 

@@ -60,8 +60,9 @@ public class AlbumController extends AbstractController {
     @RequestMapping(value = "/published", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Response published(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
-                              @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        return new Response.Builder().success().result(albumService.published(page, pageSize)).build();
+                              @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+                              @RequestParam(value = "tag", required = false, defaultValue = "-1") long tagId) {
+        return new Response.Builder().success().result(albumService.published(page, pageSize, tagId)).build();
     }
 
     @RequestMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -87,19 +88,14 @@ public class AlbumController extends AbstractController {
     public Response update(@RequestParam(value = "name") String name,
                            @RequestParam(value = "description", required = false) String description,
                            @RequestParam(value = "deletes", required = false) String deleteIdArray,
+                           @RequestParam(value = "tags", required = false) String tagIdArray,
                            @RequestParam(value = "id") long id,
                            DefaultMultipartHttpServletRequest httpServletRequest) {
         albumService.checkAuthority(id, SessionUtils.getUserInfo(httpServletRequest).getId());
         List<MultipartFile> newFiles = resolveMultipartFiles(httpServletRequest);
-        int[] deletes = null;
-        if (!StringUtils.isEmpty(deleteIdArray)) {
-            String[] strs = deleteIdArray.split(",");
-            deletes = new int[strs.length];
-            for (int i = 0; i < strs.length; i++) {
-                deletes[i] = Integer.valueOf(strs[i]);
-            }
-        }
-        albumService.update(id, name, description, deletes, newFiles, SessionUtils.getUserInfo(httpServletRequest).getId());
+        int[] deletes = stringToArray(deleteIdArray);
+        int[] tags = stringToArray(tagIdArray);
+        albumService.update(id, name, description, deletes, newFiles, tags, SessionUtils.getUserInfo(httpServletRequest).getId());
         return new Response.Builder().success().build();
     }
 
@@ -138,5 +134,17 @@ public class AlbumController extends AbstractController {
         return files;
     }
 
+
+    private int[] stringToArray(String ArrayStr) {
+        int[] tags = null;
+        if (!StringUtils.isEmpty(ArrayStr)) {
+            String[] strs = ArrayStr.split(",");
+            tags = new int[strs.length];
+            for (int i = 0; i < strs.length; i++) {
+                tags[i] = Integer.valueOf(strs[i]);
+            }
+        }
+        return tags;
+    }
 
 }

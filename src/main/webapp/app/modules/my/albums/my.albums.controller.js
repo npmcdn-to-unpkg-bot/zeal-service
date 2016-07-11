@@ -165,6 +165,34 @@
         $scope.uploading = false;
         $scope.progress = 0;
         var deleteList = [];
+        var tags = album.tags ? album.tags : [];
+        $scope.allTags = [];
+        $scope.tagExist = function (tag) {
+            for (var i = 0; i < tags.length; i++) {
+                if (tags[i].id == tag.id) {
+                    return true;
+                }
+            }
+            return false;
+        };
+
+        $scope.toggleTag = function (tag) {
+            if ($scope.tagExist(tag)) {
+                for (var i = 0; i < tags.length; i++) {
+                    if (tag.id == tags[i].id) {
+                        tags.splice(i, 1);
+                    }
+                }
+            } else {
+                tags.push(tag);
+            }
+        };
+
+        AlbumService.getAllChildrenTags().success(function (data) {
+            $scope.allTags = data
+        });
+
+
         $scope.deleteExistPicture = function (picture) {
             for (var i = 0; i < $scope.existPictures.length; i++) {
                 if (picture == $scope.existPictures[i]) {
@@ -200,15 +228,21 @@
             return null;
         };
 
-        $scope.update = function () {
-            $scope.uploading = true;
 
+        $scope.update = function () {
+            var tagIdArray = [];
+            for (var i = 0; i < tags.length; i++) {
+                tagIdArray.push(tags[i].id);
+            }
+
+            $scope.uploading = true;
             var request = {
                 id: albumId,
                 name: $scope.name,
-                description: $scope.description,
+                description: $scope.description == null ? "" : $scope.description,
                 deletes: arrayToString(deleteList),
-                files: $scope.pictures
+                files: $scope.pictures,
+                tags: arrayToString(tagIdArray)
             };
             Upload.upload({
                 url: "/zeal/album/update",
@@ -217,7 +251,7 @@
                 $scope.uploading = false;
                 var data = resp.data;
                 if (data.status == 1) {
-                    MessageService.info({message: "更新成功", size: "sm"});
+                    //MessageService.info({message: "更新成功", size: "sm"});
                     $scope.pictures = [];
                     $scope.progress = 0;
                     $uibModalInstance.close();

@@ -47,7 +47,7 @@ public class AlbumWorkerExecutor {
 
 
     public void execute(AlbumsPageResolver albumsPageResolver) {
-        UserInfo userInfo = userInfoDao.find(1);
+        UserInfo userInfo = userInfoDao.find(2);
         LogUtils.info(this.getClass(), "开始解析....");
         String entranceUrl = albumsPageResolver.getEntrance();
         LogUtils.info(this.getClass(), "入口地址 = " + entranceUrl);

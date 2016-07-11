@@ -18,6 +18,7 @@
             templateUrl: "/zeal/app/modules/home/home.html"
         }).state('albums', {
             url: "/albums",
+            params: {tag: 1},
             templateUrl: "/zeal/app/modules/albums/albums.html",
             controller: 'AlbumController'
         }).state('pictures', {

@@ -90,29 +90,32 @@ public class AlbumDao extends AbstractBaseDao<Album> {
     }
 
     /**
-     * 根据相册发布状态获取相册列表信息
+     * 根据相册发布状态tag获取相册列表信息
      *
      * @param page      开始页码 从 1 开始
      * @param pageSize  每页数量
      * @param published 是否发布
+     * @param tagId     归属的tag id
      * @return
      */
-    public PagedList<Album> pagedByPublishStatus(int page, int pageSize, boolean published) {
-        TypedQuery<Album> query = this.entityManager().createQuery("SELECT o FROM Album o where o.isPublished = :isPublished ORDER BY o.publishDate desc ", Album.class);
+    public PagedList<Album> pagedByPublishStatus(int page, int pageSize, long tagId, boolean published) {
+        TypedQuery<Album> query = this.entityManager().createQuery("SELECT o FROM Album o inner join o.albumTags t where o.isPublished = :isPublished and t.id = :tagId ORDER BY o.publishDate desc ", Album.class);
         query.setFirstResult((page - 1) * pageSize);
         query.setMaxResults(pageSize);
         query.setParameter("isPublished", published);
+        query.setParameter("tagId", tagId);
         PagedList<Album> pagedList = new PagedList<>();
         pagedList.setList(query.getResultList());
         pagedList.setSize(pageSize);
         pagedList.setPage(page);
-        pagedList.setTotalSize(countByPublishStatus(published));
+        pagedList.setTotalSize(countByPublishStatus(published, tagId));
         return pagedList;
     }
 
-    public long countByPublishStatus(boolean published) {
-        TypedQuery<Long> query = this.entityManager().createQuery("SELECT count(o) FROM Album o where o.isPublished = :isPublished ORDER BY o.publishDate desc ", Long.class);
+    public long countByPublishStatus(boolean published, long tagId) {
+        TypedQuery<Long> query = this.entityManager().createQuery("SELECT count(o) FROM Album o inner join o.albumTags t where o.isPublished = :isPublished and t.id = :tagId ORDER BY o.publishDate desc ", Long.class);
         query.setParameter("isPublished", published);
+        query.setParameter("tagId", tagId);
         return query.getSingleResult();
     }
 

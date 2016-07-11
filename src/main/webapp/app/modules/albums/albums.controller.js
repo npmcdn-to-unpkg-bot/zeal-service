@@ -3,24 +3,23 @@
  */
 
 (function () {
-    angular.module("app").controller('AlbumController', ['$scope', 'HttpService', '$log', '$state', '$uibModal', 'AlbumService',
-        function ($scope, HttpService, $log, $state, $uibModal, AlbumService) {
-
+    angular.module("app").controller('AlbumController', ['$scope', 'HttpService', '$log', '$state', '$uibModal', 'AlbumService', '$stateParams',
+        function ($scope, HttpService, $log, $state, $uibModal, AlbumService, $stateParams) {
+            var parentTag = $stateParams.tag;
+            $scope.pagination = {
+                page: 1,
+                totalSize: 0,
+                pageSize: 20
+            };
+            $scope.childTags = [];
+            $scope.childTagId = -1;
             $scope.targetAlbums = [];
 
-            $scope.albums = [];
-            $scope.rowSize = 4;
-            $scope.row = 10;
-            $scope.pageSize = $scope.rowSize * $scope.row;
-            $scope.page = 1;
-            $scope.totalSize = 0;
-
             $scope.getAlbums = function () {
-                AlbumService.getPublishedAlbums($scope.page, $scope.pageSize).success(function (data) {
+                AlbumService.getPublishedAlbums($scope.pagination.page, $scope.pagination.pageSize, $scope.childTagId).success(function (data) {
                     $scope.targetAlbums = [];
-                    $scope.page = data.page;
-                    $scope.totalSize = data.totalSize;
-                    $scope.pageSize = data.size;
+                    $scope.pagination.page = data.page;
+                    $scope.pagination.totalSize = data.totalSize;
                     var albums = data.list;
                     if (albums && albums.length > 0) {
                         for (var i = 0; i < albums.length; i++) {
@@ -34,7 +33,8 @@
                                     url: "/zeal/album/thumbnail/" + album.id,
                                     createDate: album.createDate,
                                     userInfo: album.userInfo,
-                                    publishDate: album.publishDate
+                                    publishDate: album.publishDate,
+                                    tags: album.tags
                                 }
                             );
                         }
@@ -45,15 +45,30 @@
             };
 
             $scope.onPageChanged = function () {
-                $log.info("page = " + $scope.page);
+                $log.info("page = " + $scope.pagination.page);
                 $scope.getAlbums();
             };
-            $scope.getAlbums();
 
             $scope.onClickAlbum = function (album) {
                 //$state.go('pictures', {album: album});
                 AlbumService.showAlbumModal(album);
             };
+
+            $scope.childTagClick = function (childTag) {
+                $scope.childTagId = childTag.id;
+                $scope.pagination.page = 1;
+                $scope.pagination.totalSize = 0;
+                $scope.targetAlbums = [];
+                $scope.getAlbums();
+            };
+
+            AlbumService.getChildrenTagsByTagId(parentTag).success(function (data) {
+                $scope.childTags = data;
+                if (data && data.length > 0) {
+                    $scope.childTagId = data[0].id;
+                }
+                $scope.getAlbums();
+            });
         }]);
 
 
