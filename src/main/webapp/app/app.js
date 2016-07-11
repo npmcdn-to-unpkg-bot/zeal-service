@@ -3,7 +3,7 @@
  */
 
 (function () {
-    angular.module("app", ['ui.bootstrap', 'ui.router', 'ngCookies', 'ngFileUpload']);
+    angular.module("app", ['ui.bootstrap', 'ui.router', 'ngCookies', 'ngFileUpload', 'angular-loading-bar', 'ngAnimate']);
     angular.module("app").run(['$rootScope', '$state', '$stateParams',
         function ($rootScope, $state, $stateParams) {
             $rootScope.$state = $state;
@@ -55,10 +55,13 @@
             templateUrl: "/zeal/app/modules/my/jokes/jokes.html"
         });
     });
-
+    angular.module('app').config(function (cfpLoadingBarProvider) {
+        cfpLoadingBarProvider.includeSpinner = true;
+    });
     angular.module("app").config(['$httpProvider', function ($httpProvider) {
         $httpProvider.interceptors.push('HttpInterceptor');
     }]);
+
 
     angular.module("app").controller('IndexController', ['UserService', '$scope', '$rootScope', '$state',
         function (UserService, $scope, $rootScope, $state) {

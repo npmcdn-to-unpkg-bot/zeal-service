@@ -33,14 +33,14 @@ public class Album extends BaseEntity {
     @Column(name = "publish_date")
     private Date publishDate;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "album")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "album")
     private List<Picture> pictures;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     private UserInfo userInfo;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "t_album_tags",
             joinColumns = {@JoinColumn(name = "album_id")},
             inverseJoinColumns = {@JoinColumn(name = "album_tag_id")})
