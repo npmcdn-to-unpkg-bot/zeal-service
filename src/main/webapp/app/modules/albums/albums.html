@@ -21,9 +21,10 @@
                 <ul class="list-inline">
                     <li ng-repeat="album in targetAlbums" style="width:180px;margin-top: 5px; margin-bottom: 10px;">
                         <dv class="center-block">
-                            <div class="pointer" ng-click="onClickAlbum(album)">
-                                <img ng-src="{{album.url}}" class="img-responsive img-thumbnail" title="{{album.name}}"
-                                     style="width: 160px;height: 160px;">
+                            <div class="pointer" ng-click="onClickAlbum(album)" style="overflow: hidden;">
+                                <img ng-src="{{album.url}}" class="img-responsive img-thumbnail img-scale"
+                                     title="{{album.name}}"
+                                     style="width: 160px;height: 160px;padding: 0px;">
                             </div>
                         </dv>
                         <div class="text-left  album-label">

@@ -10,15 +10,14 @@ body {
     margin-top: 0px;
 }
 
-.album {
-    margin-top: 8px;
-    margin-bottom: 8px;
+.img-scale {
+
 }
 
-.album img {
-    width: 100%;
-    max-height: 340px;
-    min-height: 300px;
+.img-scale:hover {
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
 }
 
 .album-label {
