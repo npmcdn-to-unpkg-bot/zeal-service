@@ -33,6 +33,7 @@
                                     url: "/zeal/album/thumbnail/" + album.id,
                                     createDate: album.createDate,
                                     userInfo: album.userInfo,
+                                    published: album.published,
                                     publishDate: album.publishDate,
                                     tags: album.tags
                                 }

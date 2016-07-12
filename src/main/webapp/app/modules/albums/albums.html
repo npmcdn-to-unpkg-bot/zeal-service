@@ -1,7 +1,9 @@
 <div class="row">
     <ul class="nav nav-pills  nav-stacked col-lg-2">
-        <li role="presentation" ui-sref-active="active" ui-sref-opts="{reload: true}"><a ui-sref="albums({tag:1})">美女</a></li>
-        <li role="presentation" ui-sref-active="active" ui-sref-opts="{reload: true}"><a ui-sref="albums({tag:14})">动物</a></li>
+        <li role="presentation" ui-sref-active="active" ui-sref-opts="{reload: true}"><a
+                ui-sref="albums({tag:1})">美女</a></li>
+        <li role="presentation" ui-sref-active="active" ui-sref-opts="{reload: true}"><a
+                ui-sref="albums({tag:14})">动物</a></li>
     </ul>
 
     <div ui-view class="col-lg-10">
@@ -25,14 +27,15 @@
                             </div>
                         </dv>
                         <div class="text-left  album-label">
-                            <span class="text-muted pointer" ng-click="onClickAlbum(album)">{{album.name}}</span>
+                            <span class="text-muted pointer" ng-click="onClickAlbum(album)">{{album.name | characters:12: false}}</span>
                         </div>
                     </li>
                 </ul>
             </div>
 
             <div ng-hide="totalSize <= 0">
-                <uib-pagination total-items="pagination.totalSize" ng-model="pagination.page" ng-change="onPageChanged()" first-text="第一页"
+                <uib-pagination total-items="pagination.totalSize" ng-model="pagination.page"
+                                ng-change="onPageChanged()" first-text="第一页"
                                 last-text="最后一页" next-text="下一页" previous-text="上一页" max-size="10" boundary-links="true"
                                 boundary-link-numbers="true"
                                 items-per-page="pagination.pageSize"></uib-pagination>

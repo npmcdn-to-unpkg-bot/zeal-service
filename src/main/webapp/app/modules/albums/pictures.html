@@ -1,41 +1,26 @@
-<div style="max-width: 1000px;">
+<div>
     <h2 class="text-center picture-name">{{album.name}}</h2>
-
-    <div>
-        <p class="col-lg-offset-10 col-lg-2 text-right">
-            <button type="button" class="btn btn-primary" ng-model="carouselMode" uib-btn-checkbox>
-                <span ng-show="!carouselMode">轮播模式</span>
-                <span ng-show="carouselMode">快速浏览</span>
-            </button>
-        </p>
-        <div class="col-sm-offset-4 col-sm-4 text-right">
-            <p ng-show="album.published"><span class="text-info">发布日期：</span> {{album.publishDate | date:'yyyy-MM-dd'}}
-            </p>
-        </div>
-        <div class="col-sm-4 text-right">
-            <span class="text-info">作者：</span>{{album.userInfo.nickName}}
-        </div>
+    <p class="col-sm-offset-10 col-sm-2 text-right">
+        <button type="button" class="btn btn-primary btn-sm" ng-model="carouselMode" uib-btn-checkbox>
+            <span ng-show="!carouselMode">轮播模式</span>
+            <span ng-show="carouselMode">快速浏览</span>
+        </button>
+    </p>
+    <div class="col-sm-offset-6 col-sm-3 text-right">
+            <span ng-show="album.published"><span class="text-info">发布日期：</span> {{album.publishDate | date:'yyyy-MM-dd'}}
+            </span>
     </div>
-    <hr/>
-    <!--<div ng-hide="carouselMode" class="text-center" ng-repeat="picture in album.pictures" style="margin-top: 10px;">
-        <img ng-src="{{picture.url}}" style="max-width: 900px;">
-    </div>-->
+    <div class="col-sm-3 text-right">
+        <span class="text-info">作者：</span>{{album.userInfo.nickName | characters : 12 : false}}
+    </div>
+    <hr style="clear: both"/>
     <div ng-hide="carouselMode">
         <album-list pictures="slides"></album-list>
     </div>
-    <div ng-show="carouselMode" class="text-center" style="height: 480px;margin-top: 10px;">
-        <!--<uib-carousel active="active" interval="interval" no-wrap="noWrapMode">
-            <uib-slide ng-repeat="slide in slides" index="$index">
-                <img ng-src="{{slide.url}}" style="margin:auto;max-height: 460px;min-height: 400px;">
-                <div class="carousel-caption">
-                    <h4></h4>
-                    <p>{{slide.description}}</p>
-                </div>
-            </uib-slide>
-        </uib-carousel>-->
+    <div ng-show="carouselMode" class="text-center">
         <album-gallery pictures="slides"></album-gallery>
     </div>
-    <div style="padding: 20px;margin-left: 20px;border-top: 1px solid #eee;">
+    <div style="padding:10px;border-top: 1px solid #eee;">
         <ul class="list-inline">
             <li ng-repeat="tag in album.tags">
                 <span class="label label-default">{{tag.name}}</span>

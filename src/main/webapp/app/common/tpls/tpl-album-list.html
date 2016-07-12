@@ -1,7 +1,9 @@
 <div>
-    <ul class="list-inline text-center">
-        <li ng-repeat="picture in pictures" class="text-left" style="margin-bottom: 8px;cursor: pointer;" ng-click="clickPic($index)">
-            <img ng-src="{{picture.url}}" style="height: 120px;" class="img-responsive img-thumbnail">
+    <ul class="list-inline">
+        <li ng-repeat="picture in pictures" class="text-left" style="width: 25%;margin-bottom: 8px;cursor: pointer;"
+            ng-click="clickPic($index)">
+            <img ng-src="{{picture.url}}" style="vertical-align: top;"
+                 class="img-responsive img-thumbnail">
         </li>
     </ul>
 </div>

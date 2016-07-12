@@ -41,7 +41,7 @@
                         $rootScope.UserInfo = {username: data.nickName, password: $scope.loginRequest.password};
                         $rootScope.$broadcast('userStateChange', $rootScope.UserInfo);
                         $uibModalInstance.close();
-                        $state.go('my.albums');
+                        $state.go('my.albums', null, {reload: true});
                     }).error(function (data) {
                     alert(data.message);
                     $log.info(data.message);

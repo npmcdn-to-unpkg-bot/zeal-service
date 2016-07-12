@@ -5,6 +5,7 @@
     <title>Zeal</title>
     <link rel="stylesheet" href="/zeal/app/lib/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/zeal/app/lib/angular-loading-bar/build/loading-bar.min.css">
+    <link rel="stylesheet" href="/zeal/app/lib/angular-toastr/dist/angular-toastr.min.css">
     <link rel="stylesheet" href="/zeal/app/app.css">
 
     <script src="/zeal/app/lib/angular/angular.min.js"></script>
@@ -14,6 +15,7 @@
     <script src="/zeal/app/lib/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="/zeal/app/lib/ng-file-upload/ng-file-upload.min.js"></script>
     <script src="/zeal/app/lib/angular-loading-bar/build/loading-bar.min.js"></script>
+    <script src="/zeal/app/lib/angular-toastr/dist/angular-toastr.tpls.min.js"></script>
     <script src="/zeal/app/app.js"></script>
     <script src="/zeal/app/common/services/cookie.service.js"></script>
     <script src="/zeal/app/common/interceptors/http.interceptor.js"></script>
@@ -21,6 +23,7 @@
     <script src="/zeal/app/common/services/message.service.js"></script>
     <script src="/zeal/app/common/directives/album.gallery.directive.js"></script>
     <script src="/zeal/app/common/directives/album.list.directive.js"></script>
+    <script src="/zeal/app/common/filters/text.truncate.filter.js"></script>
     <script src="/zeal/app/modules/user/user.controller.js"></script>
     <script src="/zeal/app/modules/user/user.service.js"></script>
     <script src="/zeal/app/modules/albums/albums.controller.js"></script>
@@ -44,7 +47,8 @@
                     <li role="presentation" ui-sref-active="active"><a ui-sref="movies">视频</a></li>
                     <li role="presentation" ui-sref-active="active"><a ui-sref="jokes">段子</a></li>
                     <li role="presentation" ui-sref-active="active"><a ui-sref="stories">故事</a></li>
-                    <li role="presentation" ng-show="isLogin" ng-class="{active: $state.includes('my')}"><a ui-sref="my.albums">我的Zeal</a>
+                    <li role="presentation" ng-show="isLogin" ng-class="{active: $state.includes('my')}"><a
+                            ui-sref="my.albums">我的Zeal</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">

@@ -3,7 +3,7 @@
  */
 
 (function () {
-    angular.module("app", ['ui.bootstrap', 'ui.router', 'ngCookies', 'ngFileUpload', 'angular-loading-bar', 'ngAnimate']);
+    angular.module("app", ['ui.bootstrap', 'ui.router', 'ngCookies', 'ngFileUpload', 'angular-loading-bar', 'ngAnimate', 'toastr']);
     angular.module("app").run(['$rootScope', '$state', '$stateParams',
         function ($rootScope, $state, $stateParams) {
             $rootScope.$state = $state;
@@ -61,7 +61,23 @@
     angular.module("app").config(['$httpProvider', function ($httpProvider) {
         $httpProvider.interceptors.push('HttpInterceptor');
     }]);
-
+    angular.module("app").config(function (toastrConfig) {
+        angular.extend(toastrConfig, {
+            autoDismiss: true,
+            allowHtml: false,
+            closeButton: true,
+            progressBar: false,
+            tapToDismiss: false,
+            containerId: 'toast-container',
+            maxOpened: 0,
+            newestOnTop: true,
+            positionClass: 'toast-top-right',
+            preventDuplicates: false,
+            preventOpenDuplicates: false,
+            target: 'body',
+            timeOut: 2000
+        });
+    });
 
     angular.module("app").controller('IndexController', ['UserService', '$scope', '$rootScope', '$state',
         function (UserService, $scope, $rootScope, $state) {

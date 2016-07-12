@@ -15,7 +15,9 @@
                     $scope.page = data.page;
                     $scope.pageSize = data.size;
                     $scope.totalSize = data.totalSize;
-                });
+                }).error(function (data) {
+                MessageService.toast.error(data.message, "获取数据失败");
+            });
         };
         var removeAlbum = function (id) {
             if ($scope.albums.length > 0) {
@@ -60,9 +62,10 @@
                         removeAlbum(album.id);
                         $scope.totalSize--;
                         $modalInstance.close();
+                        MessageService.toast.success(data.message, "删除成功");
                         pagedAlbums();
                     }).error(function (data) {
-                        MessageService.info({message: data.message, size: 'sm'});
+                        MessageService.toast.error(data.message, "删除失败");
                     });
                 }
             });
@@ -71,6 +74,9 @@
             AlbumService.publish(album).success(function (data) {
                 album.published = true;
                 album.publishDate = data.publishDate;
+                MessageService.toast.success("发布成功");
+            }).error(function (data) {
+                MessageService.toast.error(data.message, "发布失败");
             });
         };
         $scope.unpublish = function (album) {
@@ -83,7 +89,7 @@
                         album.publishDate = data.publishDate;
                         $modalInstance.close();
                     }).error(function (data) {
-                        MessageService.info({message: data.message, size: 'sm'});
+                        MessageService.toast.error(data.message, "取消发布失败");
                     });
                 }
             });
