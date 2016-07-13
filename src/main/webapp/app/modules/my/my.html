@@ -1,10 +1,36 @@
-<div class="row">
-
-    <ul class="nav nav-pills  nav-stacked col-lg-2">
-        <li role="presentation" ui-sref-active="active"><a ui-sref="my.albums">我的相册</a></li>
-        <li role="presentation" ui-sref-active="active"><a ui-sref="my.stories">我的故事</a></li>
-        <li role="presentation" ui-sref-active="active"><a ui-sref="my.movies">我的电影</a></li>
-        <li role="presentation" ui-sref-active="active"><a ui-sref="my.jokes">我的段子</a></li>
-    </ul>
-    <div ui-view class="col-lg-10"></div>
+<div class="container">
+    <div class="col-sm-3">
+        <div class="user-block">
+            <div class="user-detail">
+                <a href="#" target="_blank" style="overflow: hidden;">
+                    <img src="/zeal/resources/app/icons/photo.jpg">
+                </a>
+                <p class="user-name">{{album.userInfo.nickName}}</p>
+                <span class="user-email">{{album.publishDate | date:'yyyy-MM-dd'}}</span>
+            </div>
+            <div class="row user-active-block">
+                <div class="col-sm-6 text-left">
+                    <button class="btn btn-primary">
+                     <span>
+                         <i class="glyphicon glyphicon-plus"></i> 关注
+                     </span>
+                    </button>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button class="btn btn-default">
+                        <span>
+                         <i class="glyphicon glyphicon-envelope"></i> 私信
+                        </span>
+                    </button>
+                </div>
+            </div>
+            <div class="album-description-block">
+                <h5>关于我</h5>
+                <p>Fusce dolor libero, efficitur et lobortis at, faucibus nec nunc. Proin fermentum turpis eget nisi
+                    facilisis lobortis. Praesent malesuada facilisis maximus. Donec sed lobortis tortor. Ut nec lacinia
+                    sapien, sit amet dapibus magna.</p>
+            </div>
+        </div>
+    </div>
+    <div ui-view class="col-sm-9"></div>
 </div>

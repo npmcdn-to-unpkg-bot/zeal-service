@@ -25,12 +25,14 @@
         $stateProvider.state('home', {
             url: "/home",
             controller: 'HomeController',
-            templateUrl: "/zeal/app/modules/home/home.html"
+            templateUrl: "/zeal/app/modules/home/home.html",
+            title:"首页 - Zeal for you"
         }).state('albums', {
             url: "/albums",
             params: {tag: 1},
             templateUrl: "/zeal/app/modules/albums/albums.html",
-            controller: 'AlbumController'
+            controller: 'AlbumController',
+            title:"美女相册 - Zeal for you"
         }).state('albums.detail', {
             url: "/album/:albumId",
             templateUrl: "/zeal/app/modules/albums/pictures.html",
@@ -39,7 +41,8 @@
                 albumPromise: function (AlbumService, $stateParams) {
                     return AlbumService.getMyAlbumById($stateParams.albumId);
                 }
-            }
+            },
+            title:"相册信息 - Zeal for you"
         }).state('movies', {
             url: "/movies",
             templateUrl: "/zeal/app/modules/movie/movies.html"
@@ -57,7 +60,8 @@
         }).state('my.albums', {
             url: "/albums",
             templateUrl: "/zeal/app/modules/my/albums/albums.html",
-            controller: 'MyAlbumsController'
+            controller: 'MyAlbumsController',
+            title:"我的相册 - Zeal for you"
         }).state('my.stories', {
             url: "/stories",
             templateUrl: "/zeal/app/modules/my/stories/stories.html"

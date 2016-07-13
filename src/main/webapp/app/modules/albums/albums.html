@@ -1,12 +1,12 @@
 <div ui-view>
-    <ul class="nav nav-pills" style="margin-bottom: 10px;">
+    <ul class="nav nav-pills" style="margin-bottom: 20px;margin-left: 15px;margin-right: 15px;">
         <li ng-repeat="childTag in childTags" role="presentation" ng-class="{'active':childTag.id == childTagId}">
             <a ng-click="childTagClick(childTag)" class="pointer">{{childTag.name}}</a>
         </li>
     </ul>
     <div>
         <ul class="list-inline">
-            <li ng-repeat="album in targetAlbums" class="col-sm-2"
+            <li ng-repeat="album in targetAlbums" class="col-sm-3"
                 style="padding-left: 15px; padding-right: 15px;margin-bottom: 30px;">
                 <div class="album">
                     <div class="pointer" ng-click="onClickAlbum(album)"
@@ -16,7 +16,7 @@
                     </div>
                     <div class="text-left title">
                         <div class="line">
-                            <span class="text-muted pointer" ng-click="onClickAlbum(album)">{{album.name | characters:10: false}}({{album.pictures.length}}P)</span>
+                            <span class="text-muted pointer" ng-click="onClickAlbum(album)">{{album.name | characters:18: false}}</span>
                             <span class="icon">
                                 <i class="glyphicon glyphicon-heart"></i> 623
                             </span>

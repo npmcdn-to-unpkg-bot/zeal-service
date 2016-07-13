@@ -1,5 +1,41 @@
 body {
-    padding-top: 70px;
+    font-family: "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    padding-top: 90px;
+}
+
+#nav {
+    height: 70px;
+    background-color: #222835;
+    color: #fff;
+    font-size: 16px;
+}
+
+#nav .navbar-brand {
+    padding: 25px 25px;
+    color: #fff;
+}
+
+#nav .navbar-brand:hover, #nav ul li > a:hover {
+    color: #9f9f9f;;
+}
+
+#nav .navbar-text {
+    margin: 25px;
+    color: #fff;
+}
+
+#nav ul li {
+    line-height: 70px;
+}
+
+#nav ul li > a {
+    padding: 25px;
+    color: #fff;
+}
+
+#nav ul li.active > a {
+    background-color: #fff;
+    color: #222835;
 }
 
 .pointer {
@@ -8,9 +44,7 @@ body {
 
 #module-container {
     margin-top: 0px;
-    margin-left: 2%;
-    margin-right: 2%;
-    width: 96%;
+    width: 100%;
 }
 
 .img-scale {
@@ -386,6 +420,13 @@ body {
     width: 70px;
     height: 70px;
     border-radius: 70px;
+    transition: all .3s;
+}
+
+.user-block .user-detail img:hover {
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
 }
 
 .user-block .user-name {
@@ -400,6 +441,7 @@ body {
 
 .user-block .user-email {
     font-size: 12px;
+    ccolor: #a1a5b1;
 }
 
 .album-info-line {
@@ -429,4 +471,36 @@ body {
 .album-tags-label {
     color: #262626;
     font-size: 16px;
+    font-weight: bolder;
+}
+
+.picture-block {
+    margin-bottom: 60px;
+    margin-top: 0px;
+}
+
+.picture-block p {
+    color: #a1a5b1;
+    font-size: 13px;
+    line-height: 22px;
+    font-weight: 400;
+}
+
+.user-active-block {
+    margin-top: 30px;
+}
+
+.album-description-block h5 {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 13px;
+    color: #383b43;
+    font-weight: 500;
+}
+
+.album-description-block p {
+    color: #a1a5b1;
+    font-size: 13px;
+    line-height: 22px;
+    font-weight: 400;
 }

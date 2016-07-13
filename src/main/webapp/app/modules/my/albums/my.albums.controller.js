@@ -4,7 +4,7 @@
 (function () {
     angular.module("app").controller('MyAlbumsController', function ($scope, AlbumService, MessageService, $uibModal, $location) {
         $scope.page = 1;
-        $scope.pageSize = 20;
+        $scope.pageSize = 24;
         $scope.albums = [];
         $scope.totalSize = 0;
         $scope.keyword = "";

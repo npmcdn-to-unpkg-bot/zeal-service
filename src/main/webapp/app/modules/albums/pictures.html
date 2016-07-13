@@ -2,12 +2,48 @@
     <div class="col-md-3">
         <div class="user-block">
             <div class="user-detail">
-                <a href="#" target="_blank">
+                <a href="#" target="_blank" style="overflow: hidden;">
                     <img src="/zeal/resources/app/icons/photo.jpg">
                 </a>
                 <p class="user-name">{{album.userInfo.nickName}}</p>
                 <span class="user-email">{{album.publishDate | date:'yyyy-MM-dd'}}</span>
             </div>
+            <div class="row user-active-block">
+                <div class="col-lg-6 text-left">
+                    <button class="btn btn-primary">
+                     <span>
+                         <i class="glyphicon glyphicon-plus"></i> 关注
+                     </span>
+                    </button>
+                </div>
+                <div class="col-lg-6 text-right">
+                    <button class="btn btn-default">
+                        <span>
+                         <i class="glyphicon glyphicon-envelope"></i> 私信
+                        </span>
+                    </button>
+                </div>
+            </div>
+            <div class="album-description-block">
+                <h5>关于相册</h5>
+                <p>Fusce dolor libero, efficitur et lobortis at, faucibus nec nunc. Proin fermentum turpis eget nisi
+                    facilisis lobortis. Praesent malesuada facilisis maximus. Donec sed lobortis tortor. Ut nec lacinia
+                    sapien, sit amet dapibus magna.</p>
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-primary" style="width: 100%">
+                <span>
+                     <i class="glyphicon glyphicon-thumbs-up"></i> 给相册点赞
+                </span>
+            </button>
+        </div>
+        <div style="margin-top: 15px;">
+            <button class="btn btn-default" style="width: 100%">
+                <span>
+                     <i class="glyphicon glyphicon-folder-open"></i> 收藏该相册
+                </span>
+            </button>
         </div>
     </div>
     <div class="col-md-9">
@@ -22,7 +58,14 @@
                 <div class="album-title">
                     <h2 class="picture-name">{{album.name}}</h2>
                 </div>
-                <album-list pictures="slides" resize-width="320" resize-height="320"></album-list>
+                <!-- <album-list pictures="slides" resize-width="320" resize-height="320"></album-list>-->
+
+                <div ng-repeat="picture in slides" class="picture-block">
+                    <img ng-src="{{picture.url}}" style="width: 100%;height: auto;">
+                    <p>Fusce dolor libero, efficitur et lobortis at, faucibus nec nunc. Proin fermentum turpis eget nisi
+                        facilisis lobortis. Praesent malesuada facilisis maximus. Donec sed lobortis tortor. Ut nec
+                        lacinia sapien, sit amet dapibus magna.</p>
+                </div>
 
                 <div class="album-tags-block">
                     <h3 class="album-tags-label">Tags</h3>

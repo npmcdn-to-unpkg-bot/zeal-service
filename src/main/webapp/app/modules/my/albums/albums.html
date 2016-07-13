@@ -2,7 +2,7 @@
     <div>
         <form class="form-horizontal">
             <div class="form-group">
-                <div class="col-sm-9 col-sm-offset-1">
+                <div class="col-sm-10">
                     <input class="form-control" ng-model="keyword" type="text" placeholder="请输入相册名称查询"/>
                 </div>
                 <div class="col-sm-1">
@@ -17,13 +17,13 @@
     </div>
 
     <div>
-        <table class="table table-hover" ng-show="totalSize > 0">
+        <!--<table class="table table-hover" ng-show="totalSize > 0">
             <thead>
             <tr>
                 <th class="text-center col-md-1">#</th>
                 <th class="text-center col-md-3">名称</th>
                 <th class="text-center col-md-2">创建日期</th>
-                <th class="text-center col-md-1">是否发布</th>
+                <th class="text-center col-md-1">发布</th>
                 <th class="text-center col-md-2">发布日期</th>
                 <th class="text-center col-md-1"></th>
                 <th class="text-center col-md-1"></th>
@@ -65,7 +65,39 @@
                 </td>
             </tr>
             </tbody>
-        </table>
+        </table>-->
+        <ul class="list-inline">
+            <li ng-repeat="album in albums" class="col-sm-4"
+                style="padding-left: 15px; padding-right: 15px;margin-bottom: 30px;">
+                <div class="album">
+                    <div class="pointer" ng-click="onClickAlbum(album)"
+                         style="width:100%; overflow: hidden;">
+                        <img ng-src="/zeal/picture/resize/{{album.pictures[0].id}}?width=480&height=480"
+                             class="img-scale"
+                             title="{{album.name}}" style="width: 100%;height: auto;">
+                    </div>
+                    <div class="text-left title">
+                        <div class="line">
+                            <span class="text-muted pointer" ng-click="onClickAlbum(album)">{{album.name | characters:18: false}}</span>
+                            <span class="icon">
+                                <i class="glyphicon glyphicon-heart"></i> 623
+                            </span>
+                        </div>
+                    </div>
+                    <div class="text-left author">
+                        <div class="line">
+                            <a href="/zeal/#/albums" target="_blank">
+                                <img src="/zeal/resources/app/icons/photo.jpg"> <span class="text-muted">{{album.userInfo.nickName}}</span>
+                            </a>
+                            <span class="icon">
+                                <i class="glyphicon glyphicon-thumbs-up"></i> 120
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
         <div ng-hide="totalSize <= 0">
             <uib-pagination total-items="totalSize" ng-model="page" ng-change="onPageChanged()" first-text="第一页"
                             last-text="最后一页" next-text="下一页" previous-text="上一页" max-size="10" boundary-links="true"
