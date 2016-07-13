@@ -2284,7 +2284,7 @@ function setupModuleLoader(window) {
            *    configuration.
            * @description
            * Use this method to register work which needs to be performed on module loading.
-           * For more about how to configure.properties services, see
+           * For more about how to configure services, see
            * {@link providers#provider-recipe Provider Recipe}.
            */
           config: config,
@@ -4621,9 +4621,9 @@ function createInjector(modulesToLoad, strictDi) {
           module = module[module.length - 1];
         }
         if (e.message && e.stack && e.stack.indexOf(e.message) == -1) {
-          // Safari & FF's stack traces don't contain error.movie content
+          // Safari & FF's stack traces don't contain error.message content
           // unlike those of Chrome and IE
-          // So if stack doesn't contain movie, we create a new string that contains both.
+          // So if stack doesn't contain message, we create a new string that contains both.
           // Since error.stack is read-only in Safari, I'm overriding e and not e.stack here.
           /* jshint -W022 */
           e = e.message + '\n' + e.stack;
@@ -13626,7 +13626,7 @@ function $LogProvider() {
        * @name $log#log
        *
        * @description
-       * Write a log movie
+       * Write a log message
        */
       log: consoleLog('log'),
 
@@ -13635,7 +13635,7 @@ function $LogProvider() {
        * @name $log#info
        *
        * @description
-       * Write an information movie
+       * Write an information message
        */
       info: consoleLog('info'),
 
@@ -13644,7 +13644,7 @@ function $LogProvider() {
        * @name $log#warn
        *
        * @description
-       * Write a warning movie
+       * Write a warning message
        */
       warn: consoleLog('warn'),
 
@@ -13653,7 +13653,7 @@ function $LogProvider() {
        * @name $log#error
        *
        * @description
-       * Write an error movie
+       * Write an error message
        */
       error: consoleLog('error'),
 
@@ -13662,7 +13662,7 @@ function $LogProvider() {
        * @name $log#debug
        *
        * @description
-       * Write a debug movie
+       * Write a debug message
        */
       debug: (function() {
         var fn = consoleLog('debug');
@@ -16299,7 +16299,7 @@ function qFactory(nextTick, exceptionHandler) {
    *   });
    * ```
    *
-   * @param {*} reason Constant, movie, exception or an object representing the rejection reason.
+   * @param {*} reason Constant, message, exception or an object representing the rejection reason.
    * @returns {Promise} Returns a promise that was already resolved as rejected with the `reason`.
    */
   var reject = function(reason) {

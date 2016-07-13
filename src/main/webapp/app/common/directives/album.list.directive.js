@@ -13,7 +13,7 @@
                 $scope.index = 0;
                 $scope.clickPic = function (index) {
                     $scope.index = index;
-                    var doc = angular.element('<div class="_mask">' +
+                    var doc = angular.element('<div class="_mask" onselectstart="return false;">' +
                         '<div class="_mask-bg">' +
                         '</div>' +
                         '<span class="glyphicon glyphicon-remove closer" ng-click="_close()"></span>' +

@@ -21,11 +21,15 @@
             params: {tag: 1},
             templateUrl: "/zeal/app/modules/albums/albums.html",
             controller: 'AlbumController'
-        }).state('pictures', {
-            url: "/pictures",
+        }).state('albums.detail', {
+            url: "/album/:albumId",
             templateUrl: "/zeal/app/modules/albums/pictures.html",
             controller: 'AlbumDisplayController',
-            params: {album: null}
+            resolve: {
+                albumPromise: function (AlbumService, $stateParams) {
+                    return AlbumService.getMyAlbumById($stateParams.albumId);
+                }
+            }
         }).state('movies', {
             url: "/movies",
             templateUrl: "/zeal/app/modules/movie/movies.html"

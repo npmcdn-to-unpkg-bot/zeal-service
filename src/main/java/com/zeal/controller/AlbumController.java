@@ -39,6 +39,18 @@ public class AlbumController extends AbstractController {
     private AlbumService albumService;
 
 
+    @RequestMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Response find(@PathVariable("id") long id, HttpServletRequest request) {
+        AlbumVO albumVO = albumService.find(id);
+        if (!albumVO.isPublished()) {
+            UserInfoVO userInfo = SessionUtils.getUserInfo(request);
+            albumService.checkAuthority(id, userInfo.getId());
+        }
+        return new Response.Builder().success().result(albumService.find(id)).build();
+    }
+
+
     @RequestMapping(value = "/publish/{id}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Response publish(@PathVariable("id") long id, HttpServletRequest request) {

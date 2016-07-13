@@ -19,6 +19,13 @@
             });
         };
 
+        this.getMyAlbumById = function (id) {
+            return HttpService.http({
+                method: "GET",
+                url: "/zeal/album/" + id
+            });
+        };
+
         this.showAlbumModal = function (album) {
             if (!album.pictures || album.pictures.length <= 0) {
                 MessageService.info({message: "相册为空", size: "sm"});

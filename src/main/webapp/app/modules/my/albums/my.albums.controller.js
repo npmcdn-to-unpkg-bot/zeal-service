@@ -2,9 +2,9 @@
  * Created by yang_shoulai on 2016/7/2.
  */
 (function () {
-    angular.module("app").controller('MyAlbumsController', function ($scope, AlbumService, MessageService, $uibModal) {
+    angular.module("app").controller('MyAlbumsController', function ($scope, AlbumService, MessageService, $uibModal, $location) {
         $scope.page = 1;
-        $scope.pageSize = 10;
+        $scope.pageSize = 20;
         $scope.albums = [];
         $scope.totalSize = 0;
         $scope.keyword = "";

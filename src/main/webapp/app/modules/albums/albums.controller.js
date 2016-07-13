@@ -3,8 +3,8 @@
  */
 
 (function () {
-    angular.module("app").controller('AlbumController', ['$scope', 'HttpService', '$log', '$state', '$uibModal', 'AlbumService', '$stateParams',
-        function ($scope, HttpService, $log, $state, $uibModal, AlbumService, $stateParams) {
+    angular.module("app").controller('AlbumController', ['$scope', 'HttpService', '$log', '$state', '$uibModal', 'AlbumService', '$stateParams', '$location',
+        function ($scope, HttpService, $log, $state, $uibModal, AlbumService, $stateParams, $location) {
             var parentTag = $stateParams.tag;
             $scope.pagination = {
                 page: 1,
@@ -52,7 +52,8 @@
 
             $scope.onClickAlbum = function (album) {
                 //$state.go('pictures', {album: album});
-                AlbumService.showAlbumModal(album);
+                //AlbumService.showAlbumModal(album);
+                $location.path('/albums/album/' + album.id);
             };
 
             $scope.childTagClick = function (childTag) {
@@ -73,19 +74,23 @@
         }]);
 
 
-    angular.module("app").controller('AlbumDisplayController', ['$scope', 'HttpService', '$log', '$stateParams', 'CookieService', 'album',
-        function ($scope, HttpService, $log, $stateParams, CookieService, album) {
-            $scope.album = album;
-            $scope.slides = album.pictures;
-            $scope.carouselMode = true;
-            $scope.active = 0;
-            $scope.interval = 2000;
-            $scope.noWrapMode = false;
+    angular.module("app").controller('AlbumDisplayController', ['$scope', 'HttpService', '$log', '$stateParams', 'AlbumService', 'albumPromise',
+        function ($scope, HttpService, $log, $stateParams, AlbumService, albumPromise) {
+            albumPromise.success(function (album) {
+                $scope.album = album;
+                $scope.slides = album.pictures;
+            });
+
         }]);
 
     angular.module("app").controller('AlbumListDisplayController', ['$scope', 'HttpService', '$log', '$stateParams', 'CookieService', 'album',
         function ($scope, HttpService, $log, $stateParams, CookieService, album) {
             $scope.album = album;
+            $scope.photos = [
+                {id: 'p1', 'title': 'A nice day!', src: "http://lorempixel.com/300/400/"},
+                {id: 'p2', 'title': 'Puh!', src: "http://lorempixel.com/300/400/sports"},
+                {id: 'p3', 'title': 'What a club!', src: "http://lorempixel.com/300/400/nightlife"}
+            ];
         }]);
 
     angular.module("app").controller('PictureDisplayController', function ($scope, picture) {

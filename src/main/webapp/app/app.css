@@ -8,6 +8,7 @@ body {
 
 #module-container {
     margin-top: 0px;
+
 }
 
 .img-scale {
@@ -43,7 +44,7 @@ body {
 }
 
 .picture-name {
-    margin-top: 40px;
+    margin-top: 0px;
 }
 
 .album-container {
@@ -308,3 +309,4 @@ body {
 }
 
 /*album list tpl end*/
+

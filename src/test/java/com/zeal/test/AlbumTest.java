@@ -46,12 +46,11 @@ public class AlbumTest {
 
     @Test
     public void deleteDuplicateAlbums() {
-        TypedQuery<Album> query = entityManager.createQuery("select o from Album o where o.name in (select o1.name from Album o1 group by o1.name having count (o1) >= 2)", Album.class);
+        TypedQuery<Album> query = entityManager.createQuery("select o from Album o where o.id >= 729 and o.id <= 5426", Album.class);
         List<Album> list = query.getResultList();
         for (Album album : list) {
             albumService.delete(album.getId(), 1L);
         }
-
     }
 
 

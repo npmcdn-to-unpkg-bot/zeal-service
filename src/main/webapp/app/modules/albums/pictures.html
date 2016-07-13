@@ -1,30 +1,18 @@
 <div>
     <h2 class="text-center picture-name">{{album.name}}</h2>
-    <p class="col-sm-offset-10 col-sm-2 text-right">
-        <button type="button" class="btn btn-primary btn-sm" ng-model="carouselMode" uib-btn-checkbox>
-            <span ng-show="!carouselMode">轮播模式</span>
-            <span ng-show="carouselMode">快速浏览</span>
-        </button>
-    </p>
-    <div class="col-sm-offset-6 col-sm-3 text-right">
-            <span ng-show="album.published"><span class="text-info">发布日期：</span> {{album.publishDate | date:'yyyy-MM-dd'}}
-            </span>
+    <div class="text-right">
+        <span ng-show="album.published">
+            <span class="text-info">发布日期：</span> {{album.publishDate | date:'yyyy-MM-dd'}}
+        </span>
+        <span class="text-info" style="margin-left: 20px;">作者：</span>{{album.userInfo.nickName | characters : 12 :
+        false}}
     </div>
-    <div class="col-sm-3 text-right">
-        <span class="text-info">作者：</span>{{album.userInfo.nickName | characters : 12 : false}}
-    </div>
-    <hr style="clear: both"/>
+    <ul class="list-inline">
+        <li ng-repeat="tag in album.tags">
+            <span class="label label-primary">{{tag.name}}</span>
+        </li>
+    </ul>
     <div ng-hide="carouselMode">
         <album-list pictures="slides"></album-list>
-    </div>
-    <div ng-show="carouselMode" class="text-center">
-        <album-gallery pictures="slides"></album-gallery>
-    </div>
-    <div style="padding:10px;border-top: 1px solid #eee;">
-        <ul class="list-inline">
-            <li ng-repeat="tag in album.tags">
-                <span class="label label-default">{{tag.name}}</span>
-            </li>
-        </ul>
     </div>
 </div>

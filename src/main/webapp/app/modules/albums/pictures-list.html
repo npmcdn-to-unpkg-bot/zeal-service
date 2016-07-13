@@ -1,27 +1,18 @@
-<div>
+<div style="padding: 40px 10px 20px 10px;">
     <h2 class="text-center picture-name">{{album.name}}</h2>
-    <div class="col-sm-offset-4 col-sm-4 text-right">
-        <p ng-show="album.published"><span class="text-info">发布日期：</span> {{album.publishDate | date:'yyyy-MM-dd'}}
-        </p>
+    <div class="text-right">
+        <span ng-show="album.published">
+            <span class="text-info">发布日期：</span> {{album.publishDate | date:'yyyy-MM-dd'}}
+        </span>
+        <span class="text-info" style="margin-left: 20px;">作者：</span>{{album.userInfo.nickName | characters : 12 :
+        false}}
     </div>
-    <div class="col-sm-4 text-right">
-        <span class="text-info">作者：</span>{{album.userInfo.nickName}}
-    </div>
-    <hr/>
-    <album-list pictures="album.pictures"></album-list>
-    <!--<album-gallery pictures="album.pictures"></album-gallery>-->
-    <!--<div style="margin-top: 10px;">
-        <ul class="list-inline text-center">
-            <li ng-repeat="picture in album.pictures" class="text-left" style="margin-bottom: 8px;">
-                <img ng-src="{{picture.url}}" style="height: 240px;" class="img-responsive img-thumbnail">
-            </li>
-        </ul>
-    </div>-->
-    <div style="padding:10px;border-top: 1px solid #eee;">
-        <ul class="list-inline">
-            <li ng-repeat="tag in album.tags">
-                <span class="label label-default">{{tag.name}}</span>
-            </li>
-        </ul>
+    <ul class="list-inline">
+        <li ng-repeat="tag in album.tags">
+            <span class="label label-primary">{{tag.name}}</span>
+        </li>
+    </ul>
+    <div ng-hide="carouselMode">
+        <album-list pictures="album.pictures"></album-list>
     </div>
 </div>
