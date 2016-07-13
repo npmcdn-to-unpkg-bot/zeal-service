@@ -7,9 +7,17 @@
             restrict: "E",
             transclude: false,
             scope: {
-                pictures: "=pictures"
+                pictures: "=pictures",
+                resizeWidth: "@",
+                resizeHeight: "@"
             },
             controller: ['$scope', '$compile', '$document', function ($scope, $compile, $document) {
+                if (!$scope.resizeHeight) {
+                    $scope.resizeHeight = 320;
+                }
+                if (!$scope.resizeWidth) {
+                    $scope.resizeWidth = 320;
+                }
                 $scope.index = 0;
                 $scope.clickPic = function (index) {
                     $scope.index = index;

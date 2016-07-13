@@ -1,46 +1,47 @@
-<div class="row">
-    <!--<ul class="nav nav-pills  nav-stacked col-sm-2">
-        <li role="presentation" ui-sref-active="active" ui-sref-opts="{reload: true}"><a
-                ui-sref="albums({tag:1})">美女</a></li>
-        <li role="presentation" ui-sref-active="active" ui-sref-opts="{reload: true}"><a
-                ui-sref="albums({tag:14})">动物</a></li>
-    </ul>-->
-
-    <div ui-view>
-        <ul class="nav nav-pills" style="margin-bottom: 10px;">
-            <li ng-repeat="childTag in childTags" role="presentation" ng-class="{'active':childTag.id == childTagId}">
-                <a ng-click="childTagClick(childTag)" class="pointer">{{childTag.name}}</a>
-               <!-- <button class="btn btn-sm btn-default"
-                        ng-class="{'active':childTag.id == childTagId,'btn-primary':childTag.id == childTagId}"
-                        ng-click="childTagClick(childTag)">
-                    <span>{{childTag.name}}</span>
-                </button>-->
+<div ui-view>
+    <ul class="nav nav-pills" style="margin-bottom: 10px;">
+        <li ng-repeat="childTag in childTags" role="presentation" ng-class="{'active':childTag.id == childTagId}">
+            <a ng-click="childTagClick(childTag)" class="pointer">{{childTag.name}}</a>
+        </li>
+    </ul>
+    <div>
+        <ul class="list-inline">
+            <li ng-repeat="album in targetAlbums" class="col-sm-2"
+                style="padding-left: 15px; padding-right: 15px;margin-bottom: 30px;">
+                <div class="album">
+                    <div class="pointer" ng-click="onClickAlbum(album)"
+                         style="width:100%; overflow: hidden;">
+                        <img ng-src="{{album.url}}" class="img-scale"
+                             title="{{album.name}}" style="width: 100%;height: auto;">
+                    </div>
+                    <div class="text-left title">
+                        <div class="line">
+                            <span class="text-muted pointer" ng-click="onClickAlbum(album)">{{album.name | characters:10: false}}({{album.pictures.length}}P)</span>
+                            <span class="icon">
+                                <i class="glyphicon glyphicon-heart"></i> 623
+                            </span>
+                        </div>
+                    </div>
+                    <div class="text-left author">
+                        <div class="line">
+                            <a href="/zeal/#/albums" target="_blank">
+                                <img src="/zeal/resources/app/icons/photo.jpg"> <span class="text-muted">{{album.userInfo.nickName}}</span>
+                            </a>
+                            <span class="icon">
+                                <i class="glyphicon glyphicon-thumbs-up"></i> 120
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </li>
         </ul>
-        <div class="">
-            <div>
-                <ul class="list-inline">
-                    <li ng-repeat="album in targetAlbums" style="width:25%;margin-top: 5px; margin-bottom: 10px;">
-                        <div class="pointer" ng-click="onClickAlbum(album)"
-                             style="overflow: hidden;border-radius:4px;border: 1px solid #edeff2; ">
-                            <img ng-src="{{album.url}}" class="img-responsive img-thumbnail img-scale"
-                                 title="{{album.name}}"
-                                 style="width: 100%;height: auto;padding: 0px;">
-                        </div>
-                        <div class="text-left  album-label">
-                            <span class="text-muted pointer" ng-click="onClickAlbum(album)">{{album.name | characters:20: false}}</span>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+    </div>
 
-            <div ng-hide="totalSize <= 0">
-                <uib-pagination total-items="pagination.totalSize" ng-model="pagination.page"
-                                ng-change="onPageChanged()" first-text="第一页"
-                                last-text="最后一页" next-text="下一页" previous-text="上一页" max-size="10" boundary-links="true"
-                                boundary-link-numbers="true"
-                                items-per-page="pagination.pageSize"></uib-pagination>
-            </div>
-        </div>
+    <div ng-hide="totalSize <= 0" style="clear: both;" class="text-center">
+        <uib-pagination total-items="pagination.totalSize" ng-model="pagination.page"
+                        ng-change="onPageChanged()" first-text="第一页"
+                        last-text="最后一页" next-text="下一页" previous-text="上一页" max-size="10" boundary-links="true"
+                        boundary-link-numbers="true"
+                        items-per-page="pagination.pageSize"></uib-pagination>
     </div>
 </div>

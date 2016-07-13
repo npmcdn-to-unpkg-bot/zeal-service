@@ -3,4 +3,4 @@ target/
 *.log
 .idea/
 *.iml
-*database.properties
+/src/main/resources/META-INF/spring/database.properties

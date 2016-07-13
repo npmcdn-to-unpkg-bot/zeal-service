@@ -3,7 +3,16 @@
  */
 
 (function () {
-    angular.module("app", ['ui.bootstrap', 'ui.router', 'ngCookies', 'ngFileUpload', 'angular-loading-bar', 'ngAnimate', 'toastr']);
+    angular.module("app",
+        [
+            'ui.bootstrap',
+            'ui.router',
+            'ngCookies',
+            'ngFileUpload',
+            'angular-loading-bar',
+            'ngAnimate',
+            'toastr'
+        ]);
     angular.module("app").run(['$rootScope', '$state', '$stateParams',
         function ($rootScope, $state, $stateParams) {
             $rootScope.$state = $state;
@@ -15,6 +24,7 @@
 
         $stateProvider.state('home', {
             url: "/home",
+            controller: 'HomeController',
             templateUrl: "/zeal/app/modules/home/home.html"
         }).state('albums', {
             url: "/albums",

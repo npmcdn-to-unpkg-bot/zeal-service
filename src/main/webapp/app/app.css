@@ -8,11 +8,13 @@ body {
 
 #module-container {
     margin-top: 0px;
-
+    margin-left: 2%;
+    margin-right: 2%;
+    width: 96%;
 }
 
 .img-scale {
-
+    transition: all .3s;
 }
 
 .img-scale:hover {
@@ -310,3 +312,121 @@ body {
 
 /*album list tpl end*/
 
+.deckgrid[deckgrid]::before {
+    /* Specifies that the grid should have a maximum of 4 columns. Each column will have the classes 'column' and 'column-1-4' */
+    content: '4 .column.column-1-4';
+    font-size: 0; /* See https://github.com/akoenig/angular-deckgrid/issues/14#issuecomment-35728861 */
+    visibility: hidden;
+}
+
+.deckgrid .column {
+    float: left;
+}
+
+.deckgrid .column-1-4 {
+    width: 25%;
+}
+
+.album {
+    border: 1px solid #edeff2;
+    border-radius: 4px;
+    font-size: 11px;
+}
+
+.album .title {
+    margin: 0 10px;
+    padding: 10px 0;
+}
+
+.album .author {
+    margin: 0 10px;
+    padding: 10px 0;
+    border-top: 1px solid #edeff2;
+}
+
+.album .author img {
+    width: 30px;
+    height: 30px;
+    border-radius: 30px;
+    margin-right: 10px;
+}
+
+.album .icon {
+    float: right;
+    font-size: 13px;
+    cursor: pointer;
+    color: #b4b7c1;
+    line-height: 30px;
+}
+
+.album .icon i {
+    line-height: inherit;
+}
+
+.album .line {
+    line-height: 30px;
+}
+
+.album a {
+    text-decoration: none;
+}
+
+.user-block {
+    padding: 30px 20px;
+    border: 1px solid #edeff2;
+    border-radius: 2px;
+    margin-bottom: 20px;
+}
+
+.user-block .user-detail {
+    text-align: center;
+}
+
+.user-block .user-detail img {
+    width: 70px;
+    height: 70px;
+    border-radius: 70px;
+}
+
+.user-block .user-name {
+    margin-top: 25px;
+    color: #262626;
+    font-size: 16px;
+    overflow: hidden;
+    font-family: "Microsoft YaHei";
+    white-space: nowrap;
+    display: block;
+}
+
+.user-block .user-email {
+    font-size: 12px;
+}
+
+.album-info-line {
+    font-size: 12px;
+    color: #b4b7c1 !important;
+    line-height: 15px;
+}
+
+.album-info-line span:not(:last-child) {
+    margin-right: 25px;
+}
+
+.album-title {
+    font-size: 24px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    color: #262626;
+    border-bottom: 1px solid #edeff2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.album-tags-block {
+
+}
+
+.album-tags-label {
+    color: #262626;
+    font-size: 16px;
+}

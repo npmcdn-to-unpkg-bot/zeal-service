@@ -30,12 +30,13 @@
                                     name: album.name,
                                     size: album.pictures.length,
                                     pictures: album.pictures,
-                                    url: "/zeal/album/thumbnail/" + album.id,
+                                    url: "/zeal/picture/resize/" + album.pictures[0].id + "?width=480&height=480",
                                     createDate: album.createDate,
                                     userInfo: album.userInfo,
                                     published: album.published,
                                     publishDate: album.publishDate,
-                                    tags: album.tags
+                                    tags: album.tags,
+                                    userInfo:album.userInfo
                                 }
                             );
                         }
@@ -51,8 +52,6 @@
             };
 
             $scope.onClickAlbum = function (album) {
-                //$state.go('pictures', {album: album});
-                //AlbumService.showAlbumModal(album);
                 $location.path('/albums/album/' + album.id);
             };
 
@@ -80,17 +79,11 @@
                 $scope.album = album;
                 $scope.slides = album.pictures;
             });
-
         }]);
 
     angular.module("app").controller('AlbumListDisplayController', ['$scope', 'HttpService', '$log', '$stateParams', 'CookieService', 'album',
         function ($scope, HttpService, $log, $stateParams, CookieService, album) {
             $scope.album = album;
-            $scope.photos = [
-                {id: 'p1', 'title': 'A nice day!', src: "http://lorempixel.com/300/400/"},
-                {id: 'p2', 'title': 'Puh!', src: "http://lorempixel.com/300/400/sports"},
-                {id: 'p3', 'title': 'What a club!', src: "http://lorempixel.com/300/400/nightlife"}
-            ];
         }]);
 
     angular.module("app").controller('PictureDisplayController', function ($scope, picture) {

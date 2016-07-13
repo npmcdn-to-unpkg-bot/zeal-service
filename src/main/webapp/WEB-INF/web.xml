@@ -57,6 +57,7 @@
                 /album/\d{1,}
                 /album/thumbnail/.*
                 /picture/\d{1,}
+                /picture/resize.*
                 /albumTag/.*
             </param-value>
         </init-param>

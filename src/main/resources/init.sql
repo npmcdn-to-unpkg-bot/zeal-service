@@ -20,7 +20,3 @@ INSERT INTO t_album_tag (id, version, name, description, parent) VALUES (10, 0, 
 INSERT INTO t_album_tag (id, version, name, description, parent) VALUES (11, 0, '黑丝', '', 1);
 INSERT INTO t_album_tag (id, version, name, description, parent) VALUES (12, 0, '成熟', '', 1);
 INSERT INTO t_album_tag (id, version, name, description, parent) VALUES (13, 0, '巨乳', '', 1);
-
-INSERT INTO t_album_tag (id, version, name, description, parent) VALUES (14, 0, '动物', '', 0);
-INSERT INTO t_album_tag (id, version, name, description, parent) VALUES (15, 0, '萌宠', '', 14);
-INSERT INTO t_album_tag (id, version, name, description, parent) VALUES (16, 0, '野生动物', '', 14);
