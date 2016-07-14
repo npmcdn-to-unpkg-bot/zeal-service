@@ -108,5 +108,30 @@
             });
         };
 
+        /**
+         * 收藏相册
+         * @param albumId
+         * @returns {*|{promise, success, error}}
+         */
+        this.collect = function (albumId) {
+            return HttpService.http({
+                method: "GET",
+                url: "/zeal//collection/album/add?albumId=" + albumId
+            });
+        };
+
+        /**
+         * 取消收藏相册
+         * @param albumId
+         * @returns {*|{promise, success, error}}
+         */
+        this.uncollect = function (albumId) {
+            return HttpService.http({
+                method: "GET",
+                url: "/zeal//collection/album/cancel?albumId=" + albumId
+            });
+        };
+
+
     });
 })();

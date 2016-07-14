@@ -34,14 +34,21 @@
         <div>
             <button class="btn btn-primary" style="width: 100%">
                 <span>
-                     <i class="glyphicon glyphicon-thumbs-up"></i> 给相册点赞
+                     <i class="glyphicon glyphicon-thumbs-up"></i> 点赞作者
                 </span>
             </button>
         </div>
         <div style="margin-top: 15px;">
-            <button class="btn btn-default" style="width: 100%;margin-bottom: 15px;">
+            <button ng-click="collectAlbum(album)" ng-hide="album.collected" class="btn btn-default"
+                    style="width: 100%;margin-bottom: 15px;">
                 <span>
                      <i class="glyphicon glyphicon-folder-open"></i> 收藏该相册
+                </span>
+            </button>
+            <button ng-click="uncollectAlbum(album)" ng-show="album.collected" class="btn btn-warning"
+                    style="width: 100%;margin-bottom: 15px;">
+                <span>
+                     <i class="glyphicon glyphicon-minus"></i> 取消收藏
                 </span>
             </button>
         </div>
@@ -50,7 +57,7 @@
         <div class="panel panel-default">
             <div class="panel-heading" style="padding-top: 15px; padding-bottom: 15px;">
                 <h3 class="panel-title album-info-line">
-                    <span><i class="glyphicon glyphicon-heart"></i> 623</span>
+                    <span><i class="glyphicon glyphicon-heart" ng-class="{'text-red':album.collected}"></i> {{album.collectionCount}}</span>
                     <span class="icon"><i class="glyphicon glyphicon-thumbs-up"></i> 120</span>
                     <span class="icon"><i class="glyphicon glyphicon-comment"></i> 120</span>
                     <span class="icon pull-right"><i class="fa fa-clock-o"> {{album.publishDate | date:'yyyy-MM-dd HH:mm:ss'}}</i> </span>

@@ -43,23 +43,25 @@ public class AlbumDao extends AbstractBaseDao<Album> {
     }
 
     /**
-     * 也分获取用户下的所有相册
+     * 也分获取用户下的发布或者未发布相册
      *
      * @param userInfoId 用户ID
+     * @param published  是否发布
      * @param page       分页页码 从 1 开始
      * @param pageSize   分页每页数量
      * @return 分页信息
      */
-    public PagedList<Album> pagedByUserInfoId(long userInfoId, int page, int pageSize) {
-        TypedQuery<Album> query = this.entityManager().createQuery("SELECT o FROM Album o where o.userInfo.id = :userInfoId ORDER BY o.createDate desc ", Album.class);
+    public PagedList<Album> pagedByUserInfoIdAndPublishStatus(long userInfoId, boolean published, int page, int pageSize) {
+        TypedQuery<Album> query = this.entityManager().createQuery("SELECT o FROM Album o where o.userInfo.id = :userInfoId and o.isPublished = :isPublished ORDER BY o.createDate desc ", Album.class);
         query.setFirstResult((page - 1) * pageSize);
         query.setMaxResults(pageSize);
         query.setParameter("userInfoId", userInfoId);
+        query.setParameter("isPublished", published);
         PagedList<Album> pagedList = new PagedList<>();
         pagedList.setList(query.getResultList());
         pagedList.setSize(pageSize);
         pagedList.setPage(page);
-        pagedList.setTotalSize(countByUserInfoId(userInfoId));
+        pagedList.setTotalSize(countByUserInfoIdAndPublishStatus(userInfoId, published));
         return pagedList;
     }
 
@@ -68,9 +70,10 @@ public class AlbumDao extends AbstractBaseDao<Album> {
      *
      * @return
      */
-    public long countByUserInfoId(Long userInfoId) {
-        TypedQuery<Long> query = this.entityManager().createQuery("SELECT count(o) FROM Album o where o.userInfo.id = :userInfoId ORDER BY o.createDate desc ", Long.class);
+    public long countByUserInfoIdAndPublishStatus(Long userInfoId, boolean published) {
+        TypedQuery<Long> query = this.entityManager().createQuery("SELECT count(o) FROM Album o where o.userInfo.id = :userInfoId and o.isPublished = :isPublished ORDER BY o.createDate desc ", Long.class);
         query.setParameter("userInfoId", userInfoId);
+        query.setParameter("isPublished", published);
         return query.getSingleResult();
     }
 

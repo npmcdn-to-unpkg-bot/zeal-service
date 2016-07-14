@@ -15,19 +15,13 @@ import java.util.List;
  */
 public interface AlbumService {
 
-    PagedList<AlbumVO> paged(int page, int pageSize);
-
     AlbumVO find(long id);
-
-    List<AlbumVO> findAll();
 
     void publish(long id, long userId);
 
     void unPublish(long id, long userId);
 
     PagedList<AlbumVO> published(int page, int pageSize, long tagId);
-
-    PagedList<AlbumVO> pagedByUserInfoId(int page, int pageSize, long userInfoId);
 
     PagedList<AlbumVO> pagedByUserInfoIdAndKeywordLike(int page, int pageSize, long userInfoId, String keyword);
 
@@ -83,5 +77,24 @@ public interface AlbumService {
      * @return
      */
     File getThumbnail(long albumId);
+
+
+    /**
+     * 获取用户的发布或者未发布相册的数量
+     *
+     * @param published
+     * @param userId
+     * @return
+     */
+    long countByPublishStatus(boolean published, long userId);
+
+    /**
+     * 获取用户发布或者未发布的相册列表
+     *
+     * @param published
+     * @param userId
+     * @return
+     */
+    PagedList<AlbumVO> findByPublishStatus(boolean published, long userId, int page, int pageSize);
 
 }

@@ -93,7 +93,7 @@ public class AlbumCollectionDao extends AbstractBaseDao<AlbumCollection> {
      * @return
      */
     public List<AlbumCollection> findByUserInfoIdAndAlbumId(long userId, long albumId) {
-        String sql = "delete from AlbumCollection o where o.album.id = :albumId and o.userInfo.id = :userInfoId";
+        String sql = "select o from AlbumCollection o where o.album.id = :albumId and o.userInfo.id = :userInfoId";
         TypedQuery<AlbumCollection> query = this.entityManager().createQuery(sql, AlbumCollection.class);
         query.setParameter("albumId", albumId);
         query.setParameter("userInfoId", userId);

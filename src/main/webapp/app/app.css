@@ -3,6 +3,10 @@ body {
     padding-top: 90px;
 }
 
+.text-red{
+    color: #ff0000;
+}
+
 #nav {
     height: 70px;
     background-color: #222835;

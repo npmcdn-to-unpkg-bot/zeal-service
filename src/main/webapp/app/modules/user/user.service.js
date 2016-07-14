@@ -63,5 +63,16 @@
                 });
             };
 
+            /**
+             * 获取我的zeal信息
+             * @returns {*|{promise, success, error}}
+             */
+            this.getMyZealInfo = function () {
+                return HttpService.http({
+                    method: "GET",
+                    url: "/zeal/my/zealInfo"
+                });
+            }
+
         }]);
 })();

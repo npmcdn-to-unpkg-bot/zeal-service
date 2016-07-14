@@ -75,12 +75,33 @@
         }]);
 
 
-    angular.module("app").controller('AlbumDisplayController', ['$scope', 'HttpService', '$log', '$stateParams', 'AlbumService', 'albumPromise',
-        function ($scope, HttpService, $log, $stateParams, AlbumService, albumPromise) {
+    angular.module("app").controller('AlbumDisplayController', ['$scope', 'HttpService', '$log', '$stateParams', 'AlbumService', 'albumPromise', 'MessageService',
+        function ($scope, HttpService, $log, $stateParams, AlbumService, albumPromise, MessageService) {
             albumPromise.success(function (album) {
                 $scope.album = album;
                 $scope.slides = album.pictures;
             });
+
+            $scope.collectAlbum = function (album) {
+                AlbumService.collect(album.id).success(function (data) {
+                    $scope.album.collected = true;
+                    $scope.album.collectionCount++;
+                }).error(function (data) {
+                    MessageService.toast.error("收藏失败：" + +data.message);
+                    $scope.album.collected = false;
+                });
+            };
+
+            $scope.uncollectAlbum = function (album) {
+                AlbumService.uncollect(album.id).success(function (data) {
+                    $scope.album.collected = false;
+                    $scope.album.collectionCount--;
+                }).error(function (data) {
+                    MessageService.toast.error("取消收藏失败:" + data.message);
+                    $scope.album.collected = true;
+                });
+            };
+
         }]);
 
     angular.module("app").controller('AlbumListDisplayController', ['$scope', 'HttpService', '$log', '$stateParams', 'CookieService', 'album',

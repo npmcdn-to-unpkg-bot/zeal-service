@@ -77,7 +77,7 @@ public class AlbumCollectionServiceImpl implements AlbumCollectionService {
 
     @Override
     public boolean collected(long userId, long albumId) {
-        return albumCollectionDao.findByUserInfoIdAndAlbumId(userId, albumId).isEmpty();
+        return !albumCollectionDao.findByUserInfoIdAndAlbumId(userId, albumId).isEmpty();
     }
 
 

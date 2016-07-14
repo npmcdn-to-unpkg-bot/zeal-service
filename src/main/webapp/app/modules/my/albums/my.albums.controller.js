@@ -2,120 +2,128 @@
  * Created by yang_shoulai on 2016/7/2.
  */
 (function () {
-    angular.module("app").controller('MyAlbumsController', function ($scope, AlbumService, MessageService, $uibModal, $location) {
-
-        $scope.pagination = {
-            pageSize: 24,
-            page: 1,
-            totalSize: 0,
-            keyword: ""
-        };
-        $scope.albums = [];
-        var pagedAlbums = function () {
-            AlbumService.getMyAlbums($scope.pagination.page, $scope.pagination.pageSize, $scope.pagination.keyword)
-                .success(function (data) {
-                    $scope.albums = data.list;
-                    $scope.pagination.page = data.page;
-                    $scope.pagination.pageSize = data.size;
-                    $scope.pagination.totalSize = data.totalSize;
-                }).error(function (data) {
-                MessageService.toast.error(data.message, "获取数据失败");
+    angular.module("app").controller('MyAlbumsController',
+        function ($scope, AlbumService, MessageService, $uibModal, $location, $rootScope, UserService) {
+            $scope.pagination = {
+                pageSize: 24,
+                page: 1,
+                totalSize: 0,
+                keyword: ""
+            };
+            UserService.getMyZealInfo().success(function (data) {
+                $scope.zealInfo = data;
+            }).error(function (data) {
+                MessageService.toast.error(data.message);
             });
-        };
-        var removeAlbum = function (id) {
-            if ($scope.albums.length > 0) {
-                for (var index = 0; index < $scope.albums.length; index++) {
-                    if ($scope.albums[index].id == id) {
-                        $scope.albums.splice(index, 1);
-                        return;
+
+            $scope.UserInfo = $rootScope.UserInfo;
+
+            $scope.albums = [];
+            var pagedAlbums = function () {
+                AlbumService.getMyAlbums($scope.pagination.page, $scope.pagination.pageSize, $scope.pagination.keyword)
+                    .success(function (data) {
+                        $scope.albums = data.list;
+                        $scope.pagination.page = data.page;
+                        $scope.pagination.pageSize = data.size;
+                        $scope.pagination.totalSize = data.totalSize;
+                    }).error(function (data) {
+                    MessageService.toast.error(data.message, "获取数据失败");
+                });
+            };
+            var removeAlbum = function (id) {
+                if ($scope.albums.length > 0) {
+                    for (var index = 0; index < $scope.albums.length; index++) {
+                        if ($scope.albums[index].id == id) {
+                            $scope.albums.splice(index, 1);
+                            return;
+                        }
                     }
                 }
-            }
-        };
-        pagedAlbums();
-        $scope.onAlbumClick = function (album) {
-            $location.path("/my/albums/view/" + album.id);
-        };
-        $scope.onPageChanged = function () {
+            };
             pagedAlbums();
-        };
-        $scope.search = function () {
-            $scope.pagination.page = 1;
-            pagedAlbums();
-        };
-        $scope.updateModal = function (album) {
-            if (album.published) {
-                MessageService.toast.info("相册已经发布，无法编辑");
-                return;
-            }
-            var modalInstance = $uibModal.open({
-                templateUrl: '/zeal/app/modules/my/albums/update.html',
-                size: 'md',
-                controller: 'AlbumUpdateController',
-                resolve: {
-                    album: album
-                }
-            });
-            modalInstance.closed.then(function (data) {
+            $scope.onAlbumClick = function (album) {
+                $location.path("/my/albums/view/" + album.id);
+            };
+            $scope.onPageChanged = function () {
                 pagedAlbums();
-            });
-        };
-        $scope.delete = function (album) {
-            if (album.published) {
-                MessageService.toast.info("相册已经发布，无法删除");
-                return;
-            }
-            MessageService.confirm({
-                message: "确定需要删除吗？",
-                size: "sm",
-                ok: function ($modalInstance) {
-                    AlbumService.delete(album).success(function (data) {
-                        removeAlbum(album.id);
-                        $scope.pagination.totalSize--;
-                        $modalInstance.close();
-                        MessageService.toast.success(data.message, "删除成功");
-                        pagedAlbums();
-                    }).error(function (data) {
-                        MessageService.toast.error(data.message, "删除失败");
-                    });
-                }
-            });
-        };
-        $scope.publish = function (album) {
-            AlbumService.publish(album).success(function (data) {
-                album.published = true;
-                album.publishDate = data.publishDate;
-                MessageService.toast.success("发布成功");
-            }).error(function (data) {
-                MessageService.toast.error(data.message, "发布失败");
-            });
-        };
-        $scope.unpublish = function (album) {
-            MessageService.confirm({
-                message: "确定取消发布吗？",
-                size: "sm",
-                ok: function ($modalInstance) {
-                    AlbumService.unpublish(album).success(function (data) {
-                        album.published = false;
-                        album.publishDate = data.publishDate;
-                        $modalInstance.close();
-                    }).error(function (data) {
-                        MessageService.toast.error(data.message, "取消发布失败");
-                    });
-                }
-            });
-        };
-        $scope.addModal = function () {
-            var modalInstance = $uibModal.open({
-                templateUrl: '/zeal/app/modules/my/albums/add.html',
-                size: 'md',
-                controller: 'AlbumCreateController'
-            });
-            modalInstance.closed.then(function (data) {
+            };
+            $scope.search = function () {
+                $scope.pagination.page = 1;
                 pagedAlbums();
-            });
-        };
-    });
+            };
+            $scope.updateModal = function (album) {
+                if (album.published) {
+                    MessageService.toast.info("相册已经发布，无法编辑");
+                    return;
+                }
+                var modalInstance = $uibModal.open({
+                    templateUrl: '/zeal/app/modules/my/albums/update.html',
+                    size: 'md',
+                    controller: 'AlbumUpdateController',
+                    resolve: {
+                        album: album
+                    }
+                });
+                modalInstance.closed.then(function (data) {
+                    pagedAlbums();
+                });
+            };
+            $scope.delete = function (album) {
+                if (album.published) {
+                    MessageService.toast.info("相册已经发布，无法删除");
+                    return;
+                }
+                MessageService.confirm({
+                    message: "确定需要删除吗？",
+                    size: "sm",
+                    ok: function ($modalInstance) {
+                        AlbumService.delete(album).success(function (data) {
+                            removeAlbum(album.id);
+                            $scope.pagination.totalSize--;
+                            $modalInstance.close();
+                            MessageService.toast.success(data.message, "删除成功");
+                            pagedAlbums();
+                        }).error(function (data) {
+                            MessageService.toast.error(data.message, "删除失败");
+                        });
+                    }
+                });
+            };
+            $scope.publish = function (album) {
+                AlbumService.publish(album).success(function (data) {
+                    album.published = true;
+                    album.publishDate = data.publishDate;
+                    MessageService.toast.success("发布成功");
+                }).error(function (data) {
+                    MessageService.toast.error(data.message, "发布失败");
+                });
+            };
+            $scope.unpublish = function (album) {
+                MessageService.confirm({
+                    message: "确定取消发布吗？",
+                    size: "sm",
+                    ok: function ($modalInstance) {
+                        AlbumService.unpublish(album).success(function (data) {
+                            album.published = false;
+                            album.publishDate = data.publishDate;
+                            $modalInstance.close();
+                        }).error(function (data) {
+                            MessageService.toast.error(data.message, "取消发布失败");
+                        });
+                    }
+                });
+            };
+            $scope.addModal = function () {
+                var modalInstance = $uibModal.open({
+                    templateUrl: '/zeal/app/modules/my/albums/add.html',
+                    size: 'md',
+                    controller: 'AlbumCreateController'
+                });
+                modalInstance.closed.then(function (data) {
+                    pagedAlbums();
+                });
+            };
+        });
 
     angular.module("app").controller('AlbumCreateController', function ($scope, AlbumService, MessageService, Upload, $uibModalInstance) {
         $scope.album = {};

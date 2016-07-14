@@ -42,13 +42,6 @@ public class AlbumServiceImpl implements AlbumService {
     @Autowired
     private AlbumTagDao albumTagDao;
 
-    @Override
-    public PagedList<AlbumVO> paged(int page, int pageSize) {
-        if (page <= 0) page = 1;
-        if (pageSize <= 0) pageSize = 10;
-        PagedList<Album> albumPagedList = albumDao.paged(page, pageSize);
-        return convert(albumPagedList);
-    }
 
     @Override
     public AlbumVO find(long id) {
@@ -57,17 +50,6 @@ public class AlbumServiceImpl implements AlbumService {
         return new AlbumVO(album);
     }
 
-    @Override
-    public List<AlbumVO> findAll() {
-        List<Album> albums = albumDao.findAll();
-        List<AlbumVO> albumVOs = new ArrayList<>();
-        if (!albums.isEmpty()) {
-            for (Album album : albums) {
-                albumVOs.add(new AlbumVO(album));
-            }
-        }
-        return albumVOs;
-    }
 
     @Override
     public void publish(long id, long userId) {
@@ -90,10 +72,6 @@ public class AlbumServiceImpl implements AlbumService {
         return convert(albumDao.pagedByPublishStatus(page, pageSize, tagId, true));
     }
 
-    @Override
-    public PagedList<AlbumVO> pagedByUserInfoId(int page, int pageSize, long userInfoId) {
-        return convert(albumDao.pagedByUserInfoId(userInfoId, page, pageSize));
-    }
 
     @Override
     public PagedList<AlbumVO> pagedByUserInfoIdAndKeywordLike(int page, int pageSize, long userInfoId, String keyword) {
@@ -286,6 +264,33 @@ public class AlbumServiceImpl implements AlbumService {
         File file = new File(albumFolder.getPath() + File.separator + "thumbnail" + File.separator + "thumbnail.jpeg");
         if (!file.exists()) return null;
         return file;
+    }
+
+    /**
+     * 获取用户的发布或者未发布相册的数量
+     *
+     * @param published
+     * @param userId
+     * @return
+     */
+    @Override
+    public long countByPublishStatus(boolean published, long userId) {
+
+        return albumDao.countByUserInfoIdAndPublishStatus(userId, published);
+    }
+
+    /**
+     * 获取用户发布或者未发布的相册列表
+     *
+     * @param published
+     * @param userId
+     * @param page
+     * @param pageSize  @return
+     */
+    @Override
+    public PagedList<AlbumVO> findByPublishStatus(boolean published, long userId, int page, int pageSize) {
+
+        return convert(albumDao.pagedByUserInfoIdAndPublishStatus(userId, published, page, pageSize));
     }
 
     private List<File> download(List<PagePicture> pictures, long userInfoId, long albumId) {
