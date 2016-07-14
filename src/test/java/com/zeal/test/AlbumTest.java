@@ -1,26 +1,22 @@
 package com.zeal.test;
 
-import com.zeal.common.PagedList;
 import com.zeal.dao.AlbumDao;
 import com.zeal.dao.PictureDao;
 import com.zeal.dao.UserInfoDao;
-import com.zeal.entity.Album;
-import com.zeal.entity.Picture;
-import com.zeal.entity.UserInfo;
+import com.zeal.http.response.album.AlbumQueryResult;
 import com.zeal.service.AlbumService;
+import com.zeal.vo.album.AlbumVO;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.BeanUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by Administrator on 6/28/2016.
@@ -45,12 +41,12 @@ public class AlbumTest {
     private EntityManager entityManager;
 
     @Test
+    @Transactional
     public void deleteDuplicateAlbums() {
-        TypedQuery<Album> query = entityManager.createQuery("select o from Album o where o.id >= 729 and o.id <= 5426", Album.class);
-        List<Album> list = query.getResultList();
-        for (Album album : list) {
-            albumService.delete(album.getId(), 1L);
-        }
+        AlbumVO albumVO = albumService.find(1L);
+        AlbumQueryResult result = new AlbumQueryResult();
+        BeanUtils.copyProperties(albumVO, result);
+        Assert.assertTrue(result.getId() == 1);
     }
 
 

@@ -20,7 +20,8 @@
                                 <span ng-click="onClickAlbum(album)">{{album.name}}</span>
                             </div>
                             <div class="col-sm-4 text-right">
-                                <span><i class="glyphicon glyphicon-heart text-right"></i> 623</span>
+                                <span title="收藏数"><i class="glyphicon glyphicon-heart text-right"
+                                                     ng-class="{'text-danger':album.collected}"></i> {{album.collectionCount}}</span>
                             </div>
                         </div>
                     </div>

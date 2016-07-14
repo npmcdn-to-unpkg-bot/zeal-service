@@ -1,29 +1,27 @@
 package com.zeal.controller;
 
+import com.zeal.common.PagedList;
 import com.zeal.http.response.Response;
+import com.zeal.http.response.album.AlbumQueryResult;
+import com.zeal.service.AlbumCollectionService;
 import com.zeal.service.AlbumService;
+import com.zeal.service.AuthorityCheckService;
 import com.zeal.utils.SessionUtils;
 import com.zeal.utils.StringUtils;
 import com.zeal.vo.album.AlbumVO;
 import com.zeal.vo.user.UserInfoVO;
-import com.zeal.worker.AlbumWorkerExecutor;
-import com.zeal.worker.albums.meizitu.MeizituAlbumsPageResover;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -38,16 +36,23 @@ public class AlbumController extends AbstractController {
     @Autowired
     private AlbumService albumService;
 
+    @Autowired
+    private AuthorityCheckService authorityCheckService;
+
+    @Autowired
+    private AlbumCollectionService albumCollectionService;
 
     @RequestMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Response find(@PathVariable("id") long id, HttpServletRequest request) {
+        authorityCheckService.checkAlbumReadAuthority(request, id);
         AlbumVO albumVO = albumService.find(id);
-        if (!albumVO.isPublished()) {
-            UserInfoVO userInfo = SessionUtils.getUserInfo(request);
-            albumService.checkAuthority(id, userInfo.getId());
-        }
-        return new Response.Builder().success().result(albumService.find(id)).build();
+        AlbumQueryResult albumQueryResult = new AlbumQueryResult();
+        BeanUtils.copyProperties(albumVO, albumQueryResult);
+        UserInfoVO userInfo = SessionUtils.getUserInfo(request);
+        albumQueryResult.setCollected(userInfo != null && albumCollectionService.collected(userInfo.getId(), id));
+        albumQueryResult.setCollectionCount(albumCollectionService.countByAlbumIdEquals(id));
+        return new Response.Builder().success().result(albumQueryResult).build();
     }
 
 
@@ -55,7 +60,7 @@ public class AlbumController extends AbstractController {
     @ResponseBody
     public Response publish(@PathVariable("id") long id, HttpServletRequest request) {
         UserInfoVO userInfo = SessionUtils.getUserInfo(request);
-        albumService.checkAuthority(id, userInfo.getId());
+        authorityCheckService.checkAlbumModifyAuthority(request, id);
         albumService.publish(id, userInfo.getId());
         return new Response.Builder().success().result(albumService.find(id)).build();
     }
@@ -64,7 +69,7 @@ public class AlbumController extends AbstractController {
     @ResponseBody
     public Response unPublish(@PathVariable("id") long id, HttpServletRequest request) {
         UserInfoVO userInfo = SessionUtils.getUserInfo(request);
-        albumService.checkAuthority(id, userInfo.getId());
+        authorityCheckService.checkAlbumModifyAuthority(request, id);
         albumService.unPublish(id, userInfo.getId());
         return new Response.Builder().success().result(albumService.find(id)).build();
     }
@@ -73,14 +78,29 @@ public class AlbumController extends AbstractController {
     @ResponseBody
     public Response published(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
                               @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
-                              @RequestParam(value = "tag", required = false, defaultValue = "-1") long tagId) {
-        return new Response.Builder().success().result(albumService.published(page, pageSize, tagId)).build();
+                              @RequestParam(value = "tag", required = false, defaultValue = "-1") long tagId, HttpServletRequest request) {
+        UserInfoVO userInfo = SessionUtils.getUserInfo(request);
+        PagedList<AlbumVO> pagedList = albumService.published(page, pageSize, tagId);
+        PagedList<AlbumQueryResult> list = new PagedList<>();
+        list.setSize(pagedList.getSize());
+        list.setPage(pagedList.getPage());
+        list.setTotalSize(pagedList.getTotalSize());
+        List<AlbumQueryResult> results = new ArrayList<>();
+        for (AlbumVO albumVO : pagedList.getList()) {
+            AlbumQueryResult result = new AlbumQueryResult();
+            BeanUtils.copyProperties(albumVO, result);
+            result.setCollectionCount(albumCollectionService.countByAlbumIdEquals(albumVO.getId()));
+            result.setCollected(userInfo != null && albumCollectionService.collected(userInfo.getId(), albumVO.getId()));
+            results.add(result);
+        }
+        list.setList(results);
+        return new Response.Builder().success().result(list).build();
     }
 
     @RequestMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Response delete(@PathVariable("id") long id, HttpServletRequest httpServletRequest) {
-        albumService.checkAuthority(id, SessionUtils.getUserInfo(httpServletRequest).getId());
+        authorityCheckService.checkAlbumModifyAuthority(httpServletRequest, id);
         albumService.delete(id, SessionUtils.getUserInfo(httpServletRequest).getId());
         return new Response.Builder().success().build();
     }
@@ -103,7 +123,7 @@ public class AlbumController extends AbstractController {
                            @RequestParam(value = "tags", required = false) String tagIdArray,
                            @RequestParam(value = "id") long id,
                            DefaultMultipartHttpServletRequest httpServletRequest) {
-        albumService.checkAuthority(id, SessionUtils.getUserInfo(httpServletRequest).getId());
+        authorityCheckService.checkAlbumModifyAuthority(httpServletRequest, id);
         List<MultipartFile> newFiles = resolveMultipartFiles(httpServletRequest);
         int[] deletes = stringToArray(deleteIdArray);
         int[] tags = stringToArray(tagIdArray);
@@ -119,11 +139,7 @@ public class AlbumController extends AbstractController {
      */
     @RequestMapping(value = "/thumbnail/{id}")
     public void thumbnail(@PathVariable("id") long id, HttpServletRequest request, HttpServletResponse response) {
-        AlbumVO albumVO = albumService.find(id);
-        if (!albumVO.isPublished()) {
-            UserInfoVO userInfoVO = SessionUtils.getUserInfo(request);
-            albumService.checkAuthority(id, userInfoVO == null ? 0L : userInfoVO.getId());
-        }
+        authorityCheckService.checkAlbumReadAuthority(request, id);
         File file = albumService.getThumbnail(id);
         if (file == null || !file.exists()) {
             file = albumService.createThumbnail(id);

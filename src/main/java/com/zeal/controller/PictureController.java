@@ -1,12 +1,11 @@
 package com.zeal.controller;
 
 import com.zeal.http.response.Response;
+import com.zeal.service.AuthorityCheckService;
 import com.zeal.service.PictureService;
 import com.zeal.utils.FileUtils;
 import com.zeal.utils.ImageUtils;
 import com.zeal.utils.SessionUtils;
-import com.zeal.vo.album.AlbumVO;
-import com.zeal.vo.user.UserInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -30,9 +29,12 @@ public class PictureController extends AbstractController {
     @Autowired
     private PictureService pictureService;
 
+    @Autowired
+    private AuthorityCheckService authorityCheckService;
+
     @RequestMapping(value = "/{id}")
     public void find(@PathVariable("id") long id, HttpServletRequest request, HttpServletResponse response) {
-        checkPictureAccess(id, request);
+        authorityCheckService.checkPictureReadAuthority(request, id);
         File file = pictureService.getDiskFile(id);
         returnFile(response, file);
     }
@@ -40,7 +42,7 @@ public class PictureController extends AbstractController {
 
     @RequestMapping(value = "/resize/{id}")
     public void resize(@PathVariable("id") long id, @RequestParam("width") int width, @RequestParam("height") int height, HttpServletRequest request, HttpServletResponse response) {
-         checkPictureAccess(id, request);
+        authorityCheckService.checkPictureReadAuthority(request, id);
         File file = pictureService.getDiskFile(id);
         if (width <= 0 || height <= 0) {
             returnFile(response, file);
@@ -62,21 +64,9 @@ public class PictureController extends AbstractController {
     @RequestMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Response delete(@PathVariable("id") long id, HttpServletRequest httpServletRequest) {
-        pictureService.checkAuthority(id, SessionUtils.getUserInfo(httpServletRequest).getId());
+        authorityCheckService.checkPictureModifyAuthority(httpServletRequest, id);
         pictureService.delete(id, SessionUtils.getUserInfo(httpServletRequest).getId());
         return new Response.Builder().success().build();
     }
 
-
-    private void checkPictureAccess(long pictureId, HttpServletRequest request) {
-        AlbumVO albumVO = pictureService.findAlbumByPictureId(pictureId);
-        if (!albumVO.isPublished()) {
-            UserInfoVO userInfoVO = SessionUtils.getUserInfo(request);
-            long userId = 0L;
-            if (userInfoVO != null) {
-                userId = userInfoVO.getId();
-            }
-            pictureService.checkAuthority(pictureId, userId);
-        }
-    }
 }

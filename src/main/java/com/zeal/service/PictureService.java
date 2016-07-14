@@ -20,6 +20,4 @@ public interface PictureService {
 
     AlbumVO findAlbumByPictureId(long pictureId);
 
-    void checkAuthority(long pictureId, long userId);
-
 }

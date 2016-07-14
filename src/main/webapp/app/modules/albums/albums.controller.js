@@ -36,7 +36,9 @@
                                     published: album.published,
                                     publishDate: album.publishDate,
                                     tags: album.tags,
-                                    userInfo:album.userInfo
+                                    userInfo: album.userInfo,
+                                    collected: album.collected,
+                                    collectionCount: album.collectionCount
                                 }
                             );
                         }

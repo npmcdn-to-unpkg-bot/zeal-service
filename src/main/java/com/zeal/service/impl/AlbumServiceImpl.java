@@ -10,8 +10,6 @@ import com.zeal.entity.AlbumTag;
 import com.zeal.entity.Picture;
 import com.zeal.entity.UserInfo;
 import com.zeal.exception.BizException;
-import com.zeal.exception.BizExceptionCode;
-import com.zeal.exception.NoAuthorityException;
 import com.zeal.service.AlbumService;
 import com.zeal.utils.*;
 import com.zeal.vo.album.AlbumVO;
@@ -31,7 +29,6 @@ import java.util.*;
  */
 @Service
 public class AlbumServiceImpl implements AlbumService {
-
 
     @Autowired
     private AlbumDao albumDao;
@@ -107,9 +104,6 @@ public class AlbumServiceImpl implements AlbumService {
     @Transactional
     public void delete(long id, long userInfoId) {
         Album album = albumDao.find(id);
-        if (album.isPublished()) {
-            throw new BizException(BizExceptionCode.Album.DELETE_ON_PUBLISH_STATUS, "相册已经发布，请先取消发布");
-        }
         List<Picture> pictures = album.getPictures();
         if (pictures != null && !pictures.isEmpty()) {
             for (Picture picture : pictures) {
@@ -165,9 +159,6 @@ public class AlbumServiceImpl implements AlbumService {
     @Transactional
     public void update(long id, String name, String description, int[] deleteIdArray, List<MultipartFile> newFiles, int[] tags, long userInfoId) {
         Album album = albumDao.find(id);
-        if (album.isPublished()) {
-            throw new BizException(BizExceptionCode.Album.UPDATE_ON_PUBLISH_STATUS, "相册已经发布，请先取消发布再更新");
-        }
         if (!StringUtils.isEmpty(name)) {
             album.setName(name);
         }
@@ -295,14 +286,6 @@ public class AlbumServiceImpl implements AlbumService {
         File file = new File(albumFolder.getPath() + File.separator + "thumbnail" + File.separator + "thumbnail.jpeg");
         if (!file.exists()) return null;
         return file;
-    }
-
-    @Override
-    public void checkAuthority(long albumId, long userId) {
-        Album album = albumDao.find(albumId);
-        if (album.getUserInfo().getId() != userId) {
-            throw new NoAuthorityException();
-        }
     }
 
     private List<File> download(List<PagePicture> pictures, long userInfoId, long albumId) {

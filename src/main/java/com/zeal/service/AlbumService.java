@@ -84,5 +84,4 @@ public interface AlbumService {
      */
     File getThumbnail(long albumId);
 
-    void checkAuthority(long albumId, long userId);
 }
