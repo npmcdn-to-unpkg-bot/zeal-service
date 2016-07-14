@@ -3,18 +3,21 @@
  */
 (function () {
     angular.module("app").controller('MyAlbumsController', function ($scope, AlbumService, MessageService, $uibModal, $location) {
-        $scope.page = 1;
-        $scope.pageSize = 24;
+
+        $scope.pagination = {
+            pageSize: 24,
+            page: 1,
+            totalSize: 0,
+            keyword: ""
+        };
         $scope.albums = [];
-        $scope.totalSize = 0;
-        $scope.keyword = "";
         var pagedAlbums = function () {
-            AlbumService.getMyAlbums($scope.page, $scope.pageSize, $scope.keyword)
+            AlbumService.getMyAlbums($scope.pagination.page, $scope.pagination.pageSize, $scope.pagination.keyword)
                 .success(function (data) {
                     $scope.albums = data.list;
-                    $scope.page = data.page;
-                    $scope.pageSize = data.size;
-                    $scope.totalSize = data.totalSize;
+                    $scope.pagination.page = data.page;
+                    $scope.pagination.pageSize = data.size;
+                    $scope.pagination.totalSize = data.totalSize;
                 }).error(function (data) {
                 MessageService.toast.error(data.message, "获取数据失败");
             });
@@ -31,16 +34,20 @@
         };
         pagedAlbums();
         $scope.onAlbumClick = function (album) {
-            AlbumService.showAlbumListModal(album);
+            $location.path("/my/albums/view/" + album.id);
         };
         $scope.onPageChanged = function () {
             pagedAlbums();
         };
         $scope.search = function () {
-            $scope.page = 1;
+            $scope.pagination.page = 1;
             pagedAlbums();
         };
         $scope.updateModal = function (album) {
+            if (album.published) {
+                MessageService.toast.info("相册已经发布，无法编辑");
+                return;
+            }
             var modalInstance = $uibModal.open({
                 templateUrl: '/zeal/app/modules/my/albums/update.html',
                 size: 'md',
@@ -54,13 +61,17 @@
             });
         };
         $scope.delete = function (album) {
+            if (album.published) {
+                MessageService.toast.info("相册已经发布，无法删除");
+                return;
+            }
             MessageService.confirm({
                 message: "确定需要删除吗？",
                 size: "sm",
                 ok: function ($modalInstance) {
                     AlbumService.delete(album).success(function (data) {
                         removeAlbum(album.id);
-                        $scope.totalSize--;
+                        $scope.pagination.totalSize--;
                         $modalInstance.close();
                         MessageService.toast.success(data.message, "删除成功");
                         pagedAlbums();
@@ -257,21 +268,26 @@
                 $scope.uploading = false;
                 var data = resp.data;
                 if (data.status == 1) {
-                    //MessageService.info({message: "更新成功", size: "sm"});
+                    MessageService.toast.success("更新成功");
                     $scope.pictures = [];
                     $scope.progress = 0;
                     $uibModalInstance.close();
                 } else {
-                    MessageService.info({message: data.message, size: "sm"});
+                    MessageService.toast.error(data.message);
                 }
             }, function (data) {
                 $scope.uploading = false;
-                MessageService.info({message: "更新失败", size: "sm"});
+                MessageService.toast.error("更新失败");
             }, function (evt) {
                 $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
             });
         };
-
-
     })
+
+
+    angular.module("app").controller('MyAlbumViewController', function ($scope, albumPromise) {
+        albumPromise.success(function (data) {
+            $scope.album = data;
+        });
+    });
 })();

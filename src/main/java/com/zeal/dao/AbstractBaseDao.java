@@ -81,6 +81,7 @@ public abstract class AbstractBaseDao<T extends BaseEntity> implements BaseDao<T
     @Transactional
     public void delete(long id) {
         Query query = this.entityManager.createQuery("DELETE FROM " + entityClass.getSimpleName() + " o where o.id = :id");
+        query.setParameter("id", id);
         query.executeUpdate();
     }
 

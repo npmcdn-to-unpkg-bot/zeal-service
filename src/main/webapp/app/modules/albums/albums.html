@@ -5,31 +5,40 @@
         </li>
     </ul>
     <div>
-        <ul class="list-inline">
-            <li ng-repeat="album in targetAlbums" class="col-sm-3"
+        <ul class="list-inline text-center">
+            <li ng-repeat="album in targetAlbums" class="col-lg-2 col-md-4 col-sm-6"
                 style="padding-left: 15px; padding-right: 15px;margin-bottom: 30px;">
-                <div class="album">
+                <div class="my-album-block">
                     <div class="pointer" ng-click="onClickAlbum(album)"
                          style="width:100%; overflow: hidden;">
                         <img ng-src="{{album.url}}" class="img-scale"
                              title="{{album.name}}" style="width: 100%;height: auto;">
                     </div>
-                    <div class="text-left title">
-                        <div class="line">
-                            <span class="text-muted pointer" ng-click="onClickAlbum(album)">{{album.name | characters:18: false}}</span>
-                            <span class="icon">
-                                <i class="glyphicon glyphicon-heart"></i> 623
-                            </span>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="text-muted pointer col-sm-8 text-left">
+                                <span ng-click="onClickAlbum(album)">{{album.name}}</span>
+                            </div>
+                            <div class="col-sm-4 text-right">
+                                <span><i class="glyphicon glyphicon-heart text-right"></i> 623</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="text-left author">
-                        <div class="line">
-                            <a href="/zeal/#/albums" target="_blank">
-                                <img src="/zeal/resources/app/icons/photo.jpg"> <span class="text-muted">{{album.userInfo.nickName}}</span>
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <a href="/zeal/#/albums" target="_blank" class="col-sm-3 text-left">
+                                <img src="/zeal/resources/app/icons/photo.jpg"
+                                     style="width: 30px;height: 30px;border-radius: 30px;">
                             </a>
-                            <span class="icon">
-                                <i class="glyphicon glyphicon-thumbs-up"></i> 120
+                            <div class="col-sm-5 text-left text-muted" style="padding-left: 0px;">
+                                <span>{{album.userInfo.nickName}}</span>
+                            </div>
+                            <div class="col-sm-4 text-right">
+                                <span><i class="glyphicon glyphicon-thumbs-up"></i> 120
                             </span>
+                            </div>
+
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,33 @@
+<div class="panel panel-default">
+    <div class="panel-heading" style="padding-top: 15px; padding-bottom: 15px;">
+        <h3 class="panel-title album-info-line">
+            <span><i class="glyphicon glyphicon-heart"></i> 623</span>
+            <span class="icon"><i class="glyphicon glyphicon-thumbs-up"></i> 120</span>
+            <span class="icon"><i class="glyphicon glyphicon-comment"></i> 120</span>
+        </h3>
+    </div>
+    <div class="panel-body">
+        <div class="album-title">
+            <h2 class="picture-name">{{album.name}}</h2>
+        </div>
+        <!-- <album-list pictures="slides" resize-width="320" resize-height="320"></album-list>-->
+
+        <div ng-repeat="picture in album.pictures" class="picture-block">
+            <img ng-src="{{picture.url}}" style="width: 100%;height: auto;">
+            <p>{{picture.description}}</p>
+        </div>
+
+        <div class="album-tags-block">
+            <h3 class="album-tags-label">
+                        <span>
+                            <i class="fa fa-tags"></i> Tags
+                        </span>
+            </h3>
+            <ul class="list-inline">
+                <li ng-repeat="tag in album.tags">
+                    <span class="label label-default">{{tag.name}}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

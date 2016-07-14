@@ -417,9 +417,9 @@ body {
 }
 
 .user-block .user-detail img {
-    width: 70px;
-    height: 70px;
-    border-radius: 70px;
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
     transition: all .3s;
 }
 
@@ -432,7 +432,7 @@ body {
 .user-block .user-name {
     margin-top: 25px;
     color: #262626;
-    font-size: 16px;
+    font-size: 20px;
     overflow: hidden;
     font-family: "Microsoft YaHei";
     white-space: nowrap;
@@ -503,4 +503,38 @@ body {
     font-size: 13px;
     line-height: 22px;
     font-weight: 400;
+}
+
+.my-album-block {
+    font-size: 11px;
+    border: 1px solid #edeff2;
+    color: #777;
+}
+
+.my-album-block .row {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.my-album-block .row span {
+    overflow: hidden;
+    line-height: 30px;
+    height: 30px;
+    display: block;
+}
+
+.my-album-block .container-fluid {
+    padding-left: 15px;
+    padding-right: 15px;
+    text-overflow: ellipsis;
+}
+
+.my-album-block .container-fluid:not(:last-child) {
+    border-bottom: 1px solid #edeff2;
+}
+
+.list-group-item-primary {
+   /* color: #ffffff;*/
+   /* background-color: #222835;*/
+   /* font-size: 12px;*/
 }

@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="col-md-3">
+    <div class="col-lg-3 col-md-3 col-sm-4">
         <div class="user-block">
             <div class="user-detail">
                 <a href="#" target="_blank" style="overflow: hidden;">
@@ -9,14 +9,14 @@
                 <span class="user-email">{{album.publishDate | date:'yyyy-MM-dd'}}</span>
             </div>
             <div class="row user-active-block">
-                <div class="col-lg-6 text-left">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
                     <button class="btn btn-primary">
                      <span>
                          <i class="glyphicon glyphicon-plus"></i> 关注
                      </span>
                     </button>
                 </div>
-                <div class="col-lg-6 text-right">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
                     <button class="btn btn-default">
                         <span>
                          <i class="glyphicon glyphicon-envelope"></i> 私信
@@ -39,20 +39,23 @@
             </button>
         </div>
         <div style="margin-top: 15px;">
-            <button class="btn btn-default" style="width: 100%">
+            <button class="btn btn-default" style="width: 100%;margin-bottom: 15px;">
                 <span>
                      <i class="glyphicon glyphicon-folder-open"></i> 收藏该相册
                 </span>
             </button>
         </div>
     </div>
-    <div class="col-md-9">
+    <div class="col-lg-9 col-md-9 col-sm-8">
         <div class="panel panel-default">
             <div class="panel-heading" style="padding-top: 15px; padding-bottom: 15px;">
                 <h3 class="panel-title album-info-line">
                     <span><i class="glyphicon glyphicon-heart"></i> 623</span>
                     <span class="icon"><i class="glyphicon glyphicon-thumbs-up"></i> 120</span>
+                    <span class="icon"><i class="glyphicon glyphicon-comment"></i> 120</span>
+                    <span class="icon pull-right"><i class="fa fa-clock-o"> {{album.publishDate | date:'yyyy-MM-dd HH:mm:ss'}}</i> </span>
                 </h3>
+
             </div>
             <div class="panel-body">
                 <div class="album-title">
@@ -62,16 +65,18 @@
 
                 <div ng-repeat="picture in slides" class="picture-block">
                     <img ng-src="{{picture.url}}" style="width: 100%;height: auto;">
-                    <p>Fusce dolor libero, efficitur et lobortis at, faucibus nec nunc. Proin fermentum turpis eget nisi
-                        facilisis lobortis. Praesent malesuada facilisis maximus. Donec sed lobortis tortor. Ut nec
-                        lacinia sapien, sit amet dapibus magna.</p>
+                    <p>{{picture.description}}</p>
                 </div>
 
                 <div class="album-tags-block">
-                    <h3 class="album-tags-label">Tags</h3>
+                    <h3 class="album-tags-label">
+                        <span>
+                            <i class="fa fa-tags"></i> Tags
+                        </span>
+                    </h3>
                     <ul class="list-inline">
                         <li ng-repeat="tag in album.tags">
-                            <span class="label label-primary">{{tag.name}}</span>
+                            <span class="label label-default">{{tag.name}}</span>
                         </li>
                     </ul>
                 </div>

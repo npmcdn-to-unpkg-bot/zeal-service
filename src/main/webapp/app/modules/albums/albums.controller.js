@@ -9,7 +9,7 @@
             $scope.pagination = {
                 page: 1,
                 totalSize: 0,
-                pageSize: 20
+                pageSize: 30
             };
             $scope.childTags = [];
             $scope.childTagId = -1;
