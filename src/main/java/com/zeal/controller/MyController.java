@@ -3,7 +3,7 @@ package com.zeal.controller;
 import com.zeal.common.PagedList;
 import com.zeal.http.response.Response;
 import com.zeal.http.response.album.AlbumQueryResult;
-import com.zeal.http.response.my.MyZealInfo;
+import com.zeal.http.response.my.ZealInfo;
 import com.zeal.service.AlbumCollectionService;
 import com.zeal.service.AlbumService;
 import com.zeal.service.AuthorityCheckService;
@@ -92,7 +92,7 @@ public class MyController extends AbstractController {
     @ResponseBody
     public Response myZealInfo(HttpServletRequest request) {
         UserInfoVO userInfo = SessionUtils.getUserInfo(request);
-        MyZealInfo myZealInfo = new MyZealInfo();
+        ZealInfo myZealInfo = new ZealInfo();
         myZealInfo.id = userInfo.getId();
         myZealInfo.nickName = userInfo.getNickName();
         myZealInfo.email = "412837184@qq.com";

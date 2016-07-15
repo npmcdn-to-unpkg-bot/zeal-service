@@ -32,11 +32,10 @@
                                     pictures: album.pictures,
                                     url: "/zeal/picture/resize/" + album.pictures[0].id + "?width=480&height=480",
                                     createDate: album.createDate,
-                                    userInfo: album.userInfo,
                                     published: album.published,
                                     publishDate: album.publishDate,
                                     tags: album.tags,
-                                    userInfo: album.userInfo,
+                                    author: album.author,
                                     collected: album.collected,
                                     collectionCount: album.collectionCount
                                 }
@@ -75,12 +74,12 @@
         }]);
 
 
-    angular.module("app").controller('AlbumDisplayController', ['$scope', 'HttpService', '$log', '$stateParams', 'AlbumService', 'albumPromise', 'MessageService',
-        function ($scope, HttpService, $log, $stateParams, AlbumService, albumPromise, MessageService) {
+    angular.module("app").controller('AlbumDisplayController', ['$scope', 'HttpService', '$log', '$stateParams', 'AlbumService', 'albumPromise', 'MessageService', 'UserService',
+        function ($scope, HttpService, $log, $stateParams, AlbumService, albumPromise, MessageService, UserService) {
             albumPromise.success(function (album) {
                 $scope.album = album;
-                $scope.slides = album.pictures;
             });
+
 
             $scope.collectAlbum = function (album) {
                 AlbumService.collect(album.id).success(function (data) {

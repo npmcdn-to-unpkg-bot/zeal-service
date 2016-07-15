@@ -3,6 +3,8 @@ package com.zeal.controller;
 import com.zeal.http.request.user.UserLoginRequest;
 import com.zeal.http.request.user.UserRegisterRequest;
 import com.zeal.http.response.Response;
+import com.zeal.http.response.my.ZealInfo;
+import com.zeal.service.AlbumService;
 import com.zeal.service.UserInfoService;
 import com.zeal.utils.SessionUtils;
 import com.zeal.vo.user.UserInfoVO;
@@ -19,6 +21,9 @@ public class UserInfoController extends AbstractController {
 
     @Autowired
     private UserInfoService userInfoService;
+
+    @Autowired
+    private AlbumService albumService;
 
     /**
      * 获取用户信息
@@ -90,4 +95,21 @@ public class UserInfoController extends AbstractController {
         }
         return new Response.Builder().success().result(userInfo).build();
     }
+
+
+    @RequestMapping(value = "/zealInfo/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public Response zealInfo(@PathVariable(value = "id") long userInfoId) {
+        ZealInfo zealInfo = new ZealInfo();
+        UserInfoVO userInfoVO = userInfoService.find(userInfoId);
+        zealInfo.id = userInfoVO.getId();
+        zealInfo.email = "412837184@qq.com";
+        zealInfo.nickName = userInfoVO.getNickName();
+        zealInfo.description = "";
+        zealInfo.publishedCount = albumService.countByPublishStatus(true, userInfoId);
+        zealInfo.photo = "/zeal/resources/app/icons/photo.jpg";
+        return new Response.Builder().success().result(zealInfo).build();
+    }
+
+
 }

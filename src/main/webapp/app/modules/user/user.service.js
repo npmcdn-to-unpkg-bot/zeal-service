@@ -74,5 +74,17 @@
                 });
             }
 
+            /**
+             * 获取用户的一些zeal信息
+             * @param userInfoId
+             * @returns {*|{promise, success, error}}
+             */
+            this.getUserZealInfo = function (userInfoId) {
+                return HttpService.http({
+                    method: "GET",
+                    url: "/zeal/userinfo/zealInfo/" + userInfoId
+                });
+            };
+
         }]);
 })();

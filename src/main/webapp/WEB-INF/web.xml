@@ -50,6 +50,7 @@
                 /userinfo/register
                 /userinfo/\d{1,}
                 /userinfo/reload
+                /userinfo/zealInfo/\d{1,}
                 /resources/.*
                 /album/all
                 /album/list

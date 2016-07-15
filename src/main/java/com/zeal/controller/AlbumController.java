@@ -2,15 +2,19 @@ package com.zeal.controller;
 
 import com.zeal.common.PagedList;
 import com.zeal.http.response.Response;
-import com.zeal.http.response.album.AlbumQueryResult;
+import com.zeal.http.response.album.AlbumAuthorInfo;
+import com.zeal.http.response.album.AlbumInfo;
+import com.zeal.http.response.album.AlbumTagInfo;
+import com.zeal.http.response.album.PictureInfo;
 import com.zeal.service.AlbumCollectionService;
 import com.zeal.service.AlbumService;
 import com.zeal.service.AuthorityCheckService;
 import com.zeal.utils.SessionUtils;
 import com.zeal.utils.StringUtils;
+import com.zeal.vo.album.AlbumTagVO;
 import com.zeal.vo.album.AlbumVO;
+import com.zeal.vo.album.PictureVO;
 import com.zeal.vo.user.UserInfoVO;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -47,12 +51,8 @@ public class AlbumController extends AbstractController {
     public Response find(@PathVariable("id") long id, HttpServletRequest request) {
         authorityCheckService.checkAlbumReadAuthority(request, id);
         AlbumVO albumVO = albumService.find(id);
-        AlbumQueryResult albumQueryResult = new AlbumQueryResult();
-        BeanUtils.copyProperties(albumVO, albumQueryResult);
-        UserInfoVO userInfo = SessionUtils.getUserInfo(request);
-        albumQueryResult.setCollected(userInfo != null && albumCollectionService.collected(userInfo.getId(), id));
-        albumQueryResult.setCollectionCount(albumCollectionService.countByAlbumIdEquals(id));
-        return new Response.Builder().success().result(albumQueryResult).build();
+        AlbumInfo albumInfo = convert(albumVO, SessionUtils.getUserInfo(request));
+        return new Response.Builder().success().result(albumInfo).build();
     }
 
 
@@ -81,17 +81,13 @@ public class AlbumController extends AbstractController {
                               @RequestParam(value = "tag", required = false, defaultValue = "-1") long tagId, HttpServletRequest request) {
         UserInfoVO userInfo = SessionUtils.getUserInfo(request);
         PagedList<AlbumVO> pagedList = albumService.published(page, pageSize, tagId);
-        PagedList<AlbumQueryResult> list = new PagedList<>();
+        PagedList<AlbumInfo> list = new PagedList<>();
         list.setSize(pagedList.getSize());
         list.setPage(pagedList.getPage());
         list.setTotalSize(pagedList.getTotalSize());
-        List<AlbumQueryResult> results = new ArrayList<>();
+        List<AlbumInfo> results = new ArrayList<>();
         for (AlbumVO albumVO : pagedList.getList()) {
-            AlbumQueryResult result = new AlbumQueryResult();
-            BeanUtils.copyProperties(albumVO, result);
-            result.setCollectionCount(albumCollectionService.countByAlbumIdEquals(albumVO.getId()));
-            result.setCollected(userInfo != null && albumCollectionService.collected(userInfo.getId(), albumVO.getId()));
-            results.add(result);
+            results.add(convert(albumVO, userInfo));
         }
         list.setList(results);
         return new Response.Builder().success().result(list).build();
@@ -173,6 +169,49 @@ public class AlbumController extends AbstractController {
             }
         }
         return tags;
+    }
+
+    private AlbumInfo convert(AlbumVO albumVO, UserInfoVO currentUser) {
+        AlbumInfo albumInfo = new AlbumInfo();
+        AlbumAuthorInfo author = new AlbumAuthorInfo();
+        albumInfo.author = author;
+        albumInfo.id = albumVO.getId();
+        albumInfo.name = albumVO.getName();
+        albumInfo.description = albumVO.getDescription();
+        albumInfo.createDate = albumVO.getCreateDate();
+        albumInfo.publishDate = albumVO.getPublishDate();
+        albumInfo.isPublished = albumVO.isPublished();
+        albumInfo.commentCount = 0;
+        albumInfo.appreciationCount = 0;
+        albumInfo.collectionCount = albumCollectionService.countByAlbumIdEquals(albumInfo.id);
+        albumInfo.collected = currentUser != null && albumCollectionService.collected(currentUser.getId(), albumVO.getId());
+        List<PictureInfo> pictures = new ArrayList<>();
+        List<AlbumTagInfo> tags = new ArrayList<>();
+        albumInfo.pictures = pictures;
+        albumInfo.tags = tags;
+        for (PictureVO pictureVO : albumVO.getPictures()) {
+            PictureInfo pictureInfo = new PictureInfo();
+            pictureInfo.id = pictureVO.getId();
+            pictureInfo.url = pictureVO.getUrl();
+            pictureInfo.description = pictureVO.getDescription();
+            pictures.add(pictureInfo);
+        }
+        for (AlbumTagVO albumTagVO : albumVO.getTags()) {
+            AlbumTagInfo albumTagInfo = new AlbumTagInfo();
+            albumTagInfo.id = albumTagVO.getId();
+            albumTagInfo.name = albumTagVO.getName();
+            tags.add(albumTagInfo);
+        }
+        author.id = albumVO.getUserInfo().getId();
+        author.nickName = albumVO.getUserInfo().getNickName();
+        author.email = "412837184@qq.com";
+        author.appreciationCount = 0;
+        author.description = "";
+        author.photo = "/zeal/resources/app/icons/photo.jpg";
+        author.followerCount = 0;
+        author.followingCount = 0;
+        author.publishedCount = albumService.countByPublishStatus(true, author.id);
+        return albumInfo;
     }
 
 }

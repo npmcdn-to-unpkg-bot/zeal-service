@@ -3,7 +3,7 @@ package com.zeal.http.response.my;
 /**
  * Created by yang_shoulai on 2016/7/14.
  */
-public class MyZealInfo {
+public class ZealInfo {
 
     /**
      * 我的ID

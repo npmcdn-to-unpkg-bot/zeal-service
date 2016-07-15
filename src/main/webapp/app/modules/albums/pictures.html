@@ -3,9 +3,9 @@
         <div class="user-block">
             <div class="user-detail">
                 <a href="#" target="_blank" style="overflow: hidden;">
-                    <img src="/zeal/resources/app/icons/photo.jpg">
+                    <img ng-src="{{album.author.photo}}">
                 </a>
-                <p class="user-name">{{album.userInfo.nickName}}</p>
+                <p class="user-name">{{album.author.nickName}}</p>
                 <span class="user-email">{{album.publishDate | date:'yyyy-MM-dd'}}</span>
             </div>
             <div class="row user-active-block">
@@ -26,11 +26,38 @@
             </div>
             <div class="album-description-block">
                 <h5>关于相册</h5>
-                <p>Fusce dolor libero, efficitur et lobortis at, faucibus nec nunc. Proin fermentum turpis eget nisi
-                    facilisis lobortis. Praesent malesuada facilisis maximus. Donec sed lobortis tortor. Ut nec lacinia
-                    sapien, sit amet dapibus magna.</p>
+                <p ng-show="album.description != null && album.description.length > 0">{{album.description}}</p>
+                <p ng-hide="album.description != null && album.description.length > 0">尚无相册简介</p>
             </div>
         </div>
+
+        <div class="list-group">
+            <a href="#/albums" class="list-group-item list-group-item-primary">
+                <span class="badge">{{album.author.followerCount}}</span>
+                <span>
+                    <i class="fa fa-eye"></i> 被关注
+                </span>
+            </a>
+            <a href="#/albums" class="list-group-item list-group-item-primary">
+                <span class="badge">{{album.author.appreciationCount}}</span>
+                <span>
+                    <i class="fa fa-thumbs-up"></i> 被赞
+                </span>
+            </a>
+            <!--<aton href="#/albums" class="list-group-item list-group-item-primary">
+                <span class="badge">{{author.collectionCount}}</span>
+                 <span>
+                    <i class="fa fa-heart"></i> 收藏
+                </span>
+            </aton>-->
+            <a href="#/albums" class="list-group-item list-group-item-primary">
+                <span class="badge">{{album.author.publishedCount}}</span>
+                 <span>
+                    <i class="fa fa-send"></i> 发布
+                </span>
+            </a>
+        </div>
+
         <div>
             <button class="btn btn-primary" style="width: 100%">
                 <span>
@@ -56,13 +83,14 @@
     <div class="col-lg-9 col-md-9 col-sm-8">
         <div class="panel panel-default">
             <div class="panel-heading" style="padding-top: 15px; padding-bottom: 15px;">
-                <h3 class="panel-title album-info-line">
-                    <span><i class="glyphicon glyphicon-heart" ng-class="{'text-red':album.collected}"></i> {{album.collectionCount}}</span>
-                    <span class="icon"><i class="glyphicon glyphicon-thumbs-up"></i> 120</span>
-                    <span class="icon"><i class="glyphicon glyphicon-comment"></i> 120</span>
-                    <span class="icon pull-right"><i class="fa fa-clock-o"> {{album.publishDate | date:'yyyy-MM-dd HH:mm:ss'}}</i> </span>
-                </h3>
-
+                <div class="container-fluid text-muted">
+                    <span class="col-sm-1 col-xs-1"><i class="glyphicon glyphicon-heart"
+                                                       ng-class="{'text-red':album.collected}"></i> {{album.collectionCount}}</span>
+                    <span class="col-sm-1 col-xs-1"><i class="glyphicon glyphicon-thumbs-up"></i> {{album.appreciationCount}}</span>
+                    <span class="col-sm-1 col-xs-1"><i
+                            class="glyphicon glyphicon-comment"></i> {{album.commentCount}}</span>
+                    <span class="pull-right"><i class="fa fa-clock-o"></i> {{album.publishDate | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+                </div>
             </div>
             <div class="panel-body">
                 <div class="album-title">
@@ -70,7 +98,7 @@
                 </div>
                 <!-- <album-list pictures="slides" resize-width="320" resize-height="320"></album-list>-->
 
-                <div ng-repeat="picture in slides" class="picture-block">
+                <div ng-repeat="picture in album.pictures" class="picture-block">
                     <img ng-src="{{picture.url}}" style="width: 100%;height: auto;">
                     <p>{{picture.description}}</p>
                 </div>
