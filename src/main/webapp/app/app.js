@@ -11,12 +11,17 @@
             'ngFileUpload',
             'angular-loading-bar',
             'ngAnimate',
-            'toastr'
+            'toastr',
+            'ui.select',
+            'ngSanitize'
         ]);
-    angular.module("app").run(['$rootScope', '$state', '$stateParams',
-        function ($rootScope, $state, $stateParams) {
+    angular.module("app").run(['$rootScope', '$state', '$stateParams', '$window', '$anchorScroll',
+        function ($rootScope, $state, $stateParams, $window, $anchorScroll) {
             $rootScope.$state = $state;
             $rootScope.$stateParams = $stateParams;
+            $rootScope.$on('$viewContentLoaded', function () {
+                $window.scrollTo(0, 0);
+            });
         }
     ]);
     angular.module("app").config(function ($stateProvider, $urlRouterProvider) {
@@ -38,8 +43,12 @@
             templateUrl: "/zeal/app/modules/albums/pictures.html",
             controller: 'AlbumDisplayController',
             resolve: {
-                albumPromise: function (AlbumService, $stateParams) {
-                    return AlbumService.getMyAlbumById($stateParams.albumId);
+                album: function (AlbumService, $stateParams) {
+                    return AlbumService.getMyAlbumById($stateParams.albumId).promise;
+                },
+                author: function (UserService, album) {
+                    var http = UserService.getAuthorInfo(album.userInfo.id);
+                    return http.promise;
                 }
             },
             title: "相册信息 - Zeal for you"
@@ -56,6 +65,11 @@
             url: "/my",
             templateUrl: "/zeal/app/modules/my/my.html",
             controller: 'MyController',
+            resolve: {
+                myAuthor: function (UserService) {
+                    return UserService.getMyZealInfo().promise;
+                }
+            },
             abstract: true
         }).state('my.albums', {
             url: "/albums",
@@ -67,11 +81,16 @@
             templateUrl: "/zeal/app/modules/my/albums/view.html",
             controller: 'MyAlbumViewController',
             resolve: {
-                albumPromise: function (AlbumService, $stateParams) {
-                    return AlbumService.getMyAlbumById($stateParams.albumId);
+                album: function (AlbumService, $stateParams) {
+                    return AlbumService.getMyAlbumById($stateParams.albumId).promise;
                 }
             },
             title: "我的相册 - Zeal for you"
+        }).state('my.albums.add', {
+            url: "/add",
+            templateUrl: "/zeal/app/modules/my/albums/add.html",
+            controller: 'AlbumCreateController',
+            title: "新增相册 - Zeal for you"
         }).state('my.stories', {
             url: "/stories",
             templateUrl: "/zeal/app/modules/my/stories/stories.html"
@@ -107,8 +126,8 @@
         });
     });
 
-    angular.module("app").controller('IndexController', ['UserService', '$scope', '$rootScope', '$state',
-        function (UserService, $scope, $rootScope, $state) {
+    angular.module("app").controller('IndexController', ['UserService', '$scope', '$rootScope', '$state', '$window',
+        function (UserService, $scope, $rootScope, $state, $window) {
 
             $scope.isLogin = false;
             $scope.username = null;
@@ -123,22 +142,31 @@
 
             $scope.logout = function () {
                 UserService.logout();
-                $state.go('home');
             };
 
             $scope.$on('userStateChange', function (event, data) {
                 if (data) {
                     $scope.isLogin = true;
-                    $scope.username = data.username;
+                    $scope.username = data.nickName;
+                    $window.location.reload();
+                    //$state.go('albums');
                 } else {
                     $scope.isLogin = false;
                     $scope.username = null;
+                    $scope.showLoginModal();
                 }
             });
 
             UserService.reloadUserInfo().success(function (data) {
-                $rootScope.UserInfo = {username: data.nickName};
-                $rootScope.$broadcast('userStateChange', $rootScope.UserInfo);
+                $rootScope.UserInfo = data;
+                //$rootScope.$broadcast('userStateChange', $rootScope.UserInfo);
+                if (data) {
+                    $scope.isLogin = true;
+                    $scope.username = data.nickName;
+                } else {
+                    $scope.isLogin = false;
+                    $scope.username = null;
+                }
             });
         }]);
 

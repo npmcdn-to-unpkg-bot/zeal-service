@@ -38,10 +38,10 @@
                             CookieService.remove(CookieService.KEY_CONSTANT.user_login_username);
                             CookieService.remove(CookieService.KEY_CONSTANT.user_login_password);
                         }
-                        $rootScope.UserInfo = {username: data.nickName, password: $scope.loginRequest.password};
+                        $rootScope.UserInfo = data;
                         $rootScope.$broadcast('userStateChange', $rootScope.UserInfo);
                         $uibModalInstance.close();
-                        $state.go('my.albums', null, {reload: true});
+                        //$state.go('my.albums', null, {reload: true});
                     }).error(function (data) {
                     alert(data.message);
                     $log.info(data.message);

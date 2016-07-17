@@ -1,8 +1,7 @@
 package com.zeal.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "t_user_info")
@@ -19,6 +18,24 @@ public class UserInfo extends BaseEntity {
 
     @Column(name = "phone_number", unique = true, nullable = false, length = 255)
     private String phoneNumber;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userInfo")
+    private Set<AlbumCollection> albumCollections;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userInfo")
+    private Set<AlbumAppreciation> albumAppreciations;
+
+    /**
+     * 用户点赞记录
+     */
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "appreciator")
+    private Set<AlbumAuthorAppreciation> appreciations;
+
+    /**
+     * 用户被赞记录
+     */
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "appreciated")
+    private Set<AlbumAuthorAppreciation> appreciatedRecords;
 
     public String getLoginName() {
         return loginName;
@@ -50,5 +67,37 @@ public class UserInfo extends BaseEntity {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public Set<AlbumCollection> getAlbumCollections() {
+        return albumCollections;
+    }
+
+    public void setAlbumCollections(Set<AlbumCollection> albumCollections) {
+        this.albumCollections = albumCollections;
+    }
+
+    public Set<AlbumAppreciation> getAlbumAppreciations() {
+        return albumAppreciations;
+    }
+
+    public void setAlbumAppreciations(Set<AlbumAppreciation> albumAppreciations) {
+        this.albumAppreciations = albumAppreciations;
+    }
+
+    public Set<AlbumAuthorAppreciation> getAppreciations() {
+        return appreciations;
+    }
+
+    public void setAppreciations(Set<AlbumAuthorAppreciation> appreciations) {
+        this.appreciations = appreciations;
+    }
+
+    public Set<AlbumAuthorAppreciation> getAppreciatedRecords() {
+        return appreciatedRecords;
+    }
+
+    public void setAppreciatedRecords(Set<AlbumAuthorAppreciation> appreciatedRecords) {
+        this.appreciatedRecords = appreciatedRecords;
     }
 }

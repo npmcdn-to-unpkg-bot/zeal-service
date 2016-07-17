@@ -1,14 +1,14 @@
 <div class="container">
-    <div class="col-lg-3 col-md-3 col-sm-4">
+    <div class="col-lg-3 col-md-4 col-sm-5">
         <div class="user-block">
             <div class="user-detail">
                 <a href="#" target="_blank" style="overflow: hidden;">
-                    <img ng-src="{{album.author.photo}}">
+                    <img ng-src="{{author.photo}}">
                 </a>
-                <p class="user-name">{{album.author.nickName}}</p>
+                <p class="user-name">{{author.nickName}}</p>
                 <span class="user-email">{{album.publishDate | date:'yyyy-MM-dd'}}</span>
             </div>
-            <div class="row user-active-block">
+            <div class="row user-active-block" ng-hide="UserInfo.id == author.id">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
                     <button class="btn btn-primary">
                      <span>
@@ -17,9 +17,16 @@
                     </button>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
-                    <button class="btn btn-default">
+                    <button ng-show="!author.appreciated" class="btn btn-default" ng-click="toggleAppreciateAuthor()">
                         <span>
-                         <i class="glyphicon glyphicon-envelope"></i> 私信
+                         <i class="fa fa-thumbs-up"></i> 点赞
+                        </span>
+                    </button>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                    <button ng-hide="!author.appreciated" class="btn btn-warning" ng-click="toggleAppreciateAuthor()">
+                        <span>
+                         <i class="fa fa-thumbs-up"></i>取消点赞
                         </span>
                     </button>
                 </div>
@@ -33,13 +40,13 @@
 
         <div class="list-group">
             <a href="#/albums" class="list-group-item list-group-item-primary">
-                <span class="badge">{{album.author.followerCount}}</span>
+                <span class="badge">{{author.followerCount}}</span>
                 <span>
                     <i class="fa fa-eye"></i> 被关注
                 </span>
             </a>
             <a href="#/albums" class="list-group-item list-group-item-primary">
-                <span class="badge">{{album.author.appreciationCount}}</span>
+                <span class="badge">{{author.appreciationCount}}</span>
                 <span>
                     <i class="fa fa-thumbs-up"></i> 被赞
                 </span>
@@ -51,7 +58,7 @@
                 </span>
             </aton>-->
             <a href="#/albums" class="list-group-item list-group-item-primary">
-                <span class="badge">{{album.author.publishedCount}}</span>
+                <span class="badge">{{author.publishedCount}}</span>
                  <span>
                     <i class="fa fa-send"></i> 发布
                 </span>
@@ -59,37 +66,52 @@
         </div>
 
         <div>
-            <button class="btn btn-primary" style="width: 100%">
+            <button ng-click="toggleAppreciate()" class="btn btn-primary" style="width: 100%"
+                    ng-show="!album.appreciated" title="点赞相册">
                 <span>
-                     <i class="glyphicon glyphicon-thumbs-up"></i> 点赞作者
+                     <i class="fa fa-thumbs-up"></i> 点赞相册
+                </span>
+            </button>
+            <button ng-click="toggleAppreciate()" class="btn btn-warning" style="width: 100%"
+                    ng-hide="!album.appreciated" title="取消点赞">
+                <span>
+                     <i class="fa fa-thumbs-up"></i> 取消点赞
                 </span>
             </button>
         </div>
         <div style="margin-top: 15px;">
             <button ng-click="collectAlbum(album)" ng-hide="album.collected" class="btn btn-default"
-                    style="width: 100%;margin-bottom: 15px;">
+                    style="width: 100%;margin-bottom: 15px;" title="收藏该相册">
                 <span>
                      <i class="glyphicon glyphicon-folder-open"></i> 收藏该相册
                 </span>
             </button>
             <button ng-click="uncollectAlbum(album)" ng-show="album.collected" class="btn btn-warning"
-                    style="width: 100%;margin-bottom: 15px;">
+                    style="width: 100%;margin-bottom: 15px;" title="取消收藏相册">
                 <span>
                      <i class="glyphicon glyphicon-minus"></i> 取消收藏
                 </span>
             </button>
         </div>
     </div>
-    <div class="col-lg-9 col-md-9 col-sm-8">
+    <div class="col-lg-9 col-md-8 col-sm-7">
         <div class="panel panel-default">
             <div class="panel-heading" style="padding-top: 15px; padding-bottom: 15px;">
                 <div class="container-fluid text-muted">
-                    <span class="col-sm-1 col-xs-1"><i class="glyphicon glyphicon-heart"
-                                                       ng-class="{'text-red':album.collected}"></i> {{album.collectionCount}}</span>
-                    <span class="col-sm-1 col-xs-1"><i class="glyphicon glyphicon-thumbs-up"></i> {{album.appreciationCount}}</span>
-                    <span class="col-sm-1 col-xs-1"><i
-                            class="glyphicon glyphicon-comment"></i> {{album.commentCount}}</span>
-                    <span class="pull-right"><i class="fa fa-clock-o"></i> {{album.publishDate | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+                    <div class="row">
+                        <span class="col-md-2 col-sm-2 col-xs-2 pointer" title="收藏数" ng-click="toggleCollect()">
+                            <i class="glyphicon glyphicon-heart" ng-class="{'text-red':album.collected}"></i> {{album.collectionCount}}
+                        </span>
+                        <span class="col-md-2 col-sm-2 col-xs-2 pointer" title="被赞数" ng-click="toggleAppreciate()">
+                            <i class="fa fa-thumbs-up" ng-class="{'text-red':album.appreciated}"></i> {{album.appreciationCount}}
+                        </span>
+                        <span class="col-md-2 col-sm-2 col-xs-2 pointer" title="评论数">
+                            <i class="glyphicon glyphicon-comment"></i> {{album.commentCount}}
+                        </span>
+                        <span class="col-md-4 col-sm-6 col-xs-6 pull-right text-right" title="发布日期">
+                            <i class="fa fa-clock-o"></i> {{album.publishDate | date:'yyyy-MM-dd HH:mm:ss'}}
+                        </span>
+                    </div>
                 </div>
             </div>
             <div class="panel-body">
@@ -99,7 +121,8 @@
                 <!-- <album-list pictures="slides" resize-width="320" resize-height="320"></album-list>-->
 
                 <div ng-repeat="picture in album.pictures" class="picture-block">
-                    <img ng-src="{{picture.url}}" style="width: 100%;height: auto;">
+                    <!--<img ng-src="{{picture.url}}" style="width: 100%;height: auto;">-->
+                    <img-gallery pictures="album.pictures" index="{{$index}}" style="width: 100%;height: auto;" img-src="{{picture.url}}"></img-gallery>
                     <p>{{picture.description}}</p>
                 </div>
 

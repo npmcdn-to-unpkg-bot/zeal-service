@@ -1,9 +1,10 @@
 <div class="panel panel-default">
     <div class="panel-heading" style="padding-top: 15px; padding-bottom: 15px;">
         <h3 class="panel-title album-info-line">
-            <span><i class="glyphicon glyphicon-heart" ng-class="{'text-red':album.collected}"></i> {{album.collectionCount}}</span>
-            <span class="icon"><i class="glyphicon glyphicon-thumbs-up"></i> 120</span>
-            <span class="icon"><i class="glyphicon glyphicon-comment"></i> 120</span>
+            <span><i class="glyphicon glyphicon-heart" ng-class="{'text-red':album.collected}" title="收藏数"></i> {{album.collectionCount}}</span>
+            <span class="icon"><i class="glyphicon glyphicon-thumbs-up"
+                                  title="获赞数"></i> {{album.appreciationCount}}</span>
+            <span class="icon"><i class="glyphicon glyphicon-comment" title="评论数"></i> {{album.commentCount}}</span>
         </h3>
     </div>
     <div class="panel-body">
@@ -13,7 +14,8 @@
         <!-- <album-list pictures="slides" resize-width="320" resize-height="320"></album-list>-->
 
         <div ng-repeat="picture in album.pictures" class="picture-block">
-            <img ng-src="{{picture.url}}" style="width: 100%;height: auto;">
+            <img-gallery pictures="album.pictures" index="{{$index}}" style="width: 100%;height: auto;"
+                         img-src="{{picture.url}}"></img-gallery>
             <p>{{picture.description}}</p>
         </div>
 

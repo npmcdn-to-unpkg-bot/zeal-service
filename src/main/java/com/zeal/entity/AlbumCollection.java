@@ -15,11 +15,11 @@ public class AlbumCollection extends BaseEntity {
     @Column(name = "collect_time", nullable = false)
     private Date collectTime; //收藏的时间
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private UserInfo userInfo; //收藏者
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Album album; //收藏的相册
 

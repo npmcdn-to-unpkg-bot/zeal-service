@@ -5,21 +5,21 @@
     <div class="modal-body">
         <form class="form-horizontal">
             <div class="form-group">
-                <label for="username" class="col-sm-2 control-label">用户名：</label>
-                <div class="col-md-10">
+                <label for="username" class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">用户名：</label>
+                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
                     <input type="text" class="form-control" id="username" placeholder=""
                            ng-model="loginRequest.username"/>
                 </div>
             </div>
             <div class="form-group">
-                <label for="password" class="col-sm-2 control-label">密码：</label>
-                <div class="col-sm-10">
+                <label for="password" class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">密码：</label>
+                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
                     <input type="password" class="form-control" id="password" placeholder=""
                            ng-model="loginRequest.password">
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
+                <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-xs-offset-2 col-lg-10 col-md-10 col-sm-10 col-xs-10">
                     <div class="checkbox">
                         <label>
                             <input type="checkbox" ng-model="loginRequest.rememberMe"> 记住我？
@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="form-group" ng-show="errorMsg != null && errorMsg.length > 0">
-                <div class="col-sm-offset-2 col-sm-10">
+                <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-xs-offset-2 col-lg-10 col-md-10 col-sm-10 col-xs-10">
                     <p class="text-danger">{{errorMsg}}</p>
                 </div>
             </div>

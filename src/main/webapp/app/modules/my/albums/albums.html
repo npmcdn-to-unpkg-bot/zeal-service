@@ -1,184 +1,75 @@
-<div class="container">
-    <div class="col-lg-3 col-md-4">
-        <div class="user-block">
-            <div class="user-detail">
-                <a href="#" target="_blank" style="overflow: hidden;">
-                    <img ng-src="{{zealInfo.photo}}">
-                </a>
-                <p class="user-name">{{zealInfo.nickName}}</p>
-                <span class="user-email">{{zealInfo.email}}</span>
-            </div>
-            <div class="row user-active-block">
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
-                    <button class="btn btn-primary">
-                     <span>
-                         <i class="fa fa-edit"></i> 编辑
-                     </span>
-                    </button>
+<div ui-view>
+    <div style="padding-right: 15px;padding-left: 15px;">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                    <ui-select ng-model="stateSelected.value" on-select="onPublishStateChange($item,$model)">
+                        <ui-select-match>
+                            <span ng-bind="$select.selected.name"></span>
+                        </ui-select-match>
+                        <ui-select-choices
+                                repeat="item in (publishStates | filter: $select.search) track by item.value">
+                            <span ng-bind="item.name"></span>
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
-                    <button class="btn btn-default">
-                        <span>
-                         <i class="fa fa-share-alt"></i> 分享
-                        </span>
-                    </button>
+                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                    <input class="form-control" ng-model="pagination.keyword" type="text"
+                           placeholder="请输入相册名称查询"/>
                 </div>
-            </div>
-            <div class="album-description-block">
-                <h5>关于我</h5>
-                <p ng-show="zealInfo.description != null && zealInfo.description.length > 0">
-                    {{zealInfo.description}}</p>
-                <p ng-hide="zealInfo.description != null && zealInfo.description.length > 0">暂无说明</p>
-            </div>
-        </div>
-        <div class="list-group">
-            <a href="#/albums" class="list-group-item list-group-item-primary">
-                <span class="badge">{{zealInfo.followingCount}}</span>
-                <span>
-                    <i class="fa fa-eye"></i> 关注
-                </span>
-            </a>
-            <a href="#/albums" class="list-group-item list-group-item-primary">
-                <span class="badge">{{zealInfo.appreciationCount}}</span>
-                <span>
-                    <i class="fa fa-thumbs-up"></i> 获得的赞
-                </span>
-            </a>
-            <aton href="#/albums" class="list-group-item list-group-item-primary">
-                <span class="badge">{{zealInfo.collectionCount}}</span>
-                 <span>
-                    <i class="fa fa-heart"></i> 收藏
-                </span>
-            </aton>
-            <a href="#/albums" class="list-group-item list-group-item-primary">
-                <span class="badge">{{zealInfo.publishedCount}}</span>
-                 <span>
-                    <i class="fa fa-send"></i> 发布
-                </span>
-            </a>
-        </div>
-        <div style="margin-top: 15px;">
-            <button class="btn btn-primary" style="width: 100%;margin-bottom: 15px;" ng-click="addModal()">
-                <span>
-                     <i class="glyphicon glyphicon-plus"></i> 创建新的相册
-                </span>
-            </button>
-        </div>
-    </div>
-    <div ui-view class="col-lg-9 col-md-8">
-        <div>
-            <div style="padding-right: 15px;padding-left: 15px;">
-                <form class="form-horizontal">
-                    <div class="form-group">
-                        <div class="col-lg-10 col-md-8 col-sm-8 col-xs-8">
-                            <input class="form-control" ng-model="pagination.keyword" type="text"
-                                   placeholder="请输入相册名称查询"/>
-                        </div>
-                        <div class="col-lg-2 col-md-4 col-sm-4 col-xs-4 text-center">
-                            <button class="btn btn-primary" ng-click="search()">
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">
+                    <button class="btn btn-primary" ng-click="search()">
                                 <span>
                                     <i class="glyphicon glyphicon-search">
                                         搜索
                                     </i>
                                 </span>
-                            </button>
-                        </div>
-                        <!--<div class="col-lg-1 col-md-2 col-sm-2 col-xs-3 text-center">
-                            <button class="btn btn-primary" ng-click="addModal()">新增</button>
-                        </div>-->
-                    </div>
-                </form>
-                <hr/>
+                    </button>
+                </div>
             </div>
+        </form>
+        <hr/>
+    </div>
 
-            <div>
-                <!--<table class="table table-hover" ng-show="totalSize > 0">
-                    <thead>
-                    <tr>
-                        <th class="text-center col-md-1">#</th>
-                        <th class="text-center col-md-3">名称</th>
-                        <th class="text-center col-md-2">创建日期</th>
-                        <th class="text-center col-md-1">发布</th>
-                        <th class="text-center col-md-2">发布日期</th>
-                        <th class="text-center col-md-1"></th>
-                        <th class="text-center col-md-1"></th>
-                        <th class="text-center col-md-1"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="album in albums">
-                        <td class="text-center text-muted" style="vertical-align: middle;">{{(page - 1) * pageSize +
-                            $index+1}}
-                        </td>
-                        <td class="text-left pointer text-primary" style="vertical-align: middle;"
-                            ng-click="onAlbumClick(album)">{{album.name}}
-                        </td>
-                        <td class="text-center" style="vertical-align: middle;">{{album.createDate | date : "yyyy-MM-dd"}}</td>
-                        <td class="text-center text-info" style="vertical-align: middle;">
-                            <span ng-show="album.published == true">是</span>
-                            <span ng-show="album.published == false">否</span>
-                        </td>
-                        <td class="text-center" style="vertical-align: middle;">{{album.publishDate | date : "yyyy-MM-dd"}}</td>
-                        <td class="text-center" style="vertical-align: middle;">
-                            <button ng-show="album.published == true" class="btn btn-sm btn-warning"
-                                    ng-click="unpublish(album)">
-                                取消发布
-                            </button>
-                            <button ng-show="album.published == false" class="btn btn-sm btn-primary" ng-click="publish(album)">
-                                发布相册
-                            </button>
-                        </td>
-                        <td class="text-center" style="vertical-align: middle;">
-                            <button ng-disabled="album.published" class="btn btn-sm btn-warning" ng-click="updateModal(album)">
-                                编辑
-                            </button>
-                        </td>
-                        <td class="text-center" style="vertical-align: middle;">
-                            <button ng-disabled="album.published" class="btn btn-sm btn-danger" ng-click="delete(album)">
-                                删除
-                            </button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>-->
-                <ul class="list-inline text-center">
-                    <li ng-repeat="album in albums" class="col-lg-4 col-md-6 col-sm-12"
-                        style="padding-left: 15px; padding-right: 15px;margin-bottom: 30px;">
-                        <div class="my-album-block">
-                            <div class="pointer" ng-click="onAlbumClick(album)"
-                                 style="width:100%; overflow: hidden;">
-                                <img ng-src="/zeal/picture/resize/{{album.pictures[0].id}}?width=480&height=480"
-                                     class="img-scale"
-                                     title="{{album.name}}" style="width: 100%;height: auto;">
-                            </div>
-                            <div class="container-fluid">
-                                <div class="row">
-                                    <div class="col-sm-7 text-left">
+    <div>
+        <ul class="list-inline text-center">
+            <li ng-repeat="album in albums" class="col-lg-4 col-md-6 col-sm-12"
+                style="padding-left: 15px; padding-right: 15px;margin-bottom: 30px;">
+                <div class="my-album-block">
+                    <div class="pointer" ng-click="onAlbumClick(album)"
+                         style="width:100%; overflow: hidden;">
+                        <img ng-src="/zeal/picture/resize/{{album.pictures[0].id}}?width=480&height=480"
+                             class="img-scale"
+                             title="{{album.name}}" style="width: 100%;height: auto;">
+                    </div>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-7 text-left">
                                         <span class="text-muted pointer"
                                               ng-click="onAlbumClick(album)">{{album.name}}</span>
-                                    </div>
-                                    <div class="col-sm-5 text-left">
-                                        <span ng-show="album.published" class="text-success">（已发布）</span>
-                                        <span ng-show="!album.published" class="text-danger">（未发布）</span>
-                                    </div>
-                                </div>
                             </div>
-                            <div class="container-fluid">
-                                <div class="row">
-                                            <span class="col-md-4 col-sm-4 col-xs-4 text-left">
-                                                    <i class="glyphicon glyphicon-thumbs-up"></i> 120
+                            <div class="col-sm-5 text-left">
+                                <span ng-show="album.published" class="text-success">（已发布）</span>
+                                <span ng-show="!album.published" class="text-danger">（未发布）</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid">
+                        <div class="row">
+                                            <span class="col-md-4 col-sm-4 col-xs-4 text-left" title="获赞数">
+                                                    <i class="glyphicon glyphicon-thumbs-up"></i> {{album.appreciationCount}}
                                             </span>
-                                            <span class="col-md-4 col-sm-4 col-xs-4 text-left" title="搜藏数">
+                                            <span class="col-md-4 col-sm-4 col-xs-4 text-left" title="收藏数">
                                                      <i class="glyphicon glyphicon-heart"
                                                         ng-class="{'text-red':album.collected}"></i> {{album.collectionCount}}
                                             </span>
-                                            <span class="col-md-4 col-sm-4 col-xs-4 text-left">
-                                                    <i class="glyphicon glyphicon-comment"></i> 120
+                                            <span class="col-md-4 col-sm-4 col-xs-4 text-left" title="评论数">
+                                                    <i class="glyphicon glyphicon-comment"></i> {{album.commentCount}}
                                             </span>
-                                </div>
-                            </div>
-                            <div class="container-fluid" style="background-color: #F6F6F6;">
-                                <div class="row">
+                        </div>
+                    </div>
+                    <div class="container-fluid" style="background-color: #F6F6F6;">
+                        <div class="row">
                                             <span ng-hide="album.published"
                                                   class="col-md-4 col-sm-4 col-xs-4 text-left text-muted pointer"
                                                   ng-click="publish(album)">
@@ -197,24 +88,22 @@
                                                   ng-click="delete(album)">
                                                     <i class="glyphicon glyphicon-remove"></i> 删除
                                             </span>
-                                </div>
-                            </div>
-
                         </div>
-                    </li>
-                </ul>
+                    </div>
 
-                <div ng-hide="totalSize <= 0" style="clear: both;">
-                    <uib-pagination total-items="pagination.totalSize" ng-model="pagination.page"
-                                    ng-change="onPageChanged()" first-text="第一页"
-                                    last-text="最后一页" next-text="下一页" previous-text="上一页" max-size="10"
-                                    boundary-links="true"
-                                    boundary-link-numbers="true"
-                                    items-per-page="pagination.pageSize">
-
-                    </uib-pagination>
                 </div>
-            </div>
+            </li>
+        </ul>
+
+        <div ng-hide="totalSize <= 0" style="clear: both;">
+            <uib-pagination total-items="pagination.totalSize" ng-model="pagination.page"
+                            ng-change="onPageChanged()" first-text="第一页"
+                            last-text="最后一页" next-text="下一页" previous-text="上一页" max-size="10"
+                            boundary-links="true"
+                            boundary-link-numbers="true"
+                            items-per-page="pagination.pageSize">
+
+            </uib-pagination>
         </div>
     </div>
 </div>

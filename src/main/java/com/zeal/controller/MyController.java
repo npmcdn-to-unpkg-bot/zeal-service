@@ -2,11 +2,15 @@ package com.zeal.controller;
 
 import com.zeal.common.PagedList;
 import com.zeal.http.response.Response;
+import com.zeal.http.response.album.AlbumAuthorInfo;
+import com.zeal.http.response.album.AlbumInfo;
 import com.zeal.http.response.album.AlbumQueryResult;
+import com.zeal.http.response.my.MyAlbumAuthorInfo;
 import com.zeal.http.response.my.ZealInfo;
 import com.zeal.service.AlbumCollectionService;
 import com.zeal.service.AlbumService;
 import com.zeal.service.AuthorityCheckService;
+import com.zeal.service.UserInfoService;
 import com.zeal.utils.SessionUtils;
 import com.zeal.utils.StringUtils;
 import com.zeal.vo.album.AlbumVO;
@@ -39,7 +43,7 @@ public class MyController extends AbstractController {
     private AlbumCollectionService albumCollectionService;
 
     @Autowired
-    private AuthorityCheckService authorityCheckService;
+    private UserInfoService userInfoService;
 
 
     @RequestMapping(value = "/albums", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -47,32 +51,15 @@ public class MyController extends AbstractController {
     public Response albums(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
                            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
                            @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-                           HttpServletRequest request) {
+                           @RequestParam(value = "state", required = false, defaultValue = "-1") int state,
+                           HttpServletRequest request) throws UnsupportedEncodingException {
         if (StringUtils.isEmpty(keyword)) {
             keyword = "";
         } else {
-            try {
-                keyword = URLDecoder.decode(keyword, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            keyword = URLDecoder.decode(keyword, "UTF-8");
         }
-        UserInfoVO userInfo = SessionUtils.getUserInfo(request);
-        PagedList<AlbumVO> pagedList = albumService.pagedByUserInfoIdAndKeywordLike(page, pageSize, userInfo.getId(), keyword);
-        PagedList<AlbumQueryResult> list = new PagedList<>();
-        list.setSize(pagedList.getSize());
-        list.setPage(pagedList.getPage());
-        list.setTotalSize(pagedList.getTotalSize());
-        List<AlbumQueryResult> results = new ArrayList<>();
-        for (AlbumVO albumVO : pagedList.getList()) {
-            AlbumQueryResult result = new AlbumQueryResult();
-            BeanUtils.copyProperties(albumVO, result);
-            result.setCollectionCount(albumCollectionService.countByAlbumIdEquals(albumVO.getId()));
-            result.setCollected(albumCollectionService.collected(userInfo.getId(), albumVO.getId()));
-            results.add(result);
-        }
-        list.setList(results);
-        return new Response.Builder().success().result(list).build();
+        PagedList<AlbumInfo> pagedList = albumService.pagedByUserInfoIdAndKeywordLike(page, pageSize, SessionUtils.getUserInfoId(request), keyword, SessionUtils.getUserInfoId(request), state);
+        return new Response.Builder().success().result(pagedList).build();
     }
 
 
@@ -91,17 +78,15 @@ public class MyController extends AbstractController {
     @RequestMapping(value = "/zealInfo", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Response myZealInfo(HttpServletRequest request) {
+        //TODO 获取我的评论数目
         UserInfoVO userInfo = SessionUtils.getUserInfo(request);
-        ZealInfo myZealInfo = new ZealInfo();
-        myZealInfo.id = userInfo.getId();
-        myZealInfo.nickName = userInfo.getNickName();
-        myZealInfo.email = "412837184@qq.com";
-        myZealInfo.photo = "/zeal/resources/app/icons/photo.jpg";
-        myZealInfo.description = "";
-        myZealInfo.publishedCount = albumService.countByPublishStatus(true, userInfo.getId());
-        myZealInfo.unpublishedCount = albumService.countByPublishStatus(false, userInfo.getId());
-        myZealInfo.collectionCount = albumCollectionService.countByUserInfoIdEquals(userInfo.getId());
-        return new Response.Builder().success().result(myZealInfo).build();
+        AlbumAuthorInfo albumAuthorInfo = userInfoService.author(userInfo.getId(), userInfo.getId());
+        MyAlbumAuthorInfo myAlbumAuthorInfo = new MyAlbumAuthorInfo();
+        BeanUtils.copyProperties(albumAuthorInfo, myAlbumAuthorInfo);
+        myAlbumAuthorInfo.setCollectionCount(albumCollectionService.countByUserInfoIdEquals(userInfo.getId()));
+        myAlbumAuthorInfo.setUnpublishedCount(albumService.countByPublishStatus(false, userInfo.getId()));
+        myAlbumAuthorInfo.setCommentCount(0L);
+        return new Response.Builder().success().result(myAlbumAuthorInfo).build();
     }
 
 

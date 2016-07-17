@@ -34,6 +34,11 @@ public class SessionUtils {
         return (UserInfoVO) getAttribute(request, KEY_USERINFO);
     }
 
+    public static long getUserInfoId(HttpServletRequest request) {
+        UserInfoVO userInfo = getUserInfo(request);
+        return userInfo == null ? -1L : userInfo.getId();
+    }
+
     public static void invalidate(HttpServletRequest request) {
         request.getSession().invalidate();
     }

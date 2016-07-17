@@ -36,7 +36,14 @@ public class ImageUtils {
             } else {
                 builder = Thumbnails.of(image).size(targetWidth, targetHeight);
             }
-            builder.outputFormat("jpg").toFile(targetFile.getPath());
+            String fileType = "jpeg";
+            if (targetFile.getName().lastIndexOf(".") != -1) {
+                String type = targetFile.getName().substring(targetFile.getName().lastIndexOf("."));
+                if (".gif".equalsIgnoreCase(type)) {
+                    fileType = "gif";
+                }
+            }
+            builder.outputFormat(fileType).toFile(targetFile.getPath());
         } catch (IOException e) {
             e.printStackTrace();
         }

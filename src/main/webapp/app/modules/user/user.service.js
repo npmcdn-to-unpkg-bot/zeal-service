@@ -79,12 +79,13 @@
              * @param userInfoId
              * @returns {*|{promise, success, error}}
              */
-            this.getUserZealInfo = function (userInfoId) {
+            this.getAuthorInfo = function (userInfoId) {
                 return HttpService.http({
                     method: "GET",
-                    url: "/zeal/userinfo/zealInfo/" + userInfoId
+                    url: "/zeal/userinfo/author/" + userInfoId
                 });
             };
+
 
         }]);
 })();

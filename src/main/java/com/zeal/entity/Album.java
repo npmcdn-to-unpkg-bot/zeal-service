@@ -46,6 +46,13 @@ public class Album extends BaseEntity {
             inverseJoinColumns = {@JoinColumn(name = "album_tag_id")})
     private Set<AlbumTag> albumTags;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "album")
+    private Set<AlbumCollection> albumCollections;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "album")
+    private Set<AlbumAppreciation> albumAppreciations;
+
+
     public String getName() {
         return name;
     }
@@ -116,5 +123,21 @@ public class Album extends BaseEntity {
 
     public Set<AlbumTag> getAlbumTags() {
         return albumTags;
+    }
+
+    public Set<AlbumCollection> getAlbumCollections() {
+        return albumCollections;
+    }
+
+    public void setAlbumCollections(Set<AlbumCollection> albumCollections) {
+        this.albumCollections = albumCollections;
+    }
+
+    public Set<AlbumAppreciation> getAlbumAppreciations() {
+        return albumAppreciations;
+    }
+
+    public void setAlbumAppreciations(Set<AlbumAppreciation> albumAppreciations) {
+        this.albumAppreciations = albumAppreciations;
     }
 }

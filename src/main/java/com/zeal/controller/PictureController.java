@@ -48,7 +48,14 @@ public class PictureController extends AbstractController {
             returnFile(response, file);
         } else {
             File albumDir = file.getParentFile();
+            String originFileName = file.getName();
             String path = albumDir.getPath() + File.separator + width + "x" + height + File.separator + id + ".jpeg";
+            if (originFileName.lastIndexOf(".") != -1) {
+                String type = originFileName.substring(originFileName.lastIndexOf("."));
+                if (".gif".equalsIgnoreCase(type)) {
+                    path = albumDir.getPath() + File.separator + width + "x" + height + File.separator + id + ".gif";
+                }
+            }
             File f = new File(path);
             if (f.exists()) {
                 returnFile(response, f);

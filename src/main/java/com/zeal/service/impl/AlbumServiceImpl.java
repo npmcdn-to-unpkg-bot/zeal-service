@@ -1,20 +1,16 @@
 package com.zeal.service.impl;
 
 import com.zeal.common.PagedList;
-import com.zeal.dao.AlbumDao;
-import com.zeal.dao.AlbumTagDao;
-import com.zeal.dao.PictureDao;
-import com.zeal.dao.UserInfoDao;
-import com.zeal.entity.Album;
-import com.zeal.entity.AlbumTag;
-import com.zeal.entity.Picture;
-import com.zeal.entity.UserInfo;
+import com.zeal.dao.*;
+import com.zeal.entity.*;
 import com.zeal.exception.BizException;
+import com.zeal.http.response.album.AlbumInfo;
 import com.zeal.service.AlbumService;
 import com.zeal.utils.*;
 import com.zeal.vo.album.AlbumVO;
 import com.zeal.worker.albums.PageAlbum;
 import com.zeal.worker.albums.PagePicture;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,9 +38,38 @@ public class AlbumServiceImpl implements AlbumService {
     @Autowired
     private AlbumTagDao albumTagDao;
 
+    @Autowired
+    private AlbumCollectionDao albumCollectionDao;
 
+    @Autowired
+    private AlbumAppreciationDao albumAppreciationDao;
+
+    @Autowired
+    private AlbumAuthorAppreciationDao albumAuthorAppreciationDao;
+
+    /**
+     * 获取相册的详细信息
+     *
+     * @param id            相册ID
+     * @param currentUserId 当前用登录户ID
+     * @return
+     */
     @Override
-    public AlbumVO find(long id) {
+    public AlbumInfo findDetails(long id, long currentUserId) {
+        Album album = albumDao.find(id);
+        if (album == null) return null;
+        AlbumInfo albumInfo = convert(album, currentUserId);
+        return albumInfo;
+    }
+
+    /**
+     * 获取相册几本信息
+     *
+     * @param id 相册ID
+     * @return
+     */
+    @Override
+    public AlbumVO findBasic(long id) {
         Album album = albumDao.find(id);
         if (album == null) return null;
         return new AlbumVO(album);
@@ -56,6 +81,7 @@ public class AlbumServiceImpl implements AlbumService {
         Album album = albumDao.find(id);
         album.setPublished(true);
         album.setPublishDate(new Date());
+        album.setUpdateDate(new Date());
         albumDao.update(album);
     }
 
@@ -64,18 +90,40 @@ public class AlbumServiceImpl implements AlbumService {
         Album album = albumDao.find(id);
         album.setPublished(false);
         album.setPublishDate(null);
+        album.setUpdateDate(new Date());
         albumDao.update(album);
     }
 
+    /**
+     * 分页获取相册信息
+     *
+     * @param page          分页页码
+     * @param pageSize      每页数量
+     * @param tagId         相册tag
+     * @param currentUserId 当前登录用户ID
+     * @return
+     */
     @Override
-    public PagedList<AlbumVO> published(int page, int pageSize, long tagId) {
-        return convert(albumDao.pagedByPublishStatus(page, pageSize, tagId, true));
+    public PagedList<AlbumInfo> published(int page, int pageSize, long tagId, long currentUserId) {
+        PagedList<Album> pagedList = albumDao.pagedByPublishStatusAndTagId(page, pageSize, tagId, true);
+        return convert(pagedList, currentUserId);
     }
 
-
+    /**
+     * 分页获取相册作者的相册信息
+     *
+     * @param page          当前页码
+     * @param pageSize      每页数量
+     * @param authorId      相册作者ID
+     * @param keyword       关键字
+     * @param currentUserId 当前登录用户ID
+     * @param state         相册发布状态 -1，全部；已发布 0； 未发布 1
+     * @return
+     */
     @Override
-    public PagedList<AlbumVO> pagedByUserInfoIdAndKeywordLike(int page, int pageSize, long userInfoId, String keyword) {
-        return convert(albumDao.pagedByUserInfoIdAndKeywordLike(userInfoId, page, pageSize, keyword));
+    public PagedList<AlbumInfo> pagedByUserInfoIdAndKeywordLike(int page, int pageSize, long authorId, String keyword, long currentUserId, int state) {
+        PagedList<Album> pagedList = albumDao.pagedByUserInfoIdAndKeywordLike(authorId, page, pageSize, keyword, state);
+        return convert(pagedList, currentUserId);
     }
 
     @Override
@@ -308,6 +356,34 @@ public class AlbumServiceImpl implements AlbumService {
             downloads.clear();
         }
         return downloads;
+    }
+
+
+    private AlbumInfo convert(Album album, long currentUserId) {
+        //TODO 添加相册的评论数和被赞数
+        AlbumInfo albumInfo = new AlbumInfo();
+        BeanUtils.copyProperties(new AlbumVO(album), albumInfo);
+        Set<AlbumCollection> collections = album.getAlbumCollections();
+        albumInfo.setCollectionCount(collections.size());
+        albumInfo.setAppreciationCount(album.getAlbumAppreciations().size());
+        albumInfo.setCommentCount(0);
+        albumInfo.setCollected(currentUserId > 0 && !albumCollectionDao.findByUserInfoIdAndAlbumId(currentUserId, album.getId()).isEmpty());
+        albumInfo.setAppreciated(currentUserId > 0 && !albumAppreciationDao.findByUserInfoIdAndAlbumId(currentUserId, album.getId()).isEmpty());
+        return albumInfo;
+    }
+
+
+    private PagedList<AlbumInfo> convert(PagedList<Album> pagedList, long currentUserId) {
+        PagedList<AlbumInfo> list = new PagedList<>();
+        list.setPage(pagedList.getPage());
+        list.setSize(pagedList.getSize());
+        list.setTotalSize(pagedList.getTotalSize());
+        List<AlbumInfo> albums = new ArrayList<>();
+        for (Album album : pagedList.getList()) {
+            albums.add(convert(album, currentUserId));
+        }
+        list.setList(albums);
+        return list;
     }
 
     private PagedList<AlbumVO> convert(PagedList<Album> albumPagedList) {

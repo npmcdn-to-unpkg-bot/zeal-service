@@ -10,22 +10,28 @@
                 totalSize: 0,
                 keyword: ""
             };
-            UserService.getMyZealInfo().success(function (data) {
-                $scope.zealInfo = data;
-            }).error(function (data) {
-                MessageService.toast.error(data.message);
-            });
-
-            $scope.UserInfo = $rootScope.UserInfo;
-
+            $scope.publishStates = [
+                {name: "全部", value: -1},
+                {name: "已发布", value: 1},
+                {name: "未发布", value: 0}
+            ];
+            $scope.stateSelected = {value: $scope.publishStates[0]};
+            $scope.onPublishStateChange = function (item, model) {
+                $scope.pagination.page = 1;
+                $scope.pagination.pageSize = 24;
+                $scope.pagination.keyword = "";
+                pagedAlbums();
+            };
             $scope.albums = [];
             var pagedAlbums = function () {
-                AlbumService.getMyAlbums($scope.pagination.page, $scope.pagination.pageSize, $scope.pagination.keyword)
+                AlbumService.getMyAlbums($scope.pagination.page, $scope.pagination.pageSize, $scope.pagination.keyword, $scope.stateSelected.value.value)
                     .success(function (data) {
                         $scope.albums = data.list;
                         $scope.pagination.page = data.page;
                         $scope.pagination.pageSize = data.size;
                         $scope.pagination.totalSize = data.totalSize;
+
+                        window.scrollTo(0, 0);
                     }).error(function (data) {
                     MessageService.toast.error(data.message, "获取数据失败");
                 });
@@ -59,13 +65,20 @@
                 var modalInstance = $uibModal.open({
                     templateUrl: '/zeal/app/modules/my/albums/update.html',
                     size: 'md',
+                    keyboard: false,
                     controller: 'AlbumUpdateController',
                     resolve: {
                         album: album
                     }
                 });
-                modalInstance.closed.then(function (data) {
-                    pagedAlbums();
+                modalInstance.result.then(function (data) {
+                    for (var i = 0; i < $scope.albums.length; i++) {
+                        if ($scope.albums[i].id == data.id) {
+                            $scope.albums[i] = data;
+                            return;
+                        }
+                    }
+                    //pagedAlbums();
                 });
             };
             $scope.delete = function (album) {
@@ -78,10 +91,10 @@
                     size: "sm",
                     ok: function ($modalInstance) {
                         AlbumService.delete(album).success(function (data) {
-                            removeAlbum(album.id);
                             $scope.pagination.totalSize--;
                             $modalInstance.close();
-                            MessageService.toast.success(data.message, "删除成功");
+                            $scope.$emit('album-deleted', {});
+                            MessageService.toast.success("删除成功");
                             pagedAlbums();
                         }).error(function (data) {
                             MessageService.toast.error(data.message, "删除失败");
@@ -94,6 +107,11 @@
                     album.published = true;
                     album.publishDate = data.publishDate;
                     MessageService.toast.success("发布成功");
+                    $scope.$emit('publish-status-change', {published: true});
+                    if ($scope.stateSelected.value.value >= 0) {
+                        pagedAlbums();
+                    }
+
                 }).error(function (data) {
                     MessageService.toast.error(data.message, "发布失败");
                 });
@@ -107,79 +125,17 @@
                             album.published = false;
                             album.publishDate = data.publishDate;
                             $modalInstance.close();
+                            $scope.$emit('publish-status-change', {published: false});
+                            if ($scope.stateSelected.value.value >= 0) {
+                                pagedAlbums();
+                            }
                         }).error(function (data) {
                             MessageService.toast.error(data.message, "取消发布失败");
                         });
                     }
                 });
             };
-            $scope.addModal = function () {
-                var modalInstance = $uibModal.open({
-                    templateUrl: '/zeal/app/modules/my/albums/add.html',
-                    size: 'md',
-                    controller: 'AlbumCreateController'
-                });
-                modalInstance.closed.then(function (data) {
-                    pagedAlbums();
-                });
-            };
         });
-
-    angular.module("app").controller('AlbumCreateController', function ($scope, AlbumService, MessageService, Upload, $uibModalInstance) {
-        $scope.album = {};
-        $scope.pictures = [];
-        $scope.progress = 0;
-
-        $scope.uploading = false;
-
-        $scope.select = function (files) {
-            if (files && files.length) {
-                $scope.pictures = files;
-            }
-        };
-
-        $scope.deletePicture = function (picture) {
-            if ($scope.pictures && $scope.pictures.length > 0) {
-                for (var i = 0; i < $scope.pictures.length; i++) {
-                    if (picture == $scope.pictures[i]) {
-                        $scope.pictures.splice(i, 1);
-                        return;
-                    }
-                }
-            }
-        };
-
-        $scope.create = function () {
-            $scope.uploading = true;
-            var request = {name: $scope.album.name, description: $scope.album.description};
-            for (var i = 0; i < $scope.pictures.length; i++) {
-                request['pictures[' + i + ']'] = $scope.pictures[i];
-            }
-            Upload.upload({
-                url: "/zeal/album/create",
-                data: request
-            }).then(function (resp) {
-                $scope.uploading = false;
-                var data = resp.data;
-                if (data.status == 1) {
-                    MessageService.info({message: "创建成功", size: "sm"});
-                    $scope.album = {};
-                    $scope.pictures = [];
-                    $scope.progress = 0;
-                    $uibModalInstance.close();
-                } else {
-                    MessageService.info({message: data.message, size: "sm"});
-                }
-            }, function (data) {
-                $scope.uploading = false;
-                MessageService.info({message: "创建失败", size: "sm"});
-            }, function (evt) {
-                $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-            });
-        };
-
-    });
-
 
     angular.module("app").controller('AlbumUpdateController', function ($scope, AlbumService, MessageService, Upload, $uibModalInstance, album) {
         var albumId = album.id;
@@ -235,10 +191,6 @@
                 }
             }
         };
-        $scope.showPicture = function (picture) {
-            AlbumService.showPicture(picture);
-        };
-
         var arrayToString = function (array) {
             if (array || array.length > 0) {
                 var buffer = "";
@@ -279,7 +231,7 @@
                     MessageService.toast.success("更新成功");
                     $scope.pictures = [];
                     $scope.progress = 0;
-                    $uibModalInstance.close();
+                    $uibModalInstance.close(data.result);
                 } else {
                     MessageService.toast.error(data.message);
                 }
@@ -293,9 +245,7 @@
     })
 
 
-    angular.module("app").controller('MyAlbumViewController', function ($scope, albumPromise) {
-        albumPromise.success(function (data) {
-            $scope.album = data;
-        });
+    angular.module("app").controller('MyAlbumViewController', function ($scope, album) {
+        $scope.album = album;
     });
 })();

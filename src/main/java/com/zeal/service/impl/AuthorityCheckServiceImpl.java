@@ -50,7 +50,7 @@ public class AuthorityCheckServiceImpl implements AuthorityCheckService {
         Album album = albumDao.find(albumId);
         if (!album.isPublished()) {
             UserInfoVO userInfoVO = SessionUtils.getUserInfo(request);
-            if (userInfoVO == null || userInfoVO.getId() != albumId) {
+            if (userInfoVO == null || userInfoVO.getId() != album.getUserInfo().getId()) {
                 throw new NoAuthorityException();
             }
         }

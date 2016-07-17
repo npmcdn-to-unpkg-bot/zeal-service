@@ -1,11 +1,16 @@
 package com.zeal.service.impl;
 
+import com.zeal.dao.AlbumAuthorAppreciationDao;
+import com.zeal.dao.AlbumCollectionDao;
+import com.zeal.dao.AlbumDao;
 import com.zeal.dao.UserInfoDao;
 import com.zeal.entity.UserInfo;
 import com.zeal.exception.BizException;
 import com.zeal.exception.BizExceptionCode;
 import com.zeal.http.request.user.UserLoginRequest;
 import com.zeal.http.request.user.UserRegisterRequest;
+import com.zeal.http.response.album.AlbumAuthorInfo;
+import com.zeal.service.AlbumCollectionService;
 import com.zeal.service.UserInfoService;
 import com.zeal.utils.StringUtils;
 import com.zeal.vo.user.UserInfoVO;
@@ -21,6 +26,15 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Autowired
     private UserInfoDao userInfoDao;
+
+    @Autowired
+    private AlbumCollectionDao albumCollectionDao;
+
+    @Autowired
+    private AlbumDao albumDao;
+
+    @Autowired
+    private AlbumAuthorAppreciationDao albumAuthorAppreciationDao;
 
     @Override
     public UserInfoVO find(long id) {
@@ -69,5 +83,30 @@ public class UserInfoServiceImpl implements UserInfoService {
         userInfo.setPhoneNumber(userRegisterRequest.phoneNumber);
         userInfoDao.insert(userInfo);
         return new UserInfoVO(userInfo);
+    }
+
+    /**
+     * 获取相册作者的相关信息
+     *
+     * @param id            作者ID
+     * @param currentUserId 当前登录用户ID
+     * @return
+     */
+    @Override
+    public AlbumAuthorInfo author(long id, long currentUserId) {
+        //TODO 设置作者的关注数，被关注数，获赞数目等等
+        UserInfo userInfo = userInfoDao.find(id);
+        AlbumAuthorInfo author = new AlbumAuthorInfo();
+        author.id = userInfo.getId();
+        author.email = "412837184@qq.com";
+        author.nickName = userInfo.getNickName();
+        author.description = "";
+        author.publishedCount = albumDao.countByUserInfoIdAndPublishStatus(id, true);
+        author.appreciated = currentUserId > 0 && !albumAuthorAppreciationDao.find(currentUserId, id).isEmpty();
+        author.photo = "/zeal/resources/app/icons/photo.jpg";
+        author.appreciationCount = userInfo.getAppreciatedRecords().size();
+        author.followerCount = 0;
+        author.followingCount = 0;
+        return author;
     }
 }

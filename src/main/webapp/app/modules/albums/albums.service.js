@@ -11,11 +11,11 @@
             });
         };
 
-        this.getMyAlbums = function (page, pageSize, keyword) {
+        this.getMyAlbums = function (page, pageSize, keyword, state) {
             keyword = escape(encodeURI(keyword));
             return HttpService.http({
                 method: "GET",
-                url: "/zeal/my/albums?page=" + page + "&pageSize=" + pageSize + "&keyword=" + keyword
+                url: "/zeal/my/albums?page=" + page + "&pageSize=" + pageSize + "&keyword=" + keyword + "&state=" + state
             });
         };
 
@@ -132,6 +132,51 @@
             });
         };
 
+        /**
+         * 点赞相册
+         * @param albumId
+         * @returns {{promise, success, error}|*}
+         */
+        this.appreciate = function (albumId) {
+            return HttpService.http({
+                method: "GET",
+                url: "/zeal/appreciation/album/add?albumId=" + albumId
+            });
+        };
+
+        /**
+         * 取消点暂
+         * @param albumId
+         * @returns {{promise, success, error}|*}
+         */
+        this.unAppreciate = function (albumId) {
+            return HttpService.http({
+                method: "GET",
+                url: "/zeal/appreciation/album/cancel?albumId=" + albumId
+            });
+        };
+
+        /**
+         * 点赞作者
+         * @param authorId 作者ID
+         */
+        this.appreciateAuthor = function (authorId) {
+            return HttpService.http({
+                method: "GET",
+                url: "/zeal/appreciation/author/add?appreciated=" + authorId
+            });
+        };
+
+        /**
+         * 取消点赞作者
+         * @param authorId 作者ID
+         */
+        this.unAppreciateAuthor = function (authorId) {
+            return HttpService.http({
+                method: "GET",
+                url: "/zeal/appreciation/author/cancel?appreciated=" + authorId
+            });
+        };
 
     });
 })();

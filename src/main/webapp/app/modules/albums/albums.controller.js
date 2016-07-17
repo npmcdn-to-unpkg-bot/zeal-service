@@ -9,46 +9,34 @@
             $scope.pagination = {
                 page: 1,
                 totalSize: 0,
-                pageSize: 30
+                pageSize: 24
             };
             $scope.childTags = [];
             $scope.childTagId = -1;
             $scope.targetAlbums = [];
-
             $scope.getAlbums = function () {
                 AlbumService.getPublishedAlbums($scope.pagination.page, $scope.pagination.pageSize, $scope.childTagId).success(function (data) {
                     $scope.targetAlbums = [];
                     $scope.pagination.page = data.page;
                     $scope.pagination.totalSize = data.totalSize;
-                    var albums = data.list;
-                    if (albums && albums.length > 0) {
-                        for (var i = 0; i < albums.length; i++) {
-                            var album = albums[i];
-                            $scope.targetAlbums.push(
-                                {
-                                    id: album.id,
-                                    name: album.name,
-                                    size: album.pictures.length,
-                                    pictures: album.pictures,
-                                    url: "/zeal/picture/resize/" + album.pictures[0].id + "?width=480&height=480",
-                                    createDate: album.createDate,
-                                    published: album.published,
-                                    publishDate: album.publishDate,
-                                    tags: album.tags,
-                                    author: album.author,
-                                    collected: album.collected,
-                                    collectionCount: album.collectionCount
-                                }
-                            );
+                    var wrappers = data.list;
+                    if (wrappers && wrappers.length > 0) {
+                        for (var i = 0; i < wrappers.length; i++) {
+                            var wrapper = wrappers[i];
+                            var album = wrapper.album;
+                            album.author = wrapper.author;
+                            album.size = album.pictures.length;
+                            album.url = "/zeal/picture/resize/" + album.pictures[0].id + "?width=480&height=480";
+                            $scope.targetAlbums.push(album);
                         }
                     }
+                    window.scrollTo(0, 0);
                 }).error(function (data) {
                     $log.info(data.message);
                 });
             };
 
             $scope.onPageChanged = function () {
-                $log.info("page = " + $scope.pagination.page);
                 $scope.getAlbums();
             };
 
@@ -74,19 +62,16 @@
         }]);
 
 
-    angular.module("app").controller('AlbumDisplayController', ['$scope', 'HttpService', '$log', '$stateParams', 'AlbumService', 'albumPromise', 'MessageService', 'UserService',
-        function ($scope, HttpService, $log, $stateParams, AlbumService, albumPromise, MessageService, UserService) {
-            albumPromise.success(function (album) {
-                $scope.album = album;
-            });
-
-
+    angular.module("app").controller('AlbumDisplayController', ['$scope', 'HttpService', '$log', '$stateParams', 'AlbumService', 'album', 'author', 'MessageService', 'UserService',
+        function ($scope, HttpService, $log, $stateParams, AlbumService, album, author, MessageService, UserService) {
+            $scope.album = album;
+            $scope.author = author;
             $scope.collectAlbum = function (album) {
                 AlbumService.collect(album.id).success(function (data) {
                     $scope.album.collected = true;
                     $scope.album.collectionCount++;
                 }).error(function (data) {
-                    MessageService.toast.error("收藏失败：" + +data.message);
+                    MessageService.toast.error(data.message, "收藏失败");
                     $scope.album.collected = false;
                 });
             };
@@ -96,9 +81,74 @@
                     $scope.album.collected = false;
                     $scope.album.collectionCount--;
                 }).error(function (data) {
-                    MessageService.toast.error("取消收藏失败:" + data.message);
+                    MessageService.toast.error(data.message, "取消收藏失败");
                     $scope.album.collected = true;
                 });
+            };
+
+            $scope.toggleCollect = function () {
+                if ($scope.album) {
+                    if ($scope.album.collected) {
+                        $scope.uncollectAlbum($scope.album);
+                    } else {
+                        $scope.collectAlbum($scope.album);
+                    }
+                }
+            };
+            /**
+             * 点赞
+             */
+            $scope.appreciate = function (album) {
+                AlbumService.appreciate(album.id).success(function (data) {
+                    $scope.album.appreciated = true;
+                    $scope.album.appreciationCount++;
+                }).error(function (data) {
+                    MessageService.toast.error(data.message, "点赞失败");
+                    $scope.album.appreciated = false;
+                });
+            };
+
+            /**
+             * 取消点赞
+             */
+            $scope.unAppreciate = function (album) {
+                AlbumService.unAppreciate(album.id).success(function (data) {
+                    $scope.album.appreciated = false;
+                    $scope.album.appreciationCount--;
+                }).error(function (data) {
+                    MessageService.toast.error(data.message, "取消点赞失败");
+                    $scope.album.appreciated = true;
+                });
+            };
+
+            $scope.toggleAppreciate = function () {
+                if ($scope.album) {
+                    if ($scope.album.appreciated) {
+                        $scope.unAppreciate($scope.album);
+                    } else {
+                        $scope.appreciate($scope.album);
+                    }
+                }
+            };
+
+            $scope.toggleAppreciateAuthor = function () {
+                if ($scope.author) {
+                    if ($scope.author.appreciated) {
+                        AlbumService.unAppreciateAuthor($scope.author.id).success(function (data) {
+                            $scope.author.appreciationCount--;
+                            $scope.author.appreciated = false;
+                        }).error(function (data) {
+                            MessageService.toast.error(data.message, "取消点赞失败");
+                        });
+                    } else {
+                        AlbumService.appreciateAuthor($scope.author.id).success(function (data) {
+                            $scope.author.appreciationCount++;
+                            $scope.author.appreciated = true;
+                        }).error(function (data) {
+                            MessageService.toast.error(data.message, "点赞失败");
+                        });
+                    }
+                }
             };
 
         }]);

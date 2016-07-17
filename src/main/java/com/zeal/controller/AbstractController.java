@@ -26,6 +26,13 @@ public abstract class AbstractController {
                 byte[] data = new byte[(int) file.length()];
                 fileInputStream.read(data);
                 response.setContentType("image/jpeg");
+                String fileName = file.getName();
+                if (fileName.lastIndexOf(".") != -1) {
+                    String type = fileName.substring(fileName.lastIndexOf("."));
+                    if (".gif".equalsIgnoreCase(type)) {
+                        response.setContentType("image/gif");
+                    }
+                }
                 stream = response.getOutputStream();
                 stream.write(data);
                 stream.flush();

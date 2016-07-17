@@ -1,77 +1,77 @@
 package com.zeal.http.response.album;
 
-import java.util.Date;
-import java.util.List;
+import com.zeal.vo.album.AlbumVO;
 
 /**
  * Created by Administrator on 7/15/2016.
  */
-public class AlbumInfo {
-
-    /**
-     * 相册ID
-     */
-    public long id;
-
-    /**
-     * 相册名称
-     */
-    public String name;
-
-    /**
-     * 相册创建日期
-     */
-    public Date createDate;
-
-    /**
-     * 相册发布日期
-     */
-    public Date publishDate;
-
-    /**
-     * 相册简介
-     */
-    public String description;
-
-    /**
-     * 相册是否发布
-     */
-    public boolean isPublished;
-
-    /**
-     * 相册图片
-     */
-    public List<PictureInfo> pictures;
-
-    /**
-     * 相册Tag
-     */
-    public List<AlbumTagInfo> tags;
-
-    /**
-     * 相册作者的相关信息
-     */
-    public AlbumAuthorInfo author;
+public class AlbumInfo extends AlbumVO {
 
     /**
      * 相册被收藏的次数
      */
-    public long collectionCount;
+    private long collectionCount;
 
     /**
      * 相册被评论次数
      */
-    public long commentCount;
+    private long commentCount;
 
     /**
      * 相册被赞的次数
      */
-    public long appreciationCount;
+    private long appreciationCount;
 
     /**
      * 当前用户是否已经收藏该相册
      * 未登陆用户false
      */
-    public boolean collected;
+    private boolean collected;
 
+    /**
+     * 是否点赞该相册
+     * 未登陆用户false
+     */
+    private boolean appreciated;
+
+
+    public long getCollectionCount() {
+        return collectionCount;
+    }
+
+    public void setCollectionCount(long collectionCount) {
+        this.collectionCount = collectionCount;
+    }
+
+    public long getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(long commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    public long getAppreciationCount() {
+        return appreciationCount;
+    }
+
+    public void setAppreciationCount(long appreciationCount) {
+        this.appreciationCount = appreciationCount;
+    }
+
+    public boolean isCollected() {
+        return collected;
+    }
+
+    public void setCollected(boolean collected) {
+        this.collected = collected;
+    }
+
+    public boolean isAppreciated() {
+        return appreciated;
+    }
+
+    public void setAppreciated(boolean appreciated) {
+        this.appreciated = appreciated;
+    }
 }

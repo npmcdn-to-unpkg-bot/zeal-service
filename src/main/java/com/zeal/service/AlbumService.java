@@ -3,6 +3,7 @@ package com.zeal.service;
 import com.zeal.common.PagedList;
 import com.zeal.entity.Album;
 import com.zeal.entity.UserInfo;
+import com.zeal.http.response.album.AlbumInfo;
 import com.zeal.vo.album.AlbumVO;
 import com.zeal.worker.albums.PageAlbum;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,15 +16,51 @@ import java.util.List;
  */
 public interface AlbumService {
 
-    AlbumVO find(long id);
+    /**
+     * 获取相册的详细信息
+     *
+     * @param id            相册ID
+     * @param currentUserId 当前用登录户ID
+     * @return
+     */
+    AlbumInfo findDetails(long id, long currentUserId);
+
+    /**
+     * 获取相册几本信息
+     *
+     * @param id 相册ID
+     * @return
+     */
+    AlbumVO findBasic(long id);
+
 
     void publish(long id, long userId);
 
     void unPublish(long id, long userId);
 
-    PagedList<AlbumVO> published(int page, int pageSize, long tagId);
+    /**
+     * 分页获取相册信息
+     *
+     * @param page          分页页码
+     * @param pageSize      每页数量
+     * @param tagId         相册tag
+     * @param currentUserId 当前登录用户ID
+     * @return
+     */
+    PagedList<AlbumInfo> published(int page, int pageSize, long tagId, long currentUserId);
 
-    PagedList<AlbumVO> pagedByUserInfoIdAndKeywordLike(int page, int pageSize, long userInfoId, String keyword);
+    /**
+     * 分页获取相册作者的相册信息
+     *
+     * @param page          当前页码
+     * @param pageSize      每页数量
+     * @param authorId      相册作者ID
+     * @param keyword       关键字
+     * @param currentUserId 当前登录用户ID
+     * @param state         相册发布状态 -1，全部；已发布 0； 未发布 1
+     * @return
+     */
+    PagedList<AlbumInfo> pagedByUserInfoIdAndKeywordLike(int page, int pageSize, long authorId, String keyword, long currentUserId, int state);
 
     void delete(long id, long userInfoId);
 

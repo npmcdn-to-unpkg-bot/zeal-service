@@ -97,18 +97,16 @@ public class UserInfoController extends AbstractController {
     }
 
 
-    @RequestMapping(value = "/zealInfo/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    /**
+     * 获取相册作者的相关信息
+     *
+     * @param userInfoId
+     * @return
+     */
+    @RequestMapping(value = "/author/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public Response zealInfo(@PathVariable(value = "id") long userInfoId) {
-        ZealInfo zealInfo = new ZealInfo();
-        UserInfoVO userInfoVO = userInfoService.find(userInfoId);
-        zealInfo.id = userInfoVO.getId();
-        zealInfo.email = "412837184@qq.com";
-        zealInfo.nickName = userInfoVO.getNickName();
-        zealInfo.description = "";
-        zealInfo.publishedCount = albumService.countByPublishStatus(true, userInfoId);
-        zealInfo.photo = "/zeal/resources/app/icons/photo.jpg";
-        return new Response.Builder().success().result(zealInfo).build();
+    public Response zealInfo(@PathVariable(value = "id") long userInfoId, HttpServletRequest request) {
+        return new Response.Builder().success().result(userInfoService.author(userInfoId, SessionUtils.getUserInfoId(request))).build();
     }
 
 

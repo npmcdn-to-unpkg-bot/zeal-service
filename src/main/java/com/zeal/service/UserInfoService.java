@@ -2,6 +2,7 @@ package com.zeal.service;
 
 import com.zeal.http.request.user.UserLoginRequest;
 import com.zeal.http.request.user.UserRegisterRequest;
+import com.zeal.http.response.album.AlbumAuthorInfo;
 import com.zeal.vo.user.UserInfoVO;
 
 /**
@@ -32,4 +33,15 @@ public interface UserInfoService {
      * @return 用户信息
      */
     UserInfoVO register(UserRegisterRequest userRegisterRequest);
+
+
+    /**
+     * 获取相册作者的相关信息
+     *
+     * @param id            作者ID
+     * @param currentUserId 当前登录用户ID
+     * @return
+     */
+    AlbumAuthorInfo author(long id, long currentUserId);
+
 }

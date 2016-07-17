@@ -20,9 +20,11 @@
             <label for="exist">已经存在的图片</label>
             <ul id="exist" class="list-inline">
                 <li ng-repeat="pic in existPictures">
-                    <span class="pointer" ng-click="showPicture(pic)">
-                        <img ng-src="{{pic.url}}" style="height: 40px;width: 40px;"
-                             class="img-responsive img-thumbnail">
+                    <span class="pointer">
+                        <img-gallery pictures="existPictures" index="{{$index}}" style="height: 40px;width: 40px;"
+                                     img-src="{{pic.url}}" class="img-responsive img-thumbnail"></img-gallery>
+                        <!--<img ng-src="{{pic.url}}" style="height: 40px;width: 40px;"
+                             class="img-responsive img-thumbnail">-->
                     </span>
                     <button type="button" ng-click="deleteExistPicture(pic)" class="close"><span
                             aria-hidden="true">&times;</span></button>

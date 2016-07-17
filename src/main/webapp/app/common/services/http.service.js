@@ -14,7 +14,8 @@
                     } else if (data.status == 4) {
                         $rootScope.UserInfo = null;
                         $rootScope.$broadcast('userStateChange', null);
-                        $injector.get('UserService').showLoginModal();
+                        defer.reject({message: "用户会话过期，请重新登录！"});
+                        //$injector.get('UserService').showLoginModal();
                     }
                 }).error(function (data) {
                     defer.reject({message: "服务器响应错误"});

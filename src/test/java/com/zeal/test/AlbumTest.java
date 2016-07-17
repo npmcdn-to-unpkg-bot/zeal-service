@@ -43,10 +43,7 @@ public class AlbumTest {
     @Test
     @Transactional
     public void deleteDuplicateAlbums() {
-        AlbumVO albumVO = albumService.find(1L);
-        AlbumQueryResult result = new AlbumQueryResult();
-        BeanUtils.copyProperties(albumVO, result);
-        Assert.assertTrue(result.getId() == 1);
+
     }
 
 

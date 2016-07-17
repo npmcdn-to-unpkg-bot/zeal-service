@@ -101,7 +101,7 @@ public class AlbumDao extends AbstractBaseDao<Album> {
      * @param tagId     归属的tag id
      * @return
      */
-    public PagedList<Album> pagedByPublishStatus(int page, int pageSize, long tagId, boolean published) {
+    public PagedList<Album> pagedByPublishStatusAndTagId(int page, int pageSize, long tagId, boolean published) {
         TypedQuery<Album> query = this.entityManager().createQuery("SELECT o FROM Album o inner join o.albumTags t where o.isPublished = :isPublished and t.id = :tagId ORDER BY o.publishDate desc ", Album.class);
         query.setFirstResult((page - 1) * pageSize);
         query.setMaxResults(pageSize);
@@ -111,11 +111,11 @@ public class AlbumDao extends AbstractBaseDao<Album> {
         pagedList.setList(query.getResultList());
         pagedList.setSize(pageSize);
         pagedList.setPage(page);
-        pagedList.setTotalSize(countByPublishStatus(published, tagId));
+        pagedList.setTotalSize(countByPublishStatusAndTagId(published, tagId));
         return pagedList;
     }
 
-    public long countByPublishStatus(boolean published, long tagId) {
+    public long countByPublishStatusAndTagId(boolean published, long tagId) {
         TypedQuery<Long> query = this.entityManager().createQuery("SELECT count(o) FROM Album o inner join o.albumTags t where o.isPublished = :isPublished and t.id = :tagId ORDER BY o.publishDate desc ", Long.class);
         query.setParameter("isPublished", published);
         query.setParameter("tagId", tagId);
@@ -123,25 +123,43 @@ public class AlbumDao extends AbstractBaseDao<Album> {
     }
 
 
-    public PagedList<Album> pagedByUserInfoIdAndKeywordLike(long userInfoId, int page, int pageSize, String keyword) {
-        TypedQuery<Album> query = this.entityManager().createQuery("SELECT o FROM Album o where o.userInfo.id = :userInfoId and (o.name like :keyword or o.description like :keyword) ORDER BY o.createDate desc ", Album.class);
+    public PagedList<Album> pagedByUserInfoIdAndKeywordLike(long userInfoId, int page, int pageSize, String keyword, int publishedState) {
+        TypedQuery<Album> query;
+        if (publishedState < 0) {
+            query = this.entityManager().createQuery("SELECT o FROM Album o where o.userInfo.id = :userInfoId and (o.name like :keyword or o.description like :keyword) ORDER BY o.updateDate desc ", Album.class);
+        } else if (publishedState == 0) {
+            query = this.entityManager().createQuery("SELECT o FROM Album o where o.userInfo.id = :userInfoId and o.isPublished = :published and (o.name like :keyword or o.description like :keyword) ORDER BY o.updateDate desc ", Album.class);
+        } else {
+            query = this.entityManager().createQuery("SELECT o FROM Album o where o.userInfo.id = :userInfoId and o.isPublished = :published and (o.name like :keyword or o.description like :keyword) ORDER BY o.publishDate desc ", Album.class);
+        }
         query.setFirstResult((page - 1) * pageSize);
         query.setMaxResults(pageSize);
         query.setParameter("userInfoId", userInfoId);
         query.setParameter("keyword", "%" + keyword + "%");
+        if (publishedState >= 0) {
+            query.setParameter("published", publishedState > 0);
+        }
         PagedList<Album> pagedList = new PagedList<>();
         pagedList.setList(query.getResultList());
         pagedList.setSize(pageSize);
         pagedList.setPage(page);
-        pagedList.setTotalSize(countByUserInfoIdAndKeywordLike(userInfoId, keyword));
+        pagedList.setTotalSize(countByUserInfoIdAndKeywordLike(userInfoId, keyword, publishedState));
         return pagedList;
 
     }
 
-    private long countByUserInfoIdAndKeywordLike(long userInfoId, String keyword) {
-        TypedQuery<Long> query = this.entityManager().createQuery("SELECT count(o) FROM Album o where o.userInfo.id = :userInfoId and (o.name like :keyword or o.description like :keyword) ORDER BY o.createDate desc ", Long.class);
+    private long countByUserInfoIdAndKeywordLike(long userInfoId, String keyword, int publishedState) {
+        TypedQuery<Long> query;
+        if (publishedState < 0) {
+            query = this.entityManager().createQuery("SELECT count(o) FROM Album o where o.userInfo.id = :userInfoId and (o.name like :keyword or o.description like :keyword)", Long.class);
+        } else {
+            query = this.entityManager().createQuery("SELECT count(o) FROM Album o where o.userInfo.id = :userInfoId and o.isPublished = :published and (o.name like :keyword or o.description like :keyword)", Long.class);
+        }
         query.setParameter("userInfoId", userInfoId);
         query.setParameter("keyword", "%" + keyword + "%");
+        if (publishedState >= 0) {
+            query.setParameter("published", publishedState > 0);
+        }
         return query.getSingleResult();
     }
 }
