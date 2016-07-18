@@ -14,7 +14,7 @@
         <!-- <album-list pictures="slides" resize-width="320" resize-height="320"></album-list>-->
 
         <div ng-repeat="picture in album.pictures" class="picture-block">
-            <img-gallery pictures="album.pictures" index="{{$index}}" style="width: 100%;height: auto;"
+            <img-gallery pictures="album.pictures" index="{{$index}}" style="max-width: 100%;height: auto;"
                          img-src="{{picture.url}}"></img-gallery>
             <p>{{picture.description}}</p>
         </div>

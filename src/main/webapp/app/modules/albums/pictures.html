@@ -1,8 +1,8 @@
-<div class="container">
+<div class="container-fluid">
     <div class="col-lg-3 col-md-4 col-sm-5">
         <div class="user-block">
             <div class="user-detail">
-                <a href="#" target="_blank" style="overflow: hidden;">
+                <a href="#/albums/album/5924" target="_blank" style="overflow: hidden;">
                     <img ng-src="{{author.photo}}">
                 </a>
                 <p class="user-name">{{author.nickName}}</p>
@@ -122,7 +122,7 @@
 
                 <div ng-repeat="picture in album.pictures" class="picture-block">
                     <!--<img ng-src="{{picture.url}}" style="width: 100%;height: auto;">-->
-                    <img-gallery pictures="album.pictures" index="{{$index}}" style="width: 100%;height: auto;" img-src="{{picture.url}}"></img-gallery>
+                    <img-gallery pictures="album.pictures" index="{{$index}}" style="max-width: 100%;height: auto;" img-src="{{picture.url}}"></img-gallery>
                     <p>{{picture.description}}</p>
                 </div>
 

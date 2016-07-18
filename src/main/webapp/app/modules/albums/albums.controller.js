@@ -40,6 +40,7 @@
             };
 
             $scope.childTagClick = function (childTag) {
+                $state.current.title = childTag.name + " - 美女相册";
                 $scope.childTagId = childTag.id;
                 $scope.pagination.page = 1;
                 $scope.pagination.totalSize = 0;
@@ -51,16 +52,18 @@
                 $scope.childTags = data;
                 if (data && data.length > 0) {
                     $scope.childTagId = data[0].id;
+                    $state.current.title = data[0].name + " - 美女相册";
                 }
                 $scope.getAlbums();
             });
         }]);
 
 
-    angular.module("app").controller('AlbumDisplayController', ['$scope', 'HttpService', '$log', '$stateParams', 'AlbumService', 'album', 'author', 'MessageService', 'UserService',
-        function ($scope, HttpService, $log, $stateParams, AlbumService, album, author, MessageService, UserService) {
+    angular.module("app").controller('AlbumDisplayController', ['$scope', 'HttpService', '$log', '$stateParams', 'AlbumService', 'album', 'author', 'MessageService', '$state',
+        function ($scope, HttpService, $log, $stateParams, AlbumService, album, author, MessageService, $state) {
             $scope.album = album;
             $scope.author = author;
+            $state.current.title = album.name;
             $scope.collectAlbum = function (album) {
                 AlbumService.collect(album.id).success(function (data) {
                     $scope.album.collected = true;

@@ -18,7 +18,7 @@
             <button type="file" class="btn btn-sm btn-primary" name="pictures" id="pictures" multiple
                     ngf-select="select($files)"
                     ng-model="pictures"
-                    accept="image/*" ngf-max-size="2MB">选择图片
+                    accept="image/*" ngf-max-size="30MB">选择图片
             </button>
             <span class="help-block">请选择需要上传的照片.</span>
             <span class="help-block" ng-show="form.pictures.$dirty && pictures.length <= 0">请至少选择一张图片</span>

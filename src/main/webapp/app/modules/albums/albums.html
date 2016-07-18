@@ -9,16 +9,17 @@
             <li ng-repeat="album in targetAlbums" class="col-lg-3 col-md-4 col-sm-6"
                 style="padding-left: 15px; padding-right: 15px;margin-bottom: 30px;">
                 <div class="my-album-block">
-                    <div class="pointer" ng-click="onClickAlbum(album)"
-                         style="width:100%; overflow: hidden;">
-                        <img ng-src="{{album.thumbnail}}" class="img-scale"
-                             title="{{album.name}}" style="width: 100%;height: auto;">
+                    <div style="width:100%; overflow: hidden;">
+                        <a href="#/albums/album/{{album.id}}" target="_blank">
+                            <img ng-src="{{album.thumbnail}}" class="img-scale"
+                                 title="{{album.name}}" style="width: 100%;height: auto;">
+                        </a>
                     </div>
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="text-muted pointer col-sm-8 col-xs-8 text-left">
-                                <span ng-click="onClickAlbum(album)">{{album.name}}</span>
-                            </div>
+                            <a class="text-muted col-sm-8 col-xs-8 text-left" href="#/albums/album/{{album.id}}" target="_blank">
+                                <span>{{album.name}}</span>
+                            </a>
                             <div class="col-sm-4 col-xs-4 text-right">
                                 <span title="收藏数"><i class="glyphicon glyphicon-heart text-right"
                                                      ng-class="{'text-red':album.collected}"></i> {{album.collectionCount}}</span>

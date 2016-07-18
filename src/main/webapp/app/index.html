@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>{{ $state.current.title }}</title>
+    <title ng-bind="$state.current.title"></title>
     <link rel="icon" href="/zeal/resources/app/icons/favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="/zeal/app/lib/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/zeal/app/lib/font-awesome/css/font-awesome.min.css">
@@ -71,30 +71,31 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li ng-show="!isLogin">
-                        <a ng-click="showLoginModal()" class="pointer">
-                            <span>登录</span>
+                        <a ng-click="showLoginModal()" role="button" href="#">
+                            <span><i class="fa fa-sign-in"></i> 登录</span>
                         </a>
                     </li>
                     <li ng-show="!isLogin">
-                        <a ng-click="showRegisterModal()" class="pointer">
-                            <span>注册</span>
+                        <a role="button" href="/zeal/app/register.html" target="_self">
+                            <span><i class="fa fa-user"></i> 注册</span>
                         </a>
                     </li>
                     <li ng-show="isLogin">
-                        <a class="pointer">
-                            <span>欢迎，{{username}}</span>
+                        <a role="button" href="#">
+                            <span>
+                                <i class="fa fa-user"></i> {{username}}</span>
                         </a>
                     </li>
                     <li ng-show="isLogin">
-                        <a ng-click="logout()" class="pointer">
-                            <span>退出</span>
+                        <a ng-click="logout()" role="button" href="#">
+                            <span><i class="fa fa-sign-out"></i> 退出</span>
                         </a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-    <div id="module-container" class="container" ui-view></div>
+    <div id="module-container" class="container-fluid" ui-view></div>
     <footer class="footer">
         <div class="container text-center">
             <p>Designed and built by <a href="#">@mdo</a> and <a href="#">@fat</a>.</p>
