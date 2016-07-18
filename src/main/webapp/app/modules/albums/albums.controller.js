@@ -19,15 +19,10 @@
                     $scope.targetAlbums = [];
                     $scope.pagination.page = data.page;
                     $scope.pagination.totalSize = data.totalSize;
-                    var wrappers = data.list;
-                    if (wrappers && wrappers.length > 0) {
-                        for (var i = 0; i < wrappers.length; i++) {
-                            var wrapper = wrappers[i];
-                            var album = wrapper.album;
-                            album.author = wrapper.author;
-                            album.size = album.pictures.length;
-                            album.url = "/zeal/picture/resize/" + album.pictures[0].id + "?width=480&height=480";
-                            $scope.targetAlbums.push(album);
+                    var albums = data.list;
+                    if (albums && albums.length > 0) {
+                        for (var i = 0; i < albums.length; i++) {
+                            $scope.targetAlbums.push(albums[i]);
                         }
                     }
                     window.scrollTo(0, 0);

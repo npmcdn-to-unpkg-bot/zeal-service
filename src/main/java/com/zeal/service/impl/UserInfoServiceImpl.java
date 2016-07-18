@@ -27,15 +27,6 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Autowired
     private UserInfoDao userInfoDao;
 
-    @Autowired
-    private AlbumCollectionDao albumCollectionDao;
-
-    @Autowired
-    private AlbumDao albumDao;
-
-    @Autowired
-    private AlbumAuthorAppreciationDao albumAuthorAppreciationDao;
-
     @Override
     public UserInfoVO find(long id) {
         UserInfo userInfo = userInfoDao.find(id);
@@ -94,19 +85,6 @@ public class UserInfoServiceImpl implements UserInfoService {
      */
     @Override
     public AlbumAuthorInfo author(long id, long currentUserId) {
-        //TODO 设置作者的关注数，被关注数，获赞数目等等
-        UserInfo userInfo = userInfoDao.find(id);
-        AlbumAuthorInfo author = new AlbumAuthorInfo();
-        author.id = userInfo.getId();
-        author.email = "412837184@qq.com";
-        author.nickName = userInfo.getNickName();
-        author.description = "";
-        author.publishedCount = albumDao.countByUserInfoIdAndPublishStatus(id, true);
-        author.appreciated = currentUserId > 0 && !albumAuthorAppreciationDao.find(currentUserId, id).isEmpty();
-        author.photo = "/zeal/resources/app/icons/photo.jpg";
-        author.appreciationCount = userInfo.getAppreciatedRecords().size();
-        author.followerCount = 0;
-        author.followingCount = 0;
-        return author;
+        return userInfoDao.author(id, currentUserId);
     }
 }

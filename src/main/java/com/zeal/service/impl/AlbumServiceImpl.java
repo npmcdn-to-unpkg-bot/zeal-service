@@ -5,6 +5,7 @@ import com.zeal.dao.*;
 import com.zeal.entity.*;
 import com.zeal.exception.BizException;
 import com.zeal.http.response.album.AlbumInfo;
+import com.zeal.http.response.album.PagedAlbumInfo;
 import com.zeal.service.AlbumService;
 import com.zeal.utils.*;
 import com.zeal.vo.album.AlbumVO;
@@ -56,10 +57,7 @@ public class AlbumServiceImpl implements AlbumService {
      */
     @Override
     public AlbumInfo findDetails(long id, long currentUserId) {
-        Album album = albumDao.find(id);
-        if (album == null) return null;
-        AlbumInfo albumInfo = convert(album, currentUserId);
-        return albumInfo;
+        return albumDao.findDetails(id, currentUserId);
     }
 
     /**
@@ -104,9 +102,8 @@ public class AlbumServiceImpl implements AlbumService {
      * @return
      */
     @Override
-    public PagedList<AlbumInfo> published(int page, int pageSize, long tagId, long currentUserId) {
-        PagedList<Album> pagedList = albumDao.pagedByPublishStatusAndTagId(page, pageSize, tagId, true);
-        return convert(pagedList, currentUserId);
+    public PagedList<PagedAlbumInfo> published(int page, int pageSize, long tagId, long currentUserId) {
+        return albumDao.pagedByPublishStatusAndTagId(page, pageSize, tagId, true, currentUserId);
     }
 
     /**
@@ -337,8 +334,7 @@ public class AlbumServiceImpl implements AlbumService {
      */
     @Override
     public PagedList<AlbumVO> findByPublishStatus(boolean published, long userId, int page, int pageSize) {
-
-        return convert(albumDao.pagedByUserInfoIdAndPublishStatus(userId, published, page, pageSize));
+        return convert(albumDao.pagedByAuthorAndPublishStatus(userId, published, page, pageSize));
     }
 
     private List<File> download(List<PagePicture> pictures, long userInfoId, long albumId) {

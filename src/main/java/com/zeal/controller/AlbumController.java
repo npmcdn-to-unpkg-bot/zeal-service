@@ -2,10 +2,7 @@ package com.zeal.controller;
 
 import com.zeal.common.PagedList;
 import com.zeal.http.response.Response;
-import com.zeal.http.response.album.AlbumAuthorInfo;
-import com.zeal.http.response.album.AlbumInfo;
-import com.zeal.http.response.album.AlbumTagInfo;
-import com.zeal.http.response.album.PictureInfo;
+import com.zeal.http.response.album.*;
 import com.zeal.service.AlbumCollectionService;
 import com.zeal.service.AlbumService;
 import com.zeal.service.AuthorityCheckService;
@@ -78,20 +75,8 @@ public class AlbumController extends AbstractController {
     public Response published(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
                               @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
                               @RequestParam(value = "tag", required = false, defaultValue = "-1") long tagId, HttpServletRequest request) {
-        PagedList<AlbumInfo> pagedList = albumService.published(page, pageSize, tagId, SessionUtils.getUserInfoId(request));
-        PagedList<Map<String, Object>> list = new PagedList<>();
-        list.setSize(pagedList.getSize());
-        list.setPage(pagedList.getPage());
-        list.setTotalSize(pagedList.getTotalSize());
-        List<Map<String, Object>> results = new ArrayList<>();
-        for (AlbumInfo album : pagedList.getList()) {
-            Map<String, Object> wrapper = new HashMap<>();
-            wrapper.put("album", album);
-            wrapper.put("author", userInfoService.author(album.getUserInfo().getId(), SessionUtils.getUserInfoId(request)));
-            results.add(wrapper);
-        }
-        list.setList(results);
-        return new Response.Builder().success().result(list).build();
+        PagedList<PagedAlbumInfo> pagedList = albumService.published(page, pageSize, tagId, SessionUtils.getUserInfoId(request));
+        return new Response.Builder().success().result(pagedList).build();
     }
 
     @RequestMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -47,7 +47,7 @@
                     return AlbumService.getMyAlbumById($stateParams.albumId).promise;
                 },
                 author: function (UserService, album) {
-                    var http = UserService.getAuthorInfo(album.userInfo.id);
+                    var http = UserService.getAuthorInfo(album.author);
                     return http.promise;
                 }
             },

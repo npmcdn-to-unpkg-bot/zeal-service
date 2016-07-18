@@ -4,18 +4,12 @@ import com.zeal.common.PagedList;
 import com.zeal.http.response.Response;
 import com.zeal.http.response.album.AlbumAuthorInfo;
 import com.zeal.http.response.album.AlbumInfo;
-import com.zeal.http.response.album.AlbumQueryResult;
-import com.zeal.http.response.my.MyAlbumAuthorInfo;
-import com.zeal.http.response.my.ZealInfo;
 import com.zeal.service.AlbumCollectionService;
 import com.zeal.service.AlbumService;
-import com.zeal.service.AuthorityCheckService;
 import com.zeal.service.UserInfoService;
 import com.zeal.utils.SessionUtils;
 import com.zeal.utils.StringUtils;
-import com.zeal.vo.album.AlbumVO;
 import com.zeal.vo.user.UserInfoVO;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -26,8 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Administrator on 6/29/2016.
@@ -80,12 +72,7 @@ public class MyController extends AbstractController {
     public Response myZealInfo(HttpServletRequest request) {
         //TODO 获取我的评论数目
         UserInfoVO userInfo = SessionUtils.getUserInfo(request);
-        AlbumAuthorInfo albumAuthorInfo = userInfoService.author(userInfo.getId(), userInfo.getId());
-        MyAlbumAuthorInfo myAlbumAuthorInfo = new MyAlbumAuthorInfo();
-        BeanUtils.copyProperties(albumAuthorInfo, myAlbumAuthorInfo);
-        myAlbumAuthorInfo.setCollectionCount(albumCollectionService.countByUserInfoIdEquals(userInfo.getId()));
-        myAlbumAuthorInfo.setUnpublishedCount(albumService.countByPublishStatus(false, userInfo.getId()));
-        myAlbumAuthorInfo.setCommentCount(0L);
+        AlbumAuthorInfo myAlbumAuthorInfo = userInfoService.author(userInfo.getId(), userInfo.getId());
         return new Response.Builder().success().result(myAlbumAuthorInfo).build();
     }
 

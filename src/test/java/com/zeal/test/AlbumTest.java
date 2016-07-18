@@ -3,13 +3,9 @@ package com.zeal.test;
 import com.zeal.dao.AlbumDao;
 import com.zeal.dao.PictureDao;
 import com.zeal.dao.UserInfoDao;
-import com.zeal.http.response.album.AlbumQueryResult;
 import com.zeal.service.AlbumService;
-import com.zeal.vo.album.AlbumVO;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.BeanUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +39,7 @@ public class AlbumTest {
     @Test
     @Transactional
     public void deleteDuplicateAlbums() {
-
+        albumDao.findPagedAlbumInfo(1);
     }
 
 

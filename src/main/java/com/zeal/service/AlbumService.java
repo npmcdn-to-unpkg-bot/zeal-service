@@ -4,6 +4,7 @@ import com.zeal.common.PagedList;
 import com.zeal.entity.Album;
 import com.zeal.entity.UserInfo;
 import com.zeal.http.response.album.AlbumInfo;
+import com.zeal.http.response.album.PagedAlbumInfo;
 import com.zeal.vo.album.AlbumVO;
 import com.zeal.worker.albums.PageAlbum;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,7 +48,7 @@ public interface AlbumService {
      * @param currentUserId 当前登录用户ID
      * @return
      */
-    PagedList<AlbumInfo> published(int page, int pageSize, long tagId, long currentUserId);
+    PagedList<PagedAlbumInfo> published(int page, int pageSize, long tagId, long currentUserId);
 
     /**
      * 分页获取相册作者的相册信息
