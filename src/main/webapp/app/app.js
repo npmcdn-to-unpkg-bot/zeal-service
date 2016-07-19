@@ -125,7 +125,7 @@
 
             $scope.isLogin = false;
             $scope.username = null;
-
+            $scope.photo = null;
             $scope.showLoginModal = function () {
                 $uibModal.open({
                     templateUrl: '/zeal/app/modules/user/login.html',
@@ -159,6 +159,7 @@
                 if (data) {
                     $scope.isLogin = true;
                     $scope.username = data.nickName;
+                    $scope.photo = data.photo;
                 } else {
                     $scope.isLogin = false;
                     $scope.username = null;
@@ -167,8 +168,9 @@
         }]);
 
 
-    angular.module("app").controller('LoginController', ['$scope', '$rootScope', '$uibModalInstance', 'CookieService', 'UserService', '$state', '$log',
-        function ($scope, $rootScope, $uibModalInstance, CookieService, UserService, $state, $log) {
+    angular.module("app").controller('LoginController', [
+        '$scope', '$rootScope', '$uibModalInstance', 'CookieService', 'UserService', '$state', '$log', 'MessageService',
+        function ($scope, $rootScope, $uibModalInstance, CookieService, UserService, $state, $log, MessageService) {
             $scope.errorMsg = "";
             //取消登录窗口
             $scope.cancel = function () {
@@ -184,6 +186,10 @@
                 $scope.loginRequest.password = CookieService.get(CookieService.KEY_CONSTANT.user_login_password);
                 $scope.loginRequest.rememberMe = true;
             }
+
+            $scope.loginNameChange = function () {
+                $scope.loginRequest.password = "";
+            };
 
             $scope.login = function () {
                 if ($scope.loginRequest.username == "" || $scope.loginRequest.password == "") {
@@ -206,8 +212,7 @@
                         $rootScope.$broadcast('userStateChange', $rootScope.UserInfo);
                         $uibModalInstance.close();
                     }).error(function (data) {
-                    alert(data.message);
-                    $log.info(data.message);
+                    MessageService.toast.error(data.message, "登录失败");
                 });
             };
         }
