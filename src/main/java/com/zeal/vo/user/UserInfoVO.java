@@ -10,8 +10,6 @@ public class UserInfoVO {
 
     private long id;
 
-    private String loginName;
-
     private String nickName;
 
     private String phoneNumber;
@@ -21,7 +19,6 @@ public class UserInfoVO {
     public UserInfoVO(UserInfo userInfo) {
         if (userInfo != null) {
             this.id = userInfo.getId();
-            this.loginName = userInfo.getLoginName();
             this.nickName = userInfo.getNickName();
             this.phoneNumber = userInfo.getPhoneNumber();
         }
@@ -33,14 +30,6 @@ public class UserInfoVO {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getLoginName() {
-        return loginName;
-    }
-
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
     }
 
     public String getNickName() {

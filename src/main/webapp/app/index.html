@@ -5,46 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title ng-bind="$state.current.title"></title>
-    <link rel="icon" href="/zeal/resources/app/icons/favicon.ico" type="image/x-icon"/>
-    <link rel="stylesheet" href="/zeal/app/lib/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/zeal/app/lib/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/zeal/app/lib/angular-loading-bar/build/loading-bar.min.css">
-    <link rel="stylesheet" href="/zeal/app/lib/angular-toastr/dist/angular-toastr.min.css">
-    <link rel="stylesheet" href="/zeal/app/lib/angular-ui-select/dist/select.min.css">
-    <link rel="stylesheet" href="/zeal/app/app.css">
+    <link rel="icon" href="icons/favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="lib/angular-loading-bar/build/loading-bar.min.css">
+    <link rel="stylesheet" href="lib/angular-toastr/dist/angular-toastr.min.css">
+    <link rel="stylesheet" href="lib/angular-ui-select/dist/select.min.css">
+    <link rel="stylesheet" href="app.css">
 
-    <script src="/zeal/app/lib/jquery/dist/jquery.min.js"></script>
-    <script src="/zeal/app/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/zeal/app/lib/angular/angular.min.js"></script>
-    <script src="/zeal/app/lib/angular-animate/angular-animate.min.js"></script>
-    <script src="/zeal/app/lib/angular-sanitize/angular-sanitize.min.js"></script>
-    <script src="/zeal/app/lib/angular-cookies/angular-cookies.min.js"></script>
-    <script src="/zeal/app/lib/angular-ui-router/release/angular-ui-router.min.js"></script>
-    <script src="/zeal/app/lib/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-    <script src="/zeal/app/lib/ng-file-upload/ng-file-upload.min.js"></script>
-    <script src="/zeal/app/lib/angular-loading-bar/build/loading-bar.min.js"></script>
-    <script src="/zeal/app/lib/angular-toastr/dist/angular-toastr.tpls.min.js"></script>
-    <script src="/zeal/app/lib/angular-ui-select/dist/select.min.js"></script>
-    <script src="/zeal/app/common/zeal.common.module.js"></script>
-    <script src="/zeal/app/common/services/cookie.service.js"></script>
-    <script src="/zeal/app/common/interceptors/http.interceptor.js"></script>
-    <script src="/zeal/app/common/services/http.service.js"></script>
-    <script src="/zeal/app/common/services/message.service.js"></script>
-    <script src="/zeal/app/common/directives/album.gallery.directive.js"></script>
-    <script src="/zeal/app/common/directives/img.gallery.directive.js"></script>
-    <script src="/zeal/app/common/directives/album.list.directive.js"></script>
-    <script src="/zeal/app/common/filters/text.truncate.filter.js"></script>
-    <script src="/zeal/app/common/services/userinfo.service.js"></script>
-    <script src="/zeal/app/common/services/album.service.js"></script>
+    <script src="lib/jquery/dist/jquery.min.js"></script>
+    <script src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="lib/angular/angular.min.js"></script>
+    <script src="lib/angular-animate/angular-animate.min.js"></script>
+    <script src="lib/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="lib/angular-cookies/angular-cookies.min.js"></script>
+    <script src="lib/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="lib/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="lib/ng-file-upload/ng-file-upload.min.js"></script>
+    <script src="lib/angular-loading-bar/build/loading-bar.min.js"></script>
+    <script src="lib/angular-toastr/dist/angular-toastr.tpls.min.js"></script>
+    <script src="lib/angular-ui-select/dist/select.min.js"></script>
+    <script src="common/zeal.common.module.js"></script>
+    <script src="common/services/cookie.service.js"></script>
+    <script src="common/interceptors/http.interceptor.js"></script>
+    <script src="common/services/http.service.js"></script>
+    <script src="common/services/message.service.js"></script>
+    <script src="common/directives/album.gallery.directive.js"></script>
+    <script src="common/directives/img.gallery.directive.js"></script>
+    <script src="common/directives/album.list.directive.js"></script>
+    <script src="common/filters/text.truncate.filter.js"></script>
+    <script src="common/services/userinfo.service.js"></script>
+    <script src="common/services/album.service.js"></script>
 
-    <script src="/zeal/app/app.js"></script>
-    <script src="/zeal/app/modules/user/user.controller.js"></script>
-    <script src="/zeal/app/modules/user/user.service.js"></script>
-    <script src="/zeal/app/modules/albums/albums.controller.js"></script>
-    <script src="/zeal/app/modules/albums/albums.service.js"></script>
-    <script src="/zeal/app/modules/my/my.controller.js"></script>
-    <script src="/zeal/app/modules/my/albums/my.albums.controller.js"></script>
-    <script src="/zeal/app/modules/home/home.controller.js"></script>
+    <script src="app.js"></script>
+    <script src="modules/user/user.controller.js"></script>
+    <script src="modules/user/user.service.js"></script>
+    <script src="modules/albums/albums.controller.js"></script>
+    <script src="modules/albums/albums.service.js"></script>
+    <script src="modules/my/my.controller.js"></script>
+    <script src="modules/my/albums/my.albums.controller.js"></script>
+    <script src="modules/home/home.controller.js"></script>
 </head>
 <body>
 <div ng-controller="IndexController">
@@ -75,12 +75,12 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li ng-show="!isLogin">
-                        <a ng-click="showLoginModal()" role="button" href="#">
+                        <a href="login.html" target="_self">
                             <span><i class="fa fa-sign-in"></i> 登录</span>
                         </a>
                     </li>
                     <li ng-show="!isLogin">
-                        <a role="button" href="/zeal/app/register.html" target="_self">
+                        <a href="register.html" target="_self">
                             <span><i class="fa fa-user"></i> 注册</span>
                         </a>
                     </li>

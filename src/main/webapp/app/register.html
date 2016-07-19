@@ -5,152 +5,165 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>用户注册 - zeal for you</title>
-    <link rel="icon" href="/zeal/resources/app/icons/favicon.ico" type="image/x-icon"/>
-    <link rel="stylesheet" href="/zeal/app/lib/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/zeal/app/lib/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/zeal/app/lib/angular-loading-bar/build/loading-bar.min.css">
-    <link rel="stylesheet" href="/zeal/app/lib/angular-toastr/dist/angular-toastr.min.css">
-    <link rel="stylesheet" href="/zeal/app/lib/angular-ui-select/dist/select.min.css">
+    <link rel="icon" href="icons/favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="lib/angular-loading-bar/build/loading-bar.min.css">
+    <link rel="stylesheet" href="lib/angular-toastr/dist/angular-toastr.min.css">
+    <link rel="stylesheet" href="lib/angular-ui-select/dist/select.min.css">
+    <link rel="stylesheet" href="register.css">
 
-    <script src="/zeal/app/lib/jquery/dist/jquery.min.js"></script>
-    <script src="/zeal/app/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/zeal/app/lib/angular/angular.min.js"></script>
-    <script src="/zeal/app/lib/angular-animate/angular-animate.min.js"></script>
-    <script src="/zeal/app/lib/angular-sanitize/angular-sanitize.min.js"></script>
-    <script src="/zeal/app/lib/angular-cookies/angular-cookies.min.js"></script>
-    <script src="/zeal/app/lib/angular-ui-router/release/angular-ui-router.min.js"></script>
-    <script src="/zeal/app/lib/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-    <script src="/zeal/app/lib/ng-file-upload/ng-file-upload.min.js"></script>
-    <script src="/zeal/app/lib/angular-loading-bar/build/loading-bar.min.js"></script>
-    <script src="/zeal/app/lib/angular-toastr/dist/angular-toastr.tpls.min.js"></script>
-    <script src="/zeal/app/lib/angular-ui-select/dist/select.min.js"></script>
+    <script src="lib/jquery/dist/jquery.min.js"></script>
+    <script src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="lib/angular/angular.min.js"></script>
+    <script src="lib/angular-animate/angular-animate.min.js"></script>
+    <script src="lib/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="lib/angular-cookies/angular-cookies.min.js"></script>
+    <script src="lib/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="lib/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="lib/ng-file-upload/ng-file-upload.min.js"></script>
+    <script src="lib/angular-loading-bar/build/loading-bar.min.js"></script>
+    <script src="lib/angular-toastr/dist/angular-toastr.tpls.min.js"></script>
+    <script src="lib/angular-ui-select/dist/select.min.js"></script>
 
-    <script src="/zeal/app/common/zeal.common.module.js"></script>
-    <script src="/zeal/app/common/services/cookie.service.js"></script>
-    <script src="/zeal/app/common/interceptors/http.interceptor.js"></script>
-    <script src="/zeal/app/common/services/http.service.js"></script>
-    <script src="/zeal/app/common/services/message.service.js"></script>
-    <script src="/zeal/app/common/filters/text.truncate.filter.js"></script>
-    <script src="/zeal/app/common/services/userinfo.service.js"></script>
-    <script src="/zeal/app/register.js"></script>
+    <script src="common/zeal.common.module.js"></script>
+    <script src="common/services/cookie.service.js"></script>
+    <script src="common/interceptors/http.interceptor.js"></script>
+    <script src="common/services/http.service.js"></script>
+    <script src="common/services/message.service.js"></script>
+    <script src="common/filters/text.truncate.filter.js"></script>
+    <script src="common/services/userinfo.service.js"></script>
+    <script src="register.js"></script>
 </head>
 <body ng-controller="RegisterController">
 <div class="container">
-    <div class="row">
-        <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3" style="margin-top: 90px;">
-            <div class="panel panel-primary">
-                <div class="panel-heading">用户注册</div>
-                <div class="panel-body">
-                    <form class="form-horizontal" name="form" novalidate="novalidate" autocomplete="off" >
-                        <div class="form-group"
-                             ng-class="{'has-error':form.loginName.$dirty && !form.loginName.$valid}">
-                            <label for="loginName" class="col-md-3 col-sm-3 col-xs-3 control-label">用户名</label>
-                            <div class="col-md-8 col-sm-8 col-xs-8">
-                                <input type="text" name="loginName" maxlength="12" minlength="6" required
-                                       ng-model="user.loginName" class="form-control" id="loginName"
-                                       placeholder="请输入用户名">
-                                <p class="help-block" ng-show="form.loginName.$dirty && form.loginName.$error.required">
-                                    用户名是必填项</p>
-                                <p class="help-block"
-                                   ng-show="form.loginName.$dirty && (form.loginName.$error.minlength || form.loginName.$error.maxlength)">
-                                    用户名长度在6~12个字符</p>
-                            </div>
-                            <label class="text-danger control-label">*</label>
+    <section class="section-register">
+        <p class="text-center">
+            <a href="index.html">
+                <img src="icons/logo.png">
+            </a>
+        </p>
+        <div class="panel panel-primary">
+            <div class="panel-body">
+
+                <h3 class="text-center">欢迎注册</h3>
+                <p class="text-center register-info"></p>
+                <form class="form-horizontal" name="form" novalidate="novalidate" autocomplete="off">
+                    <div class="form-group" ng-class="{'has-error':form.email.$dirty && !form.email.$valid}">
+                        <label for="email" class="col-md-3 col-sm-3 col-xs-3 control-label hidden-xs">邮箱</label>
+                        <div class="col-md-8 col-sm-8 col-xs-11">
+                            <input type="email" name="email" required ng-model="user.email" class="form-control"
+                                   id="email"
+                                   placeholder="请输入邮箱">
+                            <p class="help-block" ng-show="form.email.$dirty && form.email.$error.required">
+                                邮箱是必填项</p>
+                            <p class="help-block" ng-show="form.email.$dirty && form.email.$error.email">错误的邮箱格式</p>
                         </div>
-                        <div class="form-group" ng-class="{'has-error':form.email.$dirty && !form.email.$valid}">
-                            <label for="email" class="col-md-3 col-sm-3 col-xs-3 control-label">邮箱</label>
-                            <div class="col-md-8 col-sm-8 col-xs-8">
-                                <input type="email" name="email" required ng-model="user.email" class="form-control"
-                                       id="email"
-                                       placeholder="请输入邮箱">
-                                <p class="help-block" ng-show="form.email.$dirty && form.email.$error.required">
-                                    邮箱是必填项</p>
-                                <p class="help-block" ng-show="form.email.$dirty && form.email.$error.email">错误的邮箱格式</p>
-                            </div>
-                            <label class="text-danger control-label">*</label>
+                        <label class="text-danger control-label">*</label>
+                    </div>
+                    <div class="form-group"
+                         ng-class="{'has-error':form.phoneNumber.$dirty && !form.phoneNumber.$valid}">
+                        <label for="phoneNumber" class="col-md-3 col-sm-3 col-xs-3 control-label hidden-xs">手机号码</label>
+                        <div class="col-md-8 col-sm-8 col-xs-11">
+                            <input type="telephone" name="phoneNumber" required ng-model="user.phoneNumber"
+                                   class="form-control"
+                                   id="phoneNumber"
+                                   ng-pattern="/^1\d{10}$/"
+                                   placeholder="请输入手机号码">
+                            <p class="help-block"
+                               ng-show="form.phoneNumber.$dirty && form.phoneNumber.$error.required">手机号码是必填项</p>
+                            <p class="help-block"
+                               ng-show="form.phoneNumber.$dirty && form.phoneNumber.$error.pattern">错误的手机号码格式</p>
                         </div>
-                        <div class="form-group"
-                             ng-class="{'has-error':form.phoneNumber.$dirty && !form.phoneNumber.$valid}">
-                            <label for="phoneNumber" class="col-md-3 col-sm-3 col-xs-3 control-label">手机号码</label>
-                            <div class="col-md-8 col-sm-8 col-xs-8">
-                                <input type="telephone" name="phoneNumber" required ng-model="user.phoneNumber"
-                                       class="form-control"
-                                       id="phoneNumber"
-                                       ng-pattern="/^1\d{10}$/"
-                                       placeholder="请输入手机号码">
-                                <p class="help-block"
-                                   ng-show="form.phoneNumber.$dirty && form.phoneNumber.$error.required">手机号码是必填项</p>
-                                <p class="help-block"
-                                   ng-show="form.phoneNumber.$dirty && form.phoneNumber.$error.pattern">错误的手机号码格式</p>
-                            </div>
-                            <label class="text-danger control-label">*</label>
+                        <label class="text-danger control-label">*</label>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error':form.password.$dirty && !form.password.$valid}">
+                        <label for="password" class="col-md-3 col-sm-3 col-xs-3 control-label hidden-xs">密码</label>
+                        <div class="col-md-8 col-sm-8 col-xs-11">
+                            <input type="password" name="password" maxlength="12" minlength="6" required
+                                   ng-model="user.password" class="form-control" ng-change="user.repassword = ''"
+                                   id="password" placeholder="请输入密码">
+                            <p class="help-block" ng-show="form.password.$dirty && form.password.$error.required">
+                                密码是必填项</p>
+                            <p class="help-block"
+                               ng-show="form.password.$dirty && (form.password.$error.minlength || form.loginName.$error.maxlength)">
+                                密码长度在6~12个字符</p>
                         </div>
-                        <div class="form-group" ng-class="{'has-error':form.password.$dirty && !form.password.$valid}">
-                            <label for="password" class="col-md-3 col-sm-3 col-xs-3 control-label">密码</label>
-                            <div class="col-md-8 col-sm-8 col-xs-8">
-                                <input type="password" name="password" maxlength="12" minlength="6" required
-                                       ng-model="user.password" class="form-control" ng-change="user.repassword = ''"
-                                       id="password" placeholder="请输入密码">
-                                <p class="help-block" ng-show="form.password.$dirty && form.password.$error.required">
-                                    密码是必填项</p>
-                                <p class="help-block"
-                                   ng-show="form.password.$dirty && (form.password.$error.minlength || form.loginName.$error.maxlength)">
-                                    密码长度在6~12个字符</p>
-                            </div>
-                            <label class="text-danger control-label">*</label>
+                        <label class="text-danger control-label">*</label>
+                    </div>
+                    <div class="form-group"
+                         ng-class="{'has-error':form.password.$dirty && user.repassword != user.password}">
+                        <label for="re-password" class="col-md-3 col-sm-3 col-xs-3 control-label hidden-xs">确认密码</label>
+                        <div class="col-md-8 col-sm-8 col-xs-11">
+                            <input type="password" name="repassword" required ng-model="user.repassword"
+                                   class="form-control"
+                                   id="re-password" placeholder="请确认密码">
+                            <p class="help-block"
+                               ng-show="form.password.$dirty && (user.repassword != user.password)">
+                                与原密码不相同</p>
                         </div>
-                        <div class="form-group"
-                             ng-class="{'has-error':form.password.$dirty && user.repassword != user.password}">
-                            <label for="re-password" class="col-md-3 col-sm-3 col-xs-3 control-label">确认密码</label>
-                            <div class="col-md-8 col-sm-8 col-xs-8">
-                                <input type="password" name="repassword" required ng-model="user.repassword"
-                                       class="form-control"
-                                       id="re-password" placeholder="请确认密码">
-                                <p class="help-block"
-                                   ng-show="form.password.$dirty && (user.repassword != user.password)">
-                                    与原密码不相同</p>
-                            </div>
-                            <label class="text-danger control-label">*</label>
+                        <label class="text-danger control-label">*</label>
+                    </div>
+                    <div class="form-group"
+                         ng-class="{'has-error':form.nickName.$dirty && !form.nickName.$valid}">
+                        <label for="nickName" class="col-md-3 col-sm-3 col-xs-3 control-label hidden-xs">昵称</label>
+                        <div class="col-md-8 col-sm-8 col-xs-11">
+                            <input type="text" name="nickName" maxlength="12" minlength="6" required
+                                   ng-model="user.nickName" class="form-control" id="nickName"
+                                   placeholder="请输入昵称">
+                            <p class="help-block" ng-show="form.nickName.$dirty && form.nickName.$error.required">
+                                请填写一个属于你的昵称</p>
+                            <p class="help-block"
+                               ng-show="form.nickName.$dirty && (form.nickName.$error.minlength || form.nickName.$error.maxlength)">
+                                昵称长度在6~12个字符</p>
                         </div>
-                        <div class="form-group"
-                             ng-class="{'has-error':form.validationCode.$dirty && !form.validationCode.$valid}">
-                            <label for="validationCode" class="col-md-3 col-sm-3 col-xs-3 control-label">验证码</label>
-                            <div class="col-md-4 col-sm-4 col-xs-4">
-                                <input type="text" name="validationCode" minlength="4" maxlength="4" required
-                                       ng-model="user.validationCode" class="form-control"
-                                       id="validationCode" placeholder="">
-                                <p class="help-block"
-                                   ng-show="form.validationCode.$dirty &&  !form.validationCode.$valid">
-                                    请输入4位验证码</p>
-                            </div>
-                            <div class="col-md-2 col-sm-2 col-xs-2 center-block">
-                                <a href="#" role="button" ng-click="getVerifyCode()">
-                                    <img ng-src="{{validation.imgData}}"
-                                         style="height: 34px;display: block;line-height: 34px;margin: 0 auto;padding: 2px;"
-                                         class="img-responsive">
-                                </a>
-                            </div>
-                            <div class="col-md-2 col-sm-2 col-xs-2">
-                                <button class="btn btn-default btn-sm" ng-click="getVerifyCode()">
+                        <label class="text-danger control-label">*</label>
+                    </div>
+                    <div class="form-group"
+                         ng-class="{'has-error':form.validationCode.$dirty && !form.validationCode.$valid}">
+                        <label for="validationCode"
+                               class="col-md-3 col-sm-3 col-xs-3 control-label hidden-xs">验证码</label>
+                        <div class="col-md-4 col-sm-4 col-xs-5">
+                            <input type="text" name="validationCode" minlength="4" maxlength="4" required
+                                   ng-model="user.validationCode" class="form-control"
+                                   id="validationCode" placeholder="">
+                            <p class="help-block"
+                               ng-show="form.validationCode.$dirty &&  !form.validationCode.$valid">
+                                请输入4位验证码</p>
+                        </div>
+                        <div class="col-md-2 col-sm-2 col-xs-3 center-block"
+                             style="padding-left: 0px;padding-right: 0px;">
+                            <a href="#" role="button" ng-click="getVerifyCode()">
+                                <img ng-src="{{validation.imgData}}"
+                                     style="height: 34px;display: block;line-height: 34px;margin: 0 auto;padding: 2px;"
+                                     class="img-responsive">
+                            </a>
+                        </div>
+                        <div class="col-md-2 col-sm-2 col-xs-3">
+                            <button class="btn btn-default btn-xs form-control" ng-click="getVerifyCode()">
                                     <span>
                                         <i class="fa fa-refresh"></i> 刷新
                                     </span>
-                                </button>
-                            </div>
-                            <label class="text-danger control-label">*</label>
+                            </button>
                         </div>
-                        <div class="form-group">
-                            <div class="col-md-offset-3 col-sm-offset-3 col-xs-offset-3 col-md-9 col-sm-9 col-xs-9">
-                                <button ng-disabled="!form.$dirty || form.$invalid" type="submit"
-                                        class="btn btn-primary" ng-click="submit()">注册
-                                </button>
-                            </div>
+                        <label class="text-danger control-label">*</label>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-sm-offset-3 col-md-8 col-sm-8 col-xs-11">
+                            <button ng-disabled="!form.$dirty || form.$invalid" type="submit"
+                                    class="btn btn-block btn-action" ng-click="submit()">注册
+                            </button>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
+                <ul class="toggler text-center small list-unstyled">
+                    <li role="presentation">已有帐号？
+                        <a href="login.html">赶紧登录</a>
+                    </li>
+                </ul>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 
 </body>

@@ -5,8 +5,6 @@ package com.zeal.http.request.user;
  */
 public class UserRegisterRequest {
 
-    private String loginName;
-
     private String nickName;
 
     private String password;
@@ -16,14 +14,6 @@ public class UserRegisterRequest {
     private String verifyCode;
 
     private  String email;
-
-    public String getLoginName() {
-        return loginName;
-    }
-
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
-    }
 
     public String getNickName() {
         return nickName;

@@ -24,25 +24,12 @@ public class UserInfoDao extends AbstractBaseDao<UserInfo> {
      * @return 用户信息
      */
     public UserInfo findByLoginNameAndPasswordEquals(String loginName, String password) {
-        String sql = "SELECT o FROM UserInfo o WHERE o.loginName = :loginName and o.password = :password";
+        String sql = "SELECT o FROM UserInfo o WHERE (o.email = :loginName or o.phoneNumber = :loginName) and o.password = :password";
         TypedQuery<UserInfo> query = this.entityManager().createQuery(sql, UserInfo.class);
         query.setParameter("loginName", loginName);
         query.setParameter("password", password);
         List<UserInfo> list = query.getResultList();
         return list.isEmpty() ? null : list.get(0);
-    }
-
-    /**
-     * 根据登录名称查找用户信息
-     *
-     * @param loginName 用户登录名
-     * @return 用户信息列表
-     */
-    public List<UserInfo> findByLoginNameEquals(String loginName) {
-        String sql = "SELECT o FROM UserInfo o WHERE o.loginName = :loginName";
-        TypedQuery<UserInfo> query = this.entityManager().createQuery(sql, UserInfo.class);
-        query.setParameter("loginName", loginName);
-        return query.getResultList();
     }
 
     /**

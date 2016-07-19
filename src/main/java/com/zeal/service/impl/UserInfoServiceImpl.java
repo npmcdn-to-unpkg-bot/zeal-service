@@ -45,9 +45,6 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (userRegisterRequest == null) {
             throw new BizException(BizExceptionCode.User.REGISTER_EMPTY_REQUEST, "注册信息为空");
         }
-        if (StringUtils.isEmpty(userRegisterRequest.getLoginName())) {
-            throw new BizException(BizExceptionCode.User.REGISTER_EMPTY_LOGINNAME, "登录名为空");
-        }
         if (StringUtils.isEmpty(userRegisterRequest.getPassword())) {
             throw new BizException(BizExceptionCode.User.REGISTER_EMPTY_PASSWORD, "密码为空");
         }
@@ -56,9 +53,6 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
         if (!StringUtils.isPhoneNumber(userRegisterRequest.getPhoneNumber())) {
             throw new BizException(BizExceptionCode.User.REGISTER_WRONG_PHONENUMBER, "手机号格式不正确");
-        }
-        if (!userInfoDao.findByLoginNameEquals(userRegisterRequest.getLoginName()).isEmpty()) {
-            throw new BizException(BizExceptionCode.User.REGISTER_EXIST_LOGINNAME, "登录名已经存在");
         }
         if (!userInfoDao.findByPhoneNumberEquals(userRegisterRequest.getPhoneNumber()).isEmpty()) {
             throw new BizException(BizExceptionCode.User.REGISTER_EXIST_PHONENUMBER, "手机号已经存在");
@@ -73,9 +67,8 @@ public class UserInfoServiceImpl implements UserInfoService {
             throw new BizException("邮箱已经存在");
         }
         UserInfo userInfo = new UserInfo();
-        userInfo.setLoginName(userRegisterRequest.getLoginName());
         userInfo.setPassword(StringUtils.toMD5(userRegisterRequest.getPassword()));
-        userInfo.setNickName(StringUtils.isEmpty(userRegisterRequest.getNickName()) ? userRegisterRequest.getLoginName() : userRegisterRequest.getNickName());
+        userInfo.setNickName(userRegisterRequest.getNickName());
         userInfo.setPhoneNumber(userRegisterRequest.getPhoneNumber());
         userInfo.setEmail(userRegisterRequest.getEmail());
         userInfoDao.insert(userInfo);

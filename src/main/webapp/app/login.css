@@ -1,0 +1,65 @@
+body {
+    font-family: "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background: #1c2a42 url("icons/bg_header.jpg") no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.section-login {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -225px 0 0 -180px;
+    height: 450px;
+    width: 360px;
+    min-width: 360px;
+}
+
+.btn-action {
+    color: #ffffff;
+    background-color: #da4453;
+    border-color: #da4453;
+}
+
+.btn {
+    padding: 9px 40px;
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+.btn-action:hover,.btn-action:focus{
+    color: #ffffff;
+    background-color: #cd2939;
+    border-color: #bc2534;
+}
+
+.form-control {
+    border-radius: 3px;
+    padding: 9px 12px;
+    height: 40px;
+}
+
+.login-info {
+    margin: 0 0 20px 0;
+}
+
+.toggler li.active {
+    display: none;
+}
+
+.toggler li {
+    margin: 0 0 7px 0;
+}
+
+a {
+    color: #da4453;
+}
+
+a:hover {
+    color: #e72b3e;
+}

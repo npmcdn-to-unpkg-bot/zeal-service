@@ -63,12 +63,12 @@
             /**
              * 用户注册
              */
-            this.register = function (loginName, email, password, phoneNumber, validationCode) {
+            this.register = function (nickName, email, password, phoneNumber, validationCode) {
                 return HttpService.http({
                     method: "POST",
                     url: "/zeal/userinfo/register",
                     data: {
-                        loginName: loginName,
+                        nickName: nickName,
                         email: email,
                         password: password,
                         phoneNumber: phoneNumber,

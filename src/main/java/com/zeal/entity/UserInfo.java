@@ -7,9 +7,6 @@ import java.util.Set;
 @Table(name = "t_user_info")
 public class UserInfo extends BaseEntity {
 
-    @Column(name = "login_name", unique = true, nullable = false, length = 255)
-    private String loginName;
-
     @Column(name = "password", unique = false, nullable = false, length = 255)
     private String password;
 
@@ -19,10 +16,10 @@ public class UserInfo extends BaseEntity {
     @Column(name = "phone_number", unique = true, nullable = false, length = 255)
     private String phoneNumber;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    
+
     @Column(name = "photo")
     private String photo;
 
@@ -49,14 +46,6 @@ public class UserInfo extends BaseEntity {
      */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "appreciated")
     private Set<AlbumAuthorAppreciation> appreciatedRecords;
-
-    public String getLoginName() {
-        return loginName;
-    }
-
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
-    }
 
     public String getPassword() {
         return password;

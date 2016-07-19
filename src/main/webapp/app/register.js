@@ -5,7 +5,7 @@
     angular.module("register", ['zeal-common']);
     angular.module("register").controller("RegisterController", function ($scope, HttpService, MessageService, $window, $timeout, UserService) {
         $scope.user = {
-            loginName: "",
+            nickName: "",
             email: "",
             password: "",
             repassword: "",
@@ -22,7 +22,7 @@
         };
         $scope.getVerifyCode();
         $scope.submit = function () {
-            UserService.register($scope.user.loginName,
+            UserService.register($scope.user.nickName,
                 $scope.user.email,
                 $scope.user.password,
                 $scope.user.phoneNumber,
@@ -30,7 +30,7 @@
             ).success(function (data) {
                 MessageService.toast.success("2秒后进入主页", "注册成功");
                 $timeout(function () {
-                    UserService.login($scope.user.loginName, $scope.user.password)
+                    UserService.login($scope.user.email, $scope.user.password)
                         .success(function () {
                             $window.location.href = "/zeal/app/index.html";
                         }).error(function (data) {
