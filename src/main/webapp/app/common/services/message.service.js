@@ -3,7 +3,7 @@
  */
 
 (function () {
-    angular.module("app").service("MessageService", function ($uibModal, toastr) {
+    angular.module("zeal-common").service("MessageService", function ($uibModal, toastr) {
         var defaultSettings = {
             title: "提示",
             message: "",

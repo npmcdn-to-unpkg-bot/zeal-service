@@ -3,18 +3,7 @@
  */
 
 (function () {
-    angular.module("app",
-        [
-            'ui.bootstrap',
-            'ui.router',
-            'ngCookies',
-            'ngFileUpload',
-            'angular-loading-bar',
-            'ngAnimate',
-            'toastr',
-            'ui.select',
-            'ngSanitize'
-        ]);
+    angular.module("app", ['zeal-common']);
     angular.module("app").run(['$rootScope', '$state', '$stateParams', '$window', '$anchorScroll',
         function ($rootScope, $state, $stateParams, $window, $anchorScroll) {
             $rootScope.$state = $state;
@@ -37,6 +26,11 @@
             params: {tag: 1},
             templateUrl: "/zeal/app/modules/albums/albums.html",
             controller: 'AlbumController',
+            resolve: {
+                childTags: function (AlbumService) {
+                    return AlbumService.getChildrenTagsByTagId(1).promise;
+                }
+            },
             title: "美女相册 - Zeal for you"
         }).state('albums.detail', {
             url: "/album/:albumId",
@@ -44,7 +38,7 @@
             controller: 'AlbumDisplayController',
             resolve: {
                 album: function (AlbumService, $stateParams) {
-                    return AlbumService.getMyAlbumById($stateParams.albumId).promise;
+                    return AlbumService.getAlbumById($stateParams.albumId).promise;
                 },
                 author: function (UserService, album) {
                     var http = UserService.getAuthorInfo(album.author);
@@ -82,7 +76,7 @@
             controller: 'MyAlbumViewController',
             resolve: {
                 album: function (AlbumService, $stateParams) {
-                    return AlbumService.getMyAlbumById($stateParams.albumId).promise;
+                    return AlbumService.getAlbumById($stateParams.albumId).promise;
                 }
             },
             title: "我的相册 - Zeal for you"
@@ -126,22 +120,26 @@
         });
     });
 
-    angular.module("app").controller('IndexController', ['UserService', '$scope', '$rootScope', '$state', '$window',
-        function (UserService, $scope, $rootScope, $state, $window) {
+    angular.module("app").controller('IndexController', ['UserService', '$scope', '$rootScope', '$state', '$window', '$uibModal',
+        function (UserService, $scope, $rootScope, $state, $window, $uibModal) {
 
             $scope.isLogin = false;
             $scope.username = null;
 
             $scope.showLoginModal = function () {
-                UserService.showLoginModal();
-            };
-
-            $scope.showRegisterModal = function () {
-                UserService.showRegisterModal();
+                $uibModal.open({
+                    templateUrl: '/zeal/app/modules/user/login.html',
+                    size: 'md',
+                    controller: 'LoginController'
+                });
             };
 
             $scope.logout = function () {
-                UserService.logout();
+                UserService.logout().success(function (data) {
+                    $window.location.href = "/zeal/app/login.html";
+                }).error(function (data) {
+                    $window.location.href = "/zeal/app/login.html";
+                });
             };
 
             $scope.$on('userStateChange', function (event, data) {
@@ -149,7 +147,6 @@
                     $scope.isLogin = true;
                     $scope.username = data.nickName;
                     $window.location.reload();
-                    //$state.go('albums');
                 } else {
                     $scope.isLogin = false;
                     $scope.username = null;
@@ -159,7 +156,6 @@
 
             UserService.reloadUserInfo().success(function (data) {
                 $rootScope.UserInfo = data;
-                //$rootScope.$broadcast('userStateChange', $rootScope.UserInfo);
                 if (data) {
                     $scope.isLogin = true;
                     $scope.username = data.nickName;
@@ -170,4 +166,50 @@
             });
         }]);
 
+
+    angular.module("app").controller('LoginController', ['$scope', '$rootScope', '$uibModalInstance', 'CookieService', 'UserService', '$state', '$log',
+        function ($scope, $rootScope, $uibModalInstance, CookieService, UserService, $state, $log) {
+            $scope.errorMsg = "";
+            //取消登录窗口
+            $scope.cancel = function () {
+                $uibModalInstance.close();
+            };
+            $scope.loginRequest = {
+                username: "",
+                password: "",
+                rememberMe: false
+            };
+            if (CookieService.get(CookieService.KEY_CONSTANT.user_login_remember_me) == 1) {
+                $scope.loginRequest.username = CookieService.get(CookieService.KEY_CONSTANT.user_login_username);
+                $scope.loginRequest.password = CookieService.get(CookieService.KEY_CONSTANT.user_login_password);
+                $scope.loginRequest.rememberMe = true;
+            }
+
+            $scope.login = function () {
+                if ($scope.loginRequest.username == "" || $scope.loginRequest.password == "") {
+                    $scope.errorMsg = "请输入用户名和密码";
+                    return;
+                }
+                $scope.errorMsg = "";
+                UserService.login($scope.loginRequest.username, $scope.loginRequest.password)
+                    .success(function (data) {
+                        if ($scope.loginRequest.rememberMe) {
+                            CookieService.put(CookieService.KEY_CONSTANT.user_login_remember_me, 1);
+                            CookieService.put(CookieService.KEY_CONSTANT.user_login_username, $scope.loginRequest.username);
+                            CookieService.put(CookieService.KEY_CONSTANT.user_login_password, $scope.loginRequest.password);
+                        } else {
+                            CookieService.put(CookieService.KEY_CONSTANT.user_login_remember_me, 0);
+                            CookieService.remove(CookieService.KEY_CONSTANT.user_login_username);
+                            CookieService.remove(CookieService.KEY_CONSTANT.user_login_password);
+                        }
+                        $rootScope.UserInfo = data;
+                        $rootScope.$broadcast('userStateChange', $rootScope.UserInfo);
+                        $uibModalInstance.close();
+                    }).error(function (data) {
+                    alert(data.message);
+                    $log.info(data.message);
+                });
+            };
+        }
+    ]);
 })();

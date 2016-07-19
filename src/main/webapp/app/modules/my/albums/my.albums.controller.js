@@ -245,7 +245,8 @@
     })
 
 
-    angular.module("app").controller('MyAlbumViewController', function ($scope, album) {
+    angular.module("app").controller('MyAlbumViewController', function ($scope, album, $state) {
         $scope.album = album;
+        $state.current.title = album.name;
     });
 })();

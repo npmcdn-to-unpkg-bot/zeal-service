@@ -2,7 +2,7 @@
  * Created by yang_shoulai on 2016/7/17.
  */
 (function () {
-    angular.module("app").directive('imgGallery', function () {
+    angular.module("zeal-common").directive('imgGallery', function () {
         return {
             restrict: "E",
             transclude: false,

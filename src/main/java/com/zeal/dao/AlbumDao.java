@@ -7,6 +7,7 @@ import com.zeal.http.response.album.AlbumTagInfo;
 import com.zeal.http.response.album.PagedAlbumInfo;
 import com.zeal.http.response.album.PictureInfo;
 import com.zeal.utils.ConfigureUtils;
+import com.zeal.utils.StringUtils;
 import org.springframework.expression.spel.ast.LongLiteral;
 import org.springframework.stereotype.Repository;
 
@@ -123,7 +124,8 @@ public class AlbumDao extends AbstractBaseDao<Album> {
         buffer.append("(SELECT count(1) from t_album_collection where album = album.id) as collectionCount,");
         buffer.append("(SELECT count(1) from t_album_author_appreciation where appreciated = album.user_info) as authorAppreciationCount, ");
         buffer.append("(SELECT count(1) from t_album_author_appreciation where appreciated = album.user_info and appreciator = :appreciator) as userAppreciationCount, ");
-        buffer.append("(SELECT count(1) from t_album_collection where  album = album.id and user_info = :collector) as userCollectCount ");
+        buffer.append("(SELECT count(1) from t_album_collection where  album = album.id and user_info = :collector) as userCollectCount, ");
+        buffer.append("user_info.photo as photo ");
         buffer.append("FROM t_album album ");
         buffer.append("LEFT JOIN t_user_info as user_info on user_info.id = album.user_info ");
         buffer.append("where album.id in (select album_id from t_album_tags where album_tag_id = :tagId) and album.published = :publishStatus ");
@@ -155,7 +157,7 @@ public class AlbumDao extends AbstractBaseDao<Album> {
                     pagedAlbumInfo.setAuthorAppreciated(((BigInteger) array[8]).longValue() > 0);
                     pagedAlbumInfo.setCollected(((BigInteger) array[9]).longValue() > 0);
                     //TODO 获取作者头像
-                    pagedAlbumInfo.setAuthorPhoto("/zeal/resources/app/icons/photo.jpg");
+                    pagedAlbumInfo.setAuthorPhoto((String) array[10]);
                     pagedAlbumInfos.add(pagedAlbumInfo);
                 }
             }

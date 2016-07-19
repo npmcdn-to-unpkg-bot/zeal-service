@@ -1,9 +1,10 @@
-<div class="container-fluid">
+<div class="container">
     <div class="col-lg-3 col-md-4 col-sm-5">
         <div class="user-block">
             <div class="user-detail">
                 <a href="#/albums/album/5924" target="_blank" style="overflow: hidden;">
-                    <img ng-src="{{author.photo}}">
+                    <img ng-if="author.photo != null && author.photo.length > 0" ng-src="{{author.photo}}">
+                    <img ng-if="author.photo == null || author.photo.length <= 0" src="/zeal/app/icons/photo.jpg">
                 </a>
                 <p class="user-name">{{author.nickName}}</p>
                 <span class="user-email">{{album.publishDate | date:'yyyy-MM-dd'}}</span>
@@ -122,7 +123,8 @@
 
                 <div ng-repeat="picture in album.pictures" class="picture-block">
                     <!--<img ng-src="{{picture.url}}" style="width: 100%;height: auto;">-->
-                    <img-gallery pictures="album.pictures" index="{{$index}}" style="max-width: 100%;height: auto;" img-src="{{picture.url}}"></img-gallery>
+                    <img-gallery pictures="album.pictures" index="{{$index}}" style="max-width: 100%;height: auto;"
+                                 img-src="{{picture.url}}"></img-gallery>
                     <p>{{picture.description}}</p>
                 </div>
 

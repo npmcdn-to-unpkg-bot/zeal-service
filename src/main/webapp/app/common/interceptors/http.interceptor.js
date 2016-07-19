@@ -3,7 +3,7 @@
  */
 (function () {
 
-    angular.module('app').factory('HttpInterceptor', ['$q', '$injector', function ($q, $injector) {
+    angular.module('zeal-common').factory('HttpInterceptor', ['$q', '$injector', function ($q, $injector) {
         return {
             responseError: function (response) {
                 //用户会话超时

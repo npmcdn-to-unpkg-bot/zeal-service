@@ -58,6 +58,19 @@ public class UserInfoDao extends AbstractBaseDao<UserInfo> {
         return query.getResultList();
     }
 
+    /**
+     * 查询邮箱是否已经存在
+     *
+     * @param email
+     * @return
+     */
+    public boolean emailExist(String email) {
+        String sql = "select count(o) from UserInfo o where o.email = :email";
+        TypedQuery<Long> query = this.entityManager().createQuery(sql, Long.class);
+        query.setParameter("email", email);
+        return query.getSingleResult() > 0L;
+    }
+
 
     /**
      * 获取相册作者信息
@@ -73,7 +86,10 @@ public class UserInfoDao extends AbstractBaseDao<UserInfo> {
                 .append("(select count(1) from t_album where published = 1 and user_info = u.id) as publishedCount,")
                 .append("(select count(1) from t_album where published = 0 and user_info = u.id) as unpublishedCount,")
                 .append("(select count(1) from t_album_collection where user_info = u.id) as collectionCount,")
-                .append("(SELECT count(1) from t_album_author_appreciation where appreciator = :appreciator and appreciated = u.id) as appreciated")
+                .append("(SELECT count(1) from t_album_author_appreciation where appreciator = :appreciator and appreciated = u.id) as appreciated,")
+                .append("u.email,")
+                .append("u.photo,")
+                .append("u.description")
                 .append(" FROM t_user_info u where u.id = :id");
 
         Query query = this.entityManager().createNativeQuery(buffer.toString());
@@ -91,9 +107,9 @@ public class UserInfoDao extends AbstractBaseDao<UserInfo> {
         albumAuthorInfo.setAppreciated(((BigInteger) array[6]).longValue() > 0);
         //TODO 以下属性值需要设置
         albumAuthorInfo.setCommentCount(0);
-        albumAuthorInfo.setDescription("");
-        albumAuthorInfo.setEmail("412837184@qq.com");
-        albumAuthorInfo.setPhoto("/zeal/resources/app/icons/photo.jpg");
+        albumAuthorInfo.setEmail((String) array[7]);
+        albumAuthorInfo.setPhoto((String) array[8]);
+        albumAuthorInfo.setDescription((String) array[9]);
         albumAuthorInfo.setFollowed(false);
         albumAuthorInfo.setFollowerCount(0);
         albumAuthorInfo.setFollowingCount(0);

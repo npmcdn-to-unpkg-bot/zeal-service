@@ -1,8 +1,5 @@
 package com.zeal.service.impl;
 
-import com.zeal.dao.AlbumAuthorAppreciationDao;
-import com.zeal.dao.AlbumCollectionDao;
-import com.zeal.dao.AlbumDao;
 import com.zeal.dao.UserInfoDao;
 import com.zeal.entity.UserInfo;
 import com.zeal.exception.BizException;
@@ -10,7 +7,6 @@ import com.zeal.exception.BizExceptionCode;
 import com.zeal.http.request.user.UserLoginRequest;
 import com.zeal.http.request.user.UserRegisterRequest;
 import com.zeal.http.response.album.AlbumAuthorInfo;
-import com.zeal.service.AlbumCollectionService;
 import com.zeal.service.UserInfoService;
 import com.zeal.utils.StringUtils;
 import com.zeal.vo.user.UserInfoVO;
@@ -49,29 +45,39 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (userRegisterRequest == null) {
             throw new BizException(BizExceptionCode.User.REGISTER_EMPTY_REQUEST, "注册信息为空");
         }
-        if (StringUtils.isEmpty(userRegisterRequest.loginName)) {
+        if (StringUtils.isEmpty(userRegisterRequest.getLoginName())) {
             throw new BizException(BizExceptionCode.User.REGISTER_EMPTY_LOGINNAME, "登录名为空");
         }
-        if (StringUtils.isEmpty(userRegisterRequest.password)) {
+        if (StringUtils.isEmpty(userRegisterRequest.getPassword())) {
             throw new BizException(BizExceptionCode.User.REGISTER_EMPTY_PASSWORD, "密码为空");
         }
-        if (StringUtils.isEmpty(userRegisterRequest.phoneNumber)) {
+        if (StringUtils.isEmpty(userRegisterRequest.getPhoneNumber())) {
             throw new BizException(BizExceptionCode.User.REGISTER_EMPTY_PHONENUMBER, "手机号为空");
         }
-        if (!StringUtils.isPhoneNumber(userRegisterRequest.phoneNumber)) {
+        if (!StringUtils.isPhoneNumber(userRegisterRequest.getPhoneNumber())) {
             throw new BizException(BizExceptionCode.User.REGISTER_WRONG_PHONENUMBER, "手机号格式不正确");
         }
-        if (!userInfoDao.findByLoginNameEquals(userRegisterRequest.loginName).isEmpty()) {
+        if (!userInfoDao.findByLoginNameEquals(userRegisterRequest.getLoginName()).isEmpty()) {
             throw new BizException(BizExceptionCode.User.REGISTER_EXIST_LOGINNAME, "登录名已经存在");
         }
-        if (!userInfoDao.findByPhoneNumberEquals(userRegisterRequest.phoneNumber).isEmpty()) {
+        if (!userInfoDao.findByPhoneNumberEquals(userRegisterRequest.getPhoneNumber()).isEmpty()) {
             throw new BizException(BizExceptionCode.User.REGISTER_EXIST_PHONENUMBER, "手机号已经存在");
         }
+        if (StringUtils.isEmpty(userRegisterRequest.getEmail())) {
+            throw new BizException("邮箱为空");
+        }
+        if (!StringUtils.isEmail(userRegisterRequest.getEmail())) {
+            throw new BizException("邮箱格式不正确");
+        }
+        if (userInfoDao.emailExist(userRegisterRequest.getEmail())) {
+            throw new BizException("邮箱已经存在");
+        }
         UserInfo userInfo = new UserInfo();
-        userInfo.setLoginName(userRegisterRequest.loginName);
-        userInfo.setPassword(StringUtils.toMD5(userRegisterRequest.password));
-        userInfo.setNickName(userRegisterRequest.nickName);
-        userInfo.setPhoneNumber(userRegisterRequest.phoneNumber);
+        userInfo.setLoginName(userRegisterRequest.getLoginName());
+        userInfo.setPassword(StringUtils.toMD5(userRegisterRequest.getPassword()));
+        userInfo.setNickName(StringUtils.isEmpty(userRegisterRequest.getNickName()) ? userRegisterRequest.getLoginName() : userRegisterRequest.getNickName());
+        userInfo.setPhoneNumber(userRegisterRequest.getPhoneNumber());
+        userInfo.setEmail(userRegisterRequest.getEmail());
         userInfoDao.insert(userInfo);
         return new UserInfoVO(userInfo);
     }

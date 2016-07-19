@@ -2,7 +2,7 @@
  * Created by Administrator on 7/12/2016.
  */
 (function () {
-    angular.module('app').filter('characters', function () {
+    angular.module('zeal-common').filter('characters', function () {
             return function (input, chars, breakOnWord) {
                 if (isNaN(chars)) return input;
                 if (chars <= 0) return '';

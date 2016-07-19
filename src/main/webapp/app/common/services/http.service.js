@@ -2,7 +2,7 @@
  * Created by yang_shoulai on 2016/6/25.
  */
 (function () {
-    angular.module('app').service('HttpService', ['$q', '$injector', '$http', '$rootScope',
+    angular.module('zeal-common').service('HttpService', ['$q', '$injector', '$http', '$rootScope',
         function ($q, $injector, $http, $rootScope) {
             this.http = function (params) {
                 var defer = $q.defer();

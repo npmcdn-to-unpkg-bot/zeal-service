@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN" ng-app="login">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>用户登录 - zeal for you</title>
+    <link rel="icon" href="/zeal/resources/app/icons/favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="/zeal/app/lib/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/zeal/app/lib/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/zeal/app/lib/angular-loading-bar/build/loading-bar.min.css">
+    <link rel="stylesheet" href="/zeal/app/lib/angular-toastr/dist/angular-toastr.min.css">
+    <link rel="stylesheet" href="/zeal/app/lib/angular-ui-select/dist/select.min.css">
+
+    <script src="/zeal/app/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/zeal/app/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/zeal/app/lib/angular/angular.min.js"></script>
+    <script src="/zeal/app/lib/angular-animate/angular-animate.min.js"></script>
+    <script src="/zeal/app/lib/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="/zeal/app/lib/angular-cookies/angular-cookies.min.js"></script>
+    <script src="/zeal/app/lib/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="/zeal/app/lib/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="/zeal/app/lib/ng-file-upload/ng-file-upload.min.js"></script>
+    <script src="/zeal/app/lib/angular-loading-bar/build/loading-bar.min.js"></script>
+    <script src="/zeal/app/lib/angular-toastr/dist/angular-toastr.tpls.min.js"></script>
+    <script src="/zeal/app/lib/angular-ui-select/dist/select.min.js"></script>
+
+    <script src="/zeal/app/common/zeal.common.module.js"></script>
+    <script src="/zeal/app/common/services/cookie.service.js"></script>
+    <script src="/zeal/app/common/interceptors/http.interceptor.js"></script>
+    <script src="/zeal/app/common/services/http.service.js"></script>
+    <script src="/zeal/app/common/services/message.service.js"></script>
+    <script src="/zeal/app/common/filters/text.truncate.filter.js"></script>
+    <script src="/zeal/app/common/services/userinfo.service.js"></script>
+    <script src="/zeal/app/login.js"></script>
+</head>
+<body ng-controller="LoginController">
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3" style="margin-top: 90px;">
+            <div class="panel panel-primary">
+                <div class="panel-heading">用户登录</div>
+                <div class="panel-body">
+                    <form class="form-horizontal" name="form" novalidate="novalidate" autocomplete="off">
+                        <div class="form-group"
+                             ng-class="{'has-error':form.loginName.$dirty && !form.loginName.$valid}">
+                            <label for="loginName" class="col-md-3 col-sm-3 col-xs-3 control-label">用户名</label>
+                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                <input type="text" name="loginName" required ng-change="loginNameChange()"
+                                       ng-model="request.loginName" class="form-control" id="loginName"
+                                       placeholder="请输入用户名">
+                                <p class="help-block" ng-show="form.loginName.$dirty && form.loginName.$error.required">
+                                    用户名是必填项</p>
+                            </div>
+                            <label class="text-danger control-label">*</label>
+                        </div>
+                        <div class="form-group" ng-class="{'has-error':form.password.$dirty && !form.password.$valid}">
+                            <label for="password" class="col-md-3 col-sm-3 col-xs-3 control-label">密码</label>
+                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                <input type="password" name="password" required
+                                       ng-model="request.password" class="form-control" ng-change="user.repassword = ''"
+                                       id="password" placeholder="请输入密码">
+                                <p class="help-block" ng-show="form.password.$dirty && form.password.$error.required">
+                                    密码是必填项</p>
+                            </div>
+                            <label class="text-danger control-label">*</label>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-3 col-sm-offset-3 col-xs-offset-3 col-md-8 col-sm-8 col-xs-8">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" ng-model="request.remember"> 记住我？
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-3 col-sm-offset-3 col-xs-offset-3 col-md-9 col-sm-9 col-xs-9">
+                                <button ng-disabled="form.$invalid" type="submit"
+                                        class="btn btn-primary" ng-click="submit()">登录
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

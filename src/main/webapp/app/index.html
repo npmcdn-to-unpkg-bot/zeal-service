@@ -25,7 +25,7 @@
     <script src="/zeal/app/lib/angular-loading-bar/build/loading-bar.min.js"></script>
     <script src="/zeal/app/lib/angular-toastr/dist/angular-toastr.tpls.min.js"></script>
     <script src="/zeal/app/lib/angular-ui-select/dist/select.min.js"></script>
-    <script src="/zeal/app/app.js"></script>
+    <script src="/zeal/app/common/zeal.common.module.js"></script>
     <script src="/zeal/app/common/services/cookie.service.js"></script>
     <script src="/zeal/app/common/interceptors/http.interceptor.js"></script>
     <script src="/zeal/app/common/services/http.service.js"></script>
@@ -34,6 +34,10 @@
     <script src="/zeal/app/common/directives/img.gallery.directive.js"></script>
     <script src="/zeal/app/common/directives/album.list.directive.js"></script>
     <script src="/zeal/app/common/filters/text.truncate.filter.js"></script>
+    <script src="/zeal/app/common/services/userinfo.service.js"></script>
+    <script src="/zeal/app/common/services/album.service.js"></script>
+
+    <script src="/zeal/app/app.js"></script>
     <script src="/zeal/app/modules/user/user.controller.js"></script>
     <script src="/zeal/app/modules/user/user.service.js"></script>
     <script src="/zeal/app/modules/albums/albums.controller.js"></script>
@@ -80,22 +84,24 @@
                             <span><i class="fa fa-user"></i> 注册</span>
                         </a>
                     </li>
-                    <li ng-show="isLogin">
-                        <a role="button" href="#">
-                            <span>
-                                <i class="fa fa-user"></i> {{username}}</span>
+                    <li ng-show="isLogin" class="dropdown">
+                        <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">
+                            <span><i class="fa fa-user"></i> {{username}}</span> <span class="caret"></span>
                         </a>
-                    </li>
-                    <li ng-show="isLogin">
-                        <a ng-click="logout()" role="button" href="#">
-                            <span><i class="fa fa-sign-out"></i> 退出</span>
-                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#"><span><i class="fa fa-cog"></i> 账号设置</span></a></li>
+                            <li><a href="#"><span><i class="fa fa-key"></i> 修改密码</span></a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#" role="button" ng-click="logout()"><span><i
+                                    class="fa fa-sign-out"></i> 退出</span></a></li>
+                        </ul>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-    <div id="module-container" class="container-fluid" ui-view></div>
+    <div id="module-container" class="container" ui-view></div>
     <footer class="footer">
         <div class="container text-center">
             <p>Designed and built by <a href="#">@mdo</a> and <a href="#">@fat</a>.</p>

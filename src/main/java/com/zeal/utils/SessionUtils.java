@@ -14,6 +14,8 @@ public class SessionUtils {
      */
     public static final String KEY_USERINFO = "key_userinfo";
 
+    public static final String KEY_VERIFY_CODE = "key_verify_code";
+
     public static void setAttribute(HttpServletRequest request, String key, Object obj) {
         request.getSession().setAttribute(key, obj);
     }
@@ -32,6 +34,14 @@ public class SessionUtils {
 
     public static UserInfoVO getUserInfo(HttpServletRequest request) {
         return (UserInfoVO) getAttribute(request, KEY_USERINFO);
+    }
+
+    public static void setKeyVerifyCode(HttpServletRequest request, String code) {
+        setAttribute(request, KEY_VERIFY_CODE, code);
+    }
+
+    public static String getVerifyCode(HttpServletRequest request) {
+        return (String) getAttribute(request, KEY_VERIFY_CODE);
     }
 
     public static long getUserInfoId(HttpServletRequest request) {

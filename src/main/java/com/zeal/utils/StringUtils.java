@@ -68,6 +68,7 @@ public class StringUtils {
 
     /**
      * 判断号码是不是手机号
+     *
      * @param number
      * @return
      */
@@ -79,6 +80,20 @@ public class StringUtils {
 
 
     public static void main(String[] args) {
-        System.out.println(toMD5("123456"));
+        System.out.println(isEmail("412837184@qq.com"));
     }
+
+    /**
+     * 判断邮箱地址是否正确
+     *
+     * @param email
+     * @return
+     */
+    public static boolean isEmail(String email) {
+        Pattern p = Pattern.compile("^([a-z0-9A-Z]+[-|_|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$");
+        Matcher m = p.matcher(email);
+        return m.matches();
+    }
+
+
 }

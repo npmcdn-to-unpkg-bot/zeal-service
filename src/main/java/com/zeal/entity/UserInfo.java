@@ -19,6 +19,19 @@ public class UserInfo extends BaseEntity {
     @Column(name = "phone_number", unique = true, nullable = false, length = 255)
     private String phoneNumber;
 
+    @Column(name = "email", unique = true)
+    private String email;
+
+    
+    @Column(name = "photo")
+    private String photo;
+
+    /**
+     * 用户简介
+     */
+    @Column(name = "description", length = 1000)
+    private String description;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "userInfo")
     private Set<AlbumCollection> albumCollections;
 
@@ -99,5 +112,29 @@ public class UserInfo extends BaseEntity {
 
     public void setAppreciatedRecords(Set<AlbumAuthorAppreciation> appreciatedRecords) {
         this.appreciatedRecords = appreciatedRecords;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

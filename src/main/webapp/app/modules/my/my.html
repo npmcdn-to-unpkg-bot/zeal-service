@@ -3,7 +3,8 @@
         <div class="user-block">
             <div class="user-detail">
                 <a href="#" target="_blank" style="overflow: hidden;">
-                    <img ng-src="{{zealInfo.photo}}">
+                    <img ng-if="zealInfo.photo && zealInfo.photo.length > 0" ng-src="{{zealInfo.photo}}">
+                    <img ng-if="!zealInfo.photo || zealInfo.photo.length <= 0" src="/zeal/app/icons/photo.jpg">
                 </a>
                 <p class="user-name">{{zealInfo.nickName}}</p>
                 <span class="user-email">{{zealInfo.email}}</span>

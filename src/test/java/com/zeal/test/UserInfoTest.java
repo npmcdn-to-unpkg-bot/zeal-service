@@ -23,9 +23,6 @@ public class UserInfoTest {
     @Test
     public void save() {
         UserRegisterRequest registerRequest = new UserRegisterRequest();
-        registerRequest.loginName = "5864";
-        registerRequest.password = "123456";
-        registerRequest.phoneNumber = "15195952861";
         UserInfoVO userInfo = userInfoService.register(registerRequest);
         Assert.assertTrue(userInfo.getId() != 0);
     }

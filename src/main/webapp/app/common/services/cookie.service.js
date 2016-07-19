@@ -3,7 +3,7 @@
  */
 
 (function () {
-    angular.module("app").service('CookieService', ['$cookieStore', function ($cookieStore) {
+    angular.module("zeal-common").service('CookieService', ['$cookieStore', function ($cookieStore) {
 
         this.KEY_CONSTANT = {
             user_login_remember_me: 'user_login_remember_me', //是否记住用户登录状态 ：1 记住

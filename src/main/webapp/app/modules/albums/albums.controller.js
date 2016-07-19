@@ -3,16 +3,18 @@
  */
 
 (function () {
-    angular.module("app").controller('AlbumController', ['$scope', 'HttpService', '$log', '$state', '$uibModal', 'AlbumService', '$stateParams', '$location',
-        function ($scope, HttpService, $log, $state, $uibModal, AlbumService, $stateParams, $location) {
-            var parentTag = $stateParams.tag;
+    angular.module("app").controller('AlbumController', ['$scope', 'HttpService', '$log', '$state', '$uibModal', 'AlbumService', '$stateParams', '$location', 'childTags',
+        function ($scope, HttpService, $log, $state, $uibModal, AlbumService, $stateParams, $location, childTags) {
             $scope.pagination = {
                 page: 1,
                 totalSize: 0,
                 pageSize: 24
             };
-            $scope.childTags = [];
-            $scope.childTagId = -1;
+            $scope.childTags = childTags;
+            if (childTags && childTags.length > 0) {
+                $scope.childTagId = childTags[0].id;
+                $state.current.title = childTags[0].name + " - 美女相册";
+            }
             $scope.targetAlbums = [];
             $scope.getAlbums = function () {
                 AlbumService.getPublishedAlbums($scope.pagination.page, $scope.pagination.pageSize, $scope.childTagId).success(function (data) {
@@ -48,14 +50,7 @@
                 $scope.getAlbums();
             };
 
-            AlbumService.getChildrenTagsByTagId(parentTag).success(function (data) {
-                $scope.childTags = data;
-                if (data && data.length > 0) {
-                    $scope.childTagId = data[0].id;
-                    $state.current.title = data[0].name + " - 美女相册";
-                }
-                $scope.getAlbums();
-            });
+            $scope.getAlbums();
         }]);
 
 
