@@ -45,115 +45,97 @@
         </p>
         <div class="panel panel-primary">
             <div class="panel-body">
-
                 <h3 class="text-center">欢迎注册</h3>
                 <p class="text-center register-info"></p>
-                <form class="form-horizontal" name="form" novalidate="novalidate" autocomplete="off">
+                <form name="form" novalidate="novalidate" autocomplete="off">
                     <div class="form-group" ng-class="{'has-error':form.email.$dirty && !form.email.$valid}">
-                        <label for="email" class="col-md-3 col-sm-3 col-xs-3 control-label hidden-xs">邮箱</label>
-                        <div class="col-md-8 col-sm-8 col-xs-11">
-                            <input type="email" name="email" required ng-model="user.email" class="form-control"
-                                   id="email"
-                                   placeholder="请输入邮箱">
-                            <p class="help-block" ng-show="form.email.$dirty && form.email.$error.required">
-                                邮箱是必填项</p>
-                            <p class="help-block" ng-show="form.email.$dirty && form.email.$error.email">错误的邮箱格式</p>
-                        </div>
-                        <label class="text-danger control-label">*</label>
+                        <label for="email">邮箱</label>
+                        <input type="email" name="email" required ng-model="user.email" class="form-control"
+                               id="email"
+                               placeholder="请输入邮箱">
+                        <p class="help-block" ng-show="form.email.$dirty && form.email.$error.required">
+                            邮箱是必填项</p>
+                        <p class="help-block" ng-show="form.email.$dirty && form.email.$error.email">错误的邮箱格式</p>
                     </div>
                     <div class="form-group"
                          ng-class="{'has-error':form.phoneNumber.$dirty && !form.phoneNumber.$valid}">
-                        <label for="phoneNumber" class="col-md-3 col-sm-3 col-xs-3 control-label hidden-xs">手机号码</label>
-                        <div class="col-md-8 col-sm-8 col-xs-11">
-                            <input type="telephone" name="phoneNumber" required ng-model="user.phoneNumber"
-                                   class="form-control"
-                                   id="phoneNumber"
-                                   ng-pattern="/^1\d{10}$/"
-                                   placeholder="请输入手机号码">
-                            <p class="help-block"
-                               ng-show="form.phoneNumber.$dirty && form.phoneNumber.$error.required">手机号码是必填项</p>
-                            <p class="help-block"
-                               ng-show="form.phoneNumber.$dirty && form.phoneNumber.$error.pattern">错误的手机号码格式</p>
-                        </div>
-                        <label class="text-danger control-label">*</label>
+                        <label for="phoneNumber">手机号码</label>
+                        <input type="telephone" name="phoneNumber" required ng-model="user.phoneNumber"
+                               class="form-control"
+                               id="phoneNumber"
+                               ng-pattern="/^1\d{10}$/"
+                               placeholder="请输入手机号码">
+                        <p class="help-block"
+                           ng-show="form.phoneNumber.$dirty && form.phoneNumber.$error.required">手机号码是必填项</p>
+                        <p class="help-block"
+                           ng-show="form.phoneNumber.$dirty && form.phoneNumber.$error.pattern">错误的手机号码格式</p>
                     </div>
                     <div class="form-group" ng-class="{'has-error':form.password.$dirty && !form.password.$valid}">
-                        <label for="password" class="col-md-3 col-sm-3 col-xs-3 control-label hidden-xs">密码</label>
-                        <div class="col-md-8 col-sm-8 col-xs-11">
-                            <input type="password" name="password" maxlength="12" minlength="6" required
-                                   ng-model="user.password" class="form-control" ng-change="user.repassword = ''"
-                                   id="password" placeholder="请输入密码">
-                            <p class="help-block" ng-show="form.password.$dirty && form.password.$error.required">
-                                密码是必填项</p>
-                            <p class="help-block"
-                               ng-show="form.password.$dirty && (form.password.$error.minlength || form.loginName.$error.maxlength)">
-                                密码长度在6~12个字符</p>
-                        </div>
-                        <label class="text-danger control-label">*</label>
+                        <label for="password">密码</label>
+                        <input type="password" name="password" maxlength="12" minlength="6" required
+                               ng-model="user.password" class="form-control" ng-change="user.repassword = ''"
+                               id="password" placeholder="请输入密码">
+                        <p class="help-block" ng-show="form.password.$dirty && form.password.$error.required">
+                            密码是必填项</p>
+                        <p class="help-block"
+                           ng-show="form.password.$dirty && (form.password.$error.minlength || form.loginName.$error.maxlength)">
+                            密码长度在6~12个字符</p>
                     </div>
                     <div class="form-group"
                          ng-class="{'has-error':form.password.$dirty && user.repassword != user.password}">
-                        <label for="re-password" class="col-md-3 col-sm-3 col-xs-3 control-label hidden-xs">确认密码</label>
-                        <div class="col-md-8 col-sm-8 col-xs-11">
-                            <input type="password" name="repassword" required ng-model="user.repassword"
-                                   class="form-control"
-                                   id="re-password" placeholder="请确认密码">
-                            <p class="help-block"
-                               ng-show="form.password.$dirty && (user.repassword != user.password)">
-                                与原密码不相同</p>
-                        </div>
-                        <label class="text-danger control-label">*</label>
+                        <label for="re-password">确认密码</label>
+                        <input type="password" name="repassword" required ng-model="user.repassword"
+                               class="form-control"
+                               id="re-password" placeholder="请确认密码">
+                        <p class="help-block"
+                           ng-show="form.password.$dirty && (user.repassword != user.password)">
+                            与原密码不相同</p>
                     </div>
                     <div class="form-group"
                          ng-class="{'has-error':form.nickName.$dirty && !form.nickName.$valid}">
-                        <label for="nickName" class="col-md-3 col-sm-3 col-xs-3 control-label hidden-xs">昵称</label>
-                        <div class="col-md-8 col-sm-8 col-xs-11">
-                            <input type="text" name="nickName" maxlength="12" minlength="6" required
-                                   ng-model="user.nickName" class="form-control" id="nickName"
-                                   placeholder="请输入昵称">
-                            <p class="help-block" ng-show="form.nickName.$dirty && form.nickName.$error.required">
-                                请填写一个属于你的昵称</p>
-                            <p class="help-block"
-                               ng-show="form.nickName.$dirty && (form.nickName.$error.minlength || form.nickName.$error.maxlength)">
-                                昵称长度在6~12个字符</p>
-                        </div>
-                        <label class="text-danger control-label">*</label>
+                        <label for="nickName">昵称</label>
+                        <input type="text" name="nickName" maxlength="12" minlength="6" required
+                               ng-model="user.nickName" class="form-control" id="nickName"
+                               placeholder="请输入昵称">
+                        <p class="help-block" ng-show="form.nickName.$dirty && form.nickName.$error.required">
+                            请填写一个属于你的昵称</p>
+                        <p class="help-block"
+                           ng-show="form.nickName.$dirty && (form.nickName.$error.minlength || form.nickName.$error.maxlength)">
+                            昵称长度在6~12个字符</p>
                     </div>
                     <div class="form-group"
                          ng-class="{'has-error':form.validationCode.$dirty && !form.validationCode.$valid}">
-                        <label for="validationCode"
-                               class="col-md-3 col-sm-3 col-xs-3 control-label hidden-xs">验证码</label>
-                        <div class="col-md-4 col-sm-4 col-xs-5">
-                            <input type="text" name="validationCode" minlength="4" maxlength="4" required
-                                   ng-model="user.validationCode" class="form-control"
-                                   id="validationCode" placeholder="">
-                            <p class="help-block"
-                               ng-show="form.validationCode.$dirty &&  !form.validationCode.$valid">
-                                请输入4位验证码</p>
-                        </div>
-                        <div class="col-md-2 col-sm-2 col-xs-3 center-block"
-                             style="padding-left: 0px;padding-right: 0px;">
-                            <a href="#" role="button" ng-click="getVerifyCode()">
-                                <img ng-src="{{validation.imgData}}"
-                                     style="height: 34px;display: block;line-height: 34px;margin: 0 auto;padding: 2px;"
-                                     class="img-responsive">
-                            </a>
-                        </div>
-                        <div class="col-md-2 col-sm-2 col-xs-3">
-                            <button class="btn btn-default btn-xs form-control" ng-click="getVerifyCode()">
+                        <label for="validationCode">验证码</label>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <input type="text" name="validationCode" minlength="4" maxlength="4" required
+                                       ng-model="user.validationCode" class="form-control"
+                                       id="validationCode" placeholder="">
+                                <p class="help-block"
+                                   ng-show="form.validationCode.$dirty &&  !form.validationCode.$valid">
+                                    请输入4位验证码</p>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 center-block"
+                                 style="padding-left: 0px;padding-right: 0px;">
+                                <a href="#" role="button" ng-click="getVerifyCode()">
+                                    <img ng-src="{{validation.imgData}}"
+                                         style="height: 34px;display: block;line-height: 34px;margin: 0 auto;padding: 2px;"
+                                         class="img-responsive">
+                                </a>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                <button class="btn btn-default btn-xs form-control" ng-click="getVerifyCode()">
                                     <span>
-                                        <i class="fa fa-refresh"></i> 刷新
+                                        <i class="fa fa-refresh"></i>
                                     </span>
-                            </button>
+                                </button>
+                            </div>
                         </div>
-                        <label class="text-danger control-label">*</label>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-offset-3 col-sm-offset-3 col-md-8 col-sm-8 col-xs-11">
-                            <button ng-disabled="!form.$dirty || form.$invalid" type="submit"
-                                    class="btn btn-block btn-action" ng-click="submit()">注册
-                            </button>
-                        </div>
+                        <button ng-disabled="!form.$dirty || form.$invalid" type="submit"
+                                class="btn btn-block btn-action" ng-click="submit()">注册
+                        </button>
                     </div>
                 </form>
                 <ul class="toggler text-center small list-unstyled">
