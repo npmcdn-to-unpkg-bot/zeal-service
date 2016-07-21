@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="album">
+    <process id="album-unpublish" name="相册取消发布流程" isExecutable="true">
+        <startEvent id="start" name="start">
+            <documentation>相册【${albumName}】作者已经取消发布该相册</documentation>
+        </startEvent>
+        <endEvent id="sid-65043A85-6BAD-4616-AD1E-FF3FA8D64D4B"></endEvent>
+        <serviceTask id="notifyAll" name="notifyAll" activiti:expression="#{activitiAlbumService.notifyAllCollectors(albumId)}"></serviceTask>
+        <sequenceFlow id="flow1" name="flow1" sourceRef="start" targetRef="notifyAll"></sequenceFlow>
+        <sequenceFlow id="flow2" name="flow2" sourceRef="notifyAll" targetRef="sid-65043A85-6BAD-4616-AD1E-FF3FA8D64D4B"></sequenceFlow>
+    </process>
+    <bpmndi:BPMNDiagram id="BPMNDiagram_album-unpublish">
+        <bpmndi:BPMNPlane bpmnElement="album-unpublish" id="BPMNPlane_album-unpublish">
+            <bpmndi:BPMNShape bpmnElement="start" id="BPMNShape_start">
+                <omgdc:Bounds height="30.0" width="30.0" x="139.5" y="130.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="sid-65043A85-6BAD-4616-AD1E-FF3FA8D64D4B" id="BPMNShape_sid-65043A85-6BAD-4616-AD1E-FF3FA8D64D4B">
+                <omgdc:Bounds height="28.0" width="28.0" x="810.0" y="131.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="notifyAll" id="BPMNShape_notifyAll">
+                <omgdc:Bounds height="80.0" width="100.0" x="225.0" y="105.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+                <omgdi:waypoint x="325.0" y="145.0"></omgdi:waypoint>
+                <omgdi:waypoint x="810.0" y="145.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+                <omgdi:waypoint x="169.5" y="145.0"></omgdi:waypoint>
+                <omgdi:waypoint x="225.0" y="145.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</definitions>

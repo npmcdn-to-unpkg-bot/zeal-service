@@ -3,20 +3,15 @@ package com.zeal.controller;
 import com.zeal.common.PagedList;
 import com.zeal.http.response.Response;
 import com.zeal.http.response.album.*;
-import com.zeal.service.AlbumCollectionService;
 import com.zeal.service.AlbumService;
 import com.zeal.service.AuthorityCheckService;
 import com.zeal.service.UserInfoService;
 import com.zeal.utils.SessionUtils;
 import com.zeal.utils.StringUtils;
-import com.zeal.vo.album.AlbumTagVO;
-import com.zeal.vo.album.AlbumVO;
-import com.zeal.vo.album.PictureVO;
 import com.zeal.vo.user.UserInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
@@ -39,9 +34,6 @@ public class AlbumController extends AbstractController {
     @Autowired
     private AuthorityCheckService authorityCheckService;
 
-    @Autowired
-    private UserInfoService userInfoService;
-
     @RequestMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Response find(@PathVariable("id") long id, HttpServletRequest request) {
@@ -50,7 +42,6 @@ public class AlbumController extends AbstractController {
         AlbumInfo albumInfo = albumService.findDetails(id, currentUserId);
         return new Response.Builder().success().result(albumInfo).build();
     }
-
 
     @RequestMapping(value = "/publish/{id}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -107,8 +98,8 @@ public class AlbumController extends AbstractController {
                            DefaultMultipartHttpServletRequest httpServletRequest) {
         authorityCheckService.checkAlbumModifyAuthority(httpServletRequest, id);
         List<MultipartFile> newFiles = resolveMultipartFiles(httpServletRequest);
-        int[] deletes = stringToArray(deleteIdArray);
-        int[] tags = stringToArray(tagIdArray);
+        int[] deletes = StringUtils.splitToIntArray(deleteIdArray, ",");
+        int[] tags = StringUtils.splitToIntArray(tagIdArray, ",");
         albumService.update(id, name, description, deletes, newFiles, tags, SessionUtils.getUserInfo(httpServletRequest).getId());
         return new Response.Builder().success().result(albumService.findDetails(id, SessionUtils.getUserInfoId(httpServletRequest))).build();
     }
@@ -128,34 +119,5 @@ public class AlbumController extends AbstractController {
         }
         returnFile(response, file);
     }
-
-
-    private List<MultipartFile> resolveMultipartFiles(DefaultMultipartHttpServletRequest request) {
-        List<MultipartFile> files = new ArrayList<>();
-        MultiValueMap<String, MultipartFile> map = request.getMultiFileMap();
-        if (map != null && !map.isEmpty()) {
-            Collection<List<MultipartFile>> collection = map.values();
-            if (!collection.isEmpty()) {
-                for (List<MultipartFile> list : collection) {
-                    files.addAll(list);
-                }
-            }
-        }
-        return files;
-    }
-
-
-    private int[] stringToArray(String ArrayStr) {
-        int[] tags = null;
-        if (!StringUtils.isEmpty(ArrayStr)) {
-            String[] strs = ArrayStr.split(",");
-            tags = new int[strs.length];
-            for (int i = 0; i < strs.length; i++) {
-                tags[i] = Integer.valueOf(strs[i]);
-            }
-        }
-        return tags;
-    }
-
 
 }

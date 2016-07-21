@@ -50,23 +50,6 @@ public class StringUtils {
     }
 
     /**
-     * 生成8位UUID
-     *
-     * @return
-     */
-    public static String generateShortUuid() {
-        StringBuilder shortBuffer = new StringBuilder();
-        String uuid = UUID.randomUUID().toString().replace("-", "");
-        for (int i = 0; i < 8; i++) {
-            String str = uuid.substring(i * 4, i * 4 + 4);
-            int x = Integer.parseInt(str, 16);
-            shortBuffer.append(chars[x % 0x3E]);
-        }
-        return shortBuffer.toString();
-    }
-
-
-    /**
      * 判断号码是不是手机号
      *
      * @param number
@@ -95,5 +78,22 @@ public class StringUtils {
         return m.matches();
     }
 
+
+    /**
+     * 分隔字符串，返回int[]
+     *
+     * @param str
+     * @param splitor
+     * @return
+     */
+    public static int[] splitToIntArray(String str, String splitor) {
+        if (isEmpty(str) || splitor == null) throw new IllegalArgumentException();
+        String[] strs = str.split(splitor);
+        int[] array = new int[strs.length];
+        for (int i = 0; i < strs.length; i++) {
+            array[i] = Integer.valueOf(strs[i]);
+        }
+        return array;
+    }
 
 }

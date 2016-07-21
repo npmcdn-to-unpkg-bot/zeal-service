@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  * Created by Administrator on 7/14/2016.
  */
 @Service
-public class AuthorityCheckServiceImpl implements AuthorityCheckService {
+public class  AuthorityCheckServiceImpl implements AuthorityCheckService {
 
     @Autowired
     private UserInfoDao userInfoDao;

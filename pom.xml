@@ -31,6 +31,10 @@
             <name>Spring Roo Repository</name>
             <url>http://spring-roo-repository.springsource.org/release</url>
         </repository>
+        <repository>
+            <id>Alfresco Maven Repository</id>
+            <url>https://maven.alfresco.com/nexus/content/groups/public/</url>
+        </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
@@ -204,6 +208,11 @@
             <version>${spring.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
             <groupId>commons-pool</groupId>
             <artifactId>commons-pool</artifactId>
             <version>1.5.6</version>
@@ -318,6 +327,17 @@
             <version>0.4.8</version>
         </dependency>
 
+        <!-- Activiti-5.21.0 -->
+        <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-engine</artifactId>
+            <version>5.21.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-spring</artifactId>
+            <version>5.21.0</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -403,6 +423,7 @@
                     <excludes>
                         <exclude>**/*_Roo_*</exclude>
                     </excludes>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
             <plugin>

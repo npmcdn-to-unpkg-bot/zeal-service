@@ -14,7 +14,7 @@ public class AlbumCollectionVO {
 
     private Date collectTime;
 
-    private UserInfoVO author;
+    private UserInfoVO collector;
 
     private AlbumVO album;
 
@@ -24,8 +24,24 @@ public class AlbumCollectionVO {
     public AlbumCollectionVO(AlbumCollection albumCollection) {
         this.id = albumCollection.getId();
         this.collectTime = albumCollection.getCollectTime();
-        this.author = new UserInfoVO(albumCollection.getUserInfo());
+        this.collector = new UserInfoVO(albumCollection.getUserInfo());
         this.album = new AlbumVO(albumCollection.getAlbum());
+    }
+
+    public UserInfoVO getCollector() {
+        return collector;
+    }
+
+    public void setCollector(UserInfoVO collector) {
+        this.collector = collector;
+    }
+
+    public AlbumVO getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(AlbumVO album) {
+        this.album = album;
     }
 
     public long getId() {

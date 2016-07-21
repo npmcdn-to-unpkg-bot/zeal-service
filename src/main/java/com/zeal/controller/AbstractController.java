@@ -1,10 +1,18 @@
 package com.zeal.controller;
 
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
+
+import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by yang_shoulai on 2016/7/3.
@@ -25,14 +33,9 @@ public abstract class AbstractController {
                 fileInputStream = new FileInputStream(file);
                 byte[] data = new byte[(int) file.length()];
                 fileInputStream.read(data);
-                response.setContentType("image/jpeg");
-                String fileName = file.getName();
-                if (fileName.lastIndexOf(".") != -1) {
-                    String type = fileName.substring(fileName.lastIndexOf("."));
-                    if (".gif".equalsIgnoreCase(type)) {
-                        response.setContentType("image/gif");
-                    }
-                }
+                MimetypesFileTypeMap mimetypesFileTypeMap = new MimetypesFileTypeMap();
+                String contentType = mimetypesFileTypeMap.getContentType(file);
+                response.setContentType(contentType);
                 stream = response.getOutputStream();
                 stream.write(data);
                 stream.flush();
@@ -55,5 +58,20 @@ public abstract class AbstractController {
                 }
             }
         }
+    }
+
+
+    protected List<MultipartFile> resolveMultipartFiles(DefaultMultipartHttpServletRequest request) {
+        List<MultipartFile> files = new ArrayList<>();
+        MultiValueMap<String, MultipartFile> map = request.getMultiFileMap();
+        if (map != null && !map.isEmpty()) {
+            Collection<List<MultipartFile>> collection = map.values();
+            if (!collection.isEmpty()) {
+                for (List<MultipartFile> list : collection) {
+                    files.addAll(list);
+                }
+            }
+        }
+        return files;
     }
 }

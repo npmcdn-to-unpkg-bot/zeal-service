@@ -23,7 +23,7 @@ public class GlobalExceptionHandlerAdvice {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Response uncaughtException(Exception exception, HttpServletResponse httpServletResponset) {
-        LogUtils.error(GlobalExceptionHandlerAdvice.class, "uncaughtException ：" + exception.getMessage());
+        LogUtils.error(GlobalExceptionHandlerAdvice.class, "uncaughtException ：" + exception.getMessage(), exception);
         httpServletResponset.setContentType(MediaType.APPLICATION_JSON_VALUE);
         return new Response.Builder()
                 .status(Response.Status.Error)
@@ -36,7 +36,7 @@ public class GlobalExceptionHandlerAdvice {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Response nullPointerException(Exception exception, HttpServletResponse httpServletResponset) {
-        LogUtils.error(GlobalExceptionHandlerAdvice.class, "nullPointerException ：" + exception.getMessage());
+        LogUtils.error(GlobalExceptionHandlerAdvice.class, "nullPointerException ：" + exception.getMessage(), exception);
         httpServletResponset.setContentType(MediaType.APPLICATION_JSON_VALUE);
         return new Response.Builder()
                 .status(Response.Status.Error)
@@ -49,7 +49,7 @@ public class GlobalExceptionHandlerAdvice {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Response dataAccessException(Exception exception, HttpServletResponse httpServletResponset) {
-        LogUtils.error(GlobalExceptionHandlerAdvice.class, "dataAccessException ：" + exception.getMessage());
+        LogUtils.error(GlobalExceptionHandlerAdvice.class, "dataAccessException ：" + exception.getMessage(), exception);
         httpServletResponset.setContentType(MediaType.APPLICATION_JSON_VALUE);
         return new Response.Builder()
                 .status(Response.Status.Error)
@@ -63,7 +63,7 @@ public class GlobalExceptionHandlerAdvice {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Response bizException(BizException exception, HttpServletResponse httpServletResponset) {
-        LogUtils.error(GlobalExceptionHandlerAdvice.class, "BizException ：" + exception.getMessage());
+        LogUtils.error(GlobalExceptionHandlerAdvice.class, "BizException ：" + exception.getMessage(), exception);
         httpServletResponset.setContentType(MediaType.APPLICATION_JSON_VALUE);
         return new Response.Builder()
                 .status(Response.Status.Exception)
@@ -75,8 +75,8 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(value = NoAuthorityException.class)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Response noAuthorityException (NoAuthorityException exception, HttpServletResponse httpServletResponset) {
-        LogUtils.error(GlobalExceptionHandlerAdvice.class, "NoAuthorityException ：" + exception.getMessage());
+    public Response noAuthorityException(NoAuthorityException exception, HttpServletResponse httpServletResponset) {
+        LogUtils.error(GlobalExceptionHandlerAdvice.class, "NoAuthorityException ：" + exception.getMessage(), exception);
         httpServletResponset.setContentType(MediaType.APPLICATION_JSON_VALUE);
         return Response.NO_AUTHORITY;
     }
