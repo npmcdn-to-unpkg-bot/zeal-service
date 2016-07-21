@@ -4,6 +4,7 @@ import com.zeal.dao.UserInfoDao;
 import com.zeal.entity.UserInfo;
 import com.zeal.exception.BizException;
 import com.zeal.exception.BizExceptionCode;
+import com.zeal.http.request.user.UpdateBasicUserInfoRequest;
 import com.zeal.http.request.user.UserLoginRequest;
 import com.zeal.http.request.user.UserRegisterRequest;
 import com.zeal.http.response.album.AlbumAuthorInfo;
@@ -12,6 +13,9 @@ import com.zeal.utils.StringUtils;
 import com.zeal.vo.user.UserInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Created by yang_shoulai on 2016/6/27.
@@ -85,5 +89,37 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public AlbumAuthorInfo author(long id, long currentUserId) {
         return userInfoDao.author(id, currentUserId);
+    }
+
+
+    /**
+     * 更新用户的基本信息
+     *
+     * @param userInfoId
+     * @param request
+     */
+    @Override
+    @Transactional
+    public void updateBasicUserInfo(long userInfoId, UpdateBasicUserInfoRequest request) {
+        if (request == null || StringUtils.isEmpty(request.getNickName())
+                || StringUtils.isEmpty(request.getEmail())
+                || StringUtils.isEmpty(request.getPhoneNumber())) {
+            throw new BizException("错误的请求参数");
+        }
+
+        List<UserInfo> users = userInfoDao.findByPhoneNumberEquals(request.getPhoneNumber());
+        if (users.size() > 1 || (users.size() == 1 && users.get(0).getId() != userInfoId)) {
+            throw new BizException("手机号码已经存在");
+        }
+        users = userInfoDao.findByEmailEquals(request.getEmail());
+        if (users.size() > 1 || (users.size() == 1 && users.get(0).getId() != userInfoId)) {
+            throw new BizException("邮箱已经存在已经存在");
+        }
+        UserInfo userInfo = userInfoDao.find(userInfoId);
+        userInfo.setNickName(request.getNickName());
+        userInfo.setDescription(request.getDescription());
+        userInfo.setEmail(request.getEmail());
+        userInfo.setPhoneNumber(request.getPhoneNumber());
+        userInfoDao.update(userInfo);
     }
 }

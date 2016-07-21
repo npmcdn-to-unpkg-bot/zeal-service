@@ -1,6 +1,7 @@
 package com.zeal.controller;
 
 import com.zeal.common.PagedList;
+import com.zeal.http.request.user.UpdateBasicUserInfoRequest;
 import com.zeal.http.response.Response;
 import com.zeal.http.response.album.AlbumAuthorInfo;
 import com.zeal.http.response.album.AlbumInfo;
@@ -13,9 +14,7 @@ import com.zeal.vo.user.UserInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
@@ -76,5 +75,30 @@ public class MyController extends AbstractController {
         return new Response.Builder().success().result(myAlbumAuthorInfo).build();
     }
 
+    /**
+     * 返回我的基本信息
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/basic", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Response basic(HttpServletRequest request) {
+        UserInfoVO userInfo = userInfoService.find(SessionUtils.getUserInfoId(request));
+        return new Response.Builder().success().result(userInfo).build();
+    }
 
+
+    /**
+     * 返回我的基本信息
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/updateBasic", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+    @ResponseBody
+    public Response updateBasic(@RequestBody UpdateBasicUserInfoRequest updateBasicUserInfoRequest, HttpServletRequest request) {
+        userInfoService.updateBasicUserInfo(SessionUtils.getUserInfoId(request), updateBasicUserInfoRequest);
+        return new Response.Builder().success().result(userInfoService.find(SessionUtils.getUserInfoId(request))).build();
+    }
 }

@@ -1,5 +1,6 @@
 package com.zeal.service;
 
+import com.zeal.http.request.user.UpdateBasicUserInfoRequest;
 import com.zeal.http.request.user.UserLoginRequest;
 import com.zeal.http.request.user.UserRegisterRequest;
 import com.zeal.http.response.album.AlbumAuthorInfo;
@@ -43,5 +44,12 @@ public interface UserInfoService {
      * @return
      */
     AlbumAuthorInfo author(long id, long currentUserId);
+
+    /**
+     * 更新用户的基本信息
+     * @param userInfoId
+     * @param request
+     */
+    void updateBasicUserInfo(long userInfoId, UpdateBasicUserInfoRequest request);
 
 }

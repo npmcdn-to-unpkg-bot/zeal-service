@@ -11,9 +11,14 @@
             </div>
             <div class="row user-active-block" ng-hide="UserInfo.id == author.id">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
-                    <button class="btn btn-primary">
+                    <button ng-show="!author.followed" ng-click="toggleFollow()" class="btn btn-primary">
                      <span>
                          <i class="glyphicon glyphicon-plus"></i> 关注
+                     </span>
+                    </button>
+                    <button ng-hide="!author.followed" ng-click="toggleFollow()" class="btn btn-warning">
+                     <span>
+                         <i class="glyphicon glyphicon-plus"></i> 取消关注
                      </span>
                     </button>
                 </div>

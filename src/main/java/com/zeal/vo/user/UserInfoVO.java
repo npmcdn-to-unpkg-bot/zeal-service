@@ -14,13 +14,20 @@ public class UserInfoVO {
 
     private String phoneNumber;
 
-    private String password;
+    private String photo;
+
+    private String email;
+
+    private String description;
 
     public UserInfoVO(UserInfo userInfo) {
         if (userInfo != null) {
             this.id = userInfo.getId();
             this.nickName = userInfo.getNickName();
             this.phoneNumber = userInfo.getPhoneNumber();
+            this.description = userInfo.getDescription();
+            this.photo = userInfo.getPhoto();
+            this.email = userInfo.getEmail();
         }
     }
 
@@ -46,5 +53,29 @@ public class UserInfoVO {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

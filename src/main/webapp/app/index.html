@@ -45,6 +45,7 @@
     <script src="modules/my/my.controller.js"></script>
     <script src="modules/my/albums/my.albums.controller.js"></script>
     <script src="modules/home/home.controller.js"></script>
+    <script src="modules/my/userinfo/my.userinfo.controller.js"></script>
 </head>
 <body>
 <div ng-controller="IndexController">
@@ -91,7 +92,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="#"><span><i class="fa fa-cog"></i> 账号设置</span></a></li>
-                            <li><a href="#"><span><i class="fa fa-key"></i> 修改密码</span></a></li>
+                            <li><a ui-sref="my.userinfo.password"><span><i class="fa fa-lock"></i> 修改密码</span></a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="#" role="button" ng-click="logout()"><span><i
                                     class="fa fa-sign-out"></i> 退出</span></a></li>

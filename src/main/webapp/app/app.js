@@ -94,6 +94,28 @@
         }).state('my.jokes', {
             url: "/jokes",
             templateUrl: "/zeal/app/modules/my/jokes/jokes.html"
+        }).state('my.userinfo', {
+            url: "/userinfo",
+            templateUrl: "/zeal/app/modules/my/userinfo/userinfo.html",
+            abstract: true
+        }).state('my.userinfo.basic', {
+            url: "/basic",
+            templateUrl: "/zeal/app/modules/my/userinfo/basic.html",
+            controller: 'MyUserInfoBasicController',
+            resolve: {
+                basicInfo: function (UserService) {
+                    return UserService.myBasicInfo().promise;
+                }
+            },
+            title: "修改基本信息 - Zeal for you"
+        }).state('my.userinfo.password', {
+            url: "/password",
+            templateUrl: "/zeal/app/modules/my/userinfo/password.html",
+            title: "修改密码 - Zeal for you"
+        }).state('my.userinfo.photo', {
+            url: "/photo",
+            templateUrl: "/zeal/app/modules/my/userinfo/photo.html",
+            title: "修改头像 - Zeal for you"
         });
     });
     angular.module('app').config(function (cfpLoadingBarProvider) {

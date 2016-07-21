@@ -87,5 +87,53 @@
                 });
             };
 
+            /**
+             * 关注作者
+             * @param followed 作者ID
+             * @returns {{promise, success, error}|*}
+             */
+            this.follow = function (followed) {
+                return HttpService.http({
+                    method: "GET",
+                    url: "/zeal/follow/add?followed=" + followed
+                });
+            }
+
+            /**
+             * 取消关注作者
+             * @param followed 作者ID
+             * @returns {{promise, success, error}|*}
+             */
+            this.cancelFollow = function (followed) {
+                return HttpService.http({
+                    method: "GET",
+                    url: "/zeal/follow/cancel?followed=" + followed
+                });
+            }
+
+            /**
+             * 获取我的基本信息
+             * @returns {{promise, success, error}|*}
+             */
+            this.myBasicInfo = function () {
+                return HttpService.http({
+                    method: "GET",
+                    url: "/zeal/my/basic"
+                });
+            };
+
+            /**
+             * 更新用户基本信息
+             * @param request 请求数据
+             * @returns {*|{promise, success, error}}
+             */
+            this.updateBaiscInfo = function (request) {
+                return HttpService.http({
+                    method: "POST",
+                    url: "/zeal/my/updateBasic",
+                    data: request
+                });
+            }
+
         }]);
 })();

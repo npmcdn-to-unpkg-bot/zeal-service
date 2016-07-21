@@ -54,8 +54,9 @@
         }]);
 
 
-    angular.module("app").controller('AlbumDisplayController', ['$scope', 'HttpService', '$log', '$stateParams', 'AlbumService', 'album', 'author', 'MessageService', '$state',
-        function ($scope, HttpService, $log, $stateParams, AlbumService, album, author, MessageService, $state) {
+    angular.module("app").controller('AlbumDisplayController', [
+        '$scope', 'HttpService', '$log', '$stateParams', 'AlbumService', 'album', 'author', 'MessageService', '$state', 'UserService',
+        function ($scope, HttpService, $log, $stateParams, AlbumService, album, author, MessageService, $state, UserService) {
             $scope.album = album;
             $scope.author = author;
             $state.current.title = album.name;
@@ -143,6 +144,27 @@
                     }
                 }
             };
+
+            $scope.toggleFollow = function () {
+                if ($scope.author) {
+                    if ($scope.author.followed) {
+                        UserService.cancelFollow($scope.author.id).success(function (data) {
+                            $scope.author.followerCount--;
+                            $scope.author.followed = false;
+                        }).error(function (data) {
+                            MessageService.toast.error(data.message, "取消关注失败");
+                        });
+                    } else {
+                        UserService.follow($scope.author.id).success(function (data) {
+                            $scope.author.followerCount++;
+                            $scope.author.followed = true;
+                        }).error(function (data) {
+                            MessageService.toast.error(data.message, "关注失败");
+                        });
+                    }
+                }
+            };
+
 
         }]);
 

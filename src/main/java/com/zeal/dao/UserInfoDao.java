@@ -33,7 +33,7 @@ public class UserInfoDao extends AbstractBaseDao<UserInfo> {
     }
 
     /**
-     * 根据登录名称查找用户信息
+     * 根据手机号查找用户信息
      *
      * @param phoneNumber 用户手机号
      * @return 用户信息列表
@@ -42,6 +42,20 @@ public class UserInfoDao extends AbstractBaseDao<UserInfo> {
         String sql = "SELECT o FROM UserInfo o WHERE o.phoneNumber = :phoneNumber";
         TypedQuery<UserInfo> query = this.entityManager().createQuery(sql, UserInfo.class);
         query.setParameter("phoneNumber", phoneNumber);
+        return query.getResultList();
+    }
+
+
+    /**
+     * 根据邮箱查找用户信息
+     *
+     * @param email 用户邮箱
+     * @return 用户信息列表
+     */
+    public List<UserInfo> findByEmailEquals(String email) {
+        String sql = "SELECT o FROM UserInfo o WHERE o.email = :email";
+        TypedQuery<UserInfo> query = this.entityManager().createQuery(sql, UserInfo.class);
+        query.setParameter("email", email);
         return query.getResultList();
     }
 
@@ -76,11 +90,15 @@ public class UserInfoDao extends AbstractBaseDao<UserInfo> {
                 .append("(SELECT count(1) from t_album_author_appreciation where appreciator = :appreciator and appreciated = u.id) as appreciated,")
                 .append("u.email,")
                 .append("u.photo,")
-                .append("u.description")
+                .append("u.description,")
+                .append("(select count(1) from t_following where followed = u.id) as followerCount,")
+                .append("(select count(1) from t_following where follower = u.id) as followingCount,")
+                .append("(select count(1) from t_following where follower = :follower and followed = u.id) as userFollowCount")
                 .append(" FROM t_user_info u where u.id = :id");
 
         Query query = this.entityManager().createNativeQuery(buffer.toString());
         query.setParameter("appreciator", currentUserId);
+        query.setParameter("follower", currentUserId);
         query.setParameter("id", id);
         Object object = query.getSingleResult();
         Object[] array = (Object[]) object;
@@ -93,13 +111,13 @@ public class UserInfoDao extends AbstractBaseDao<UserInfo> {
         albumAuthorInfo.setCollectionCount(((BigInteger) array[5]).longValue());
         albumAuthorInfo.setAppreciated(((BigInteger) array[6]).longValue() > 0);
         //TODO 以下属性值需要设置
-        albumAuthorInfo.setCommentCount(0);
         albumAuthorInfo.setEmail((String) array[7]);
         albumAuthorInfo.setPhoto((String) array[8]);
         albumAuthorInfo.setDescription((String) array[9]);
-        albumAuthorInfo.setFollowed(false);
-        albumAuthorInfo.setFollowerCount(0);
-        albumAuthorInfo.setFollowingCount(0);
+        albumAuthorInfo.setFollowerCount(((BigInteger) array[10]).longValue());
+        albumAuthorInfo.setFollowingCount(((BigInteger) array[11]).longValue());
+        albumAuthorInfo.setFollowed(((BigInteger) array[12]).longValue() > 0);
+        albumAuthorInfo.setCommentCount(0);
         return albumAuthorInfo;
     }
 }

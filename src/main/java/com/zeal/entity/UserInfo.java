@@ -47,6 +47,19 @@ public class UserInfo extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "appreciated")
     private Set<AlbumAuthorAppreciation> appreciatedRecords;
 
+    /**
+     * 用户关注的用户
+     */
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "follower")
+    private Set<Following> followings;
+
+    /**
+     * 用户的关注者
+     */
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "followed")
+    private Set<Following> followers;
+
+
     public String getPassword() {
         return password;
     }
@@ -125,5 +138,21 @@ public class UserInfo extends BaseEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Set<Following> getFollowings() {
+        return followings;
+    }
+
+    public void setFollowings(Set<Following> followings) {
+        this.followings = followings;
+    }
+
+    public Set<Following> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(Set<Following> followers) {
+        this.followers = followers;
     }
 }

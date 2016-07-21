@@ -2,7 +2,7 @@
  * Created by Administrator on 7/1/2016.
  */
 (function () {
-    angular.module("app").controller('MyController', function ($scope, myAuthor, $location) {
+    angular.module("app").controller('MyController', function ($scope, myAuthor, $location, $state) {
         $scope.zealInfo = myAuthor;
 
         $scope.addModal = function () {
@@ -49,6 +49,14 @@
         $scope.$on('album-collection-delete', function (event, data) {
             $scope.zealInfo.collectionCount--;
         });
+
+        /**
+         * 前往信息编辑页面
+         */
+        $scope.updateMyUserInfo = function () {
+            $state.go('my.userinfo.basic');
+        };
+
 
     });
 

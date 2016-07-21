@@ -87,7 +87,7 @@ public class StringUtils {
      * @return
      */
     public static int[] splitToIntArray(String str, String splitor) {
-        if (isEmpty(str) || splitor == null) throw new IllegalArgumentException();
+        if (isEmpty(str) || splitor == null) return new int[0];
         String[] strs = str.split(splitor);
         int[] array = new int[strs.length];
         for (int i = 0; i < strs.length; i++) {
