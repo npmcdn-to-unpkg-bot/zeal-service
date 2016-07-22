@@ -2,6 +2,7 @@ package com.zeal.dao;
 
 import com.zeal.entity.UserInfo;
 import com.zeal.http.response.album.AlbumAuthorInfo;
+import com.zeal.utils.ConfigureUtils;
 import com.zeal.utils.StringUtils;
 import org.springframework.stereotype.Repository;
 
@@ -112,7 +113,7 @@ public class UserInfoDao extends AbstractBaseDao<UserInfo> {
         albumAuthorInfo.setAppreciated(((BigInteger) array[6]).longValue() > 0);
         //TODO 以下属性值需要设置
         albumAuthorInfo.setEmail((String) array[7]);
-        albumAuthorInfo.setPhoto((String) array[8]);
+        albumAuthorInfo.setPhoto(ConfigureUtils.getPhotoServer() + id);
         albumAuthorInfo.setDescription((String) array[9]);
         albumAuthorInfo.setFollowerCount(((BigInteger) array[10]).longValue());
         albumAuthorInfo.setFollowingCount(((BigInteger) array[11]).longValue());

@@ -52,6 +52,7 @@
                 /userinfo/reload
                 /userinfo/author/\d{1,}
                 /userinfo/validationCode
+                /userinfo/photo/.*
                 /resources/.*
                 /album/all
                 /album/list

@@ -1,1 +1,30 @@
-<div>PHOTO</div>
+<div class="row">
+    <div ng-show="imageCropStep == 1">
+        <h3>请选择一张图片</h3>
+        <input type="file" name="fileInput" id="fileInput" onchange="angular.element(this).scope().fileChanged(event)"/>
+    </div>
+    <div ng-show="imageCropStep == 2" class="col-md-8 text-center">
+        <image-crop
+                data-height="240"
+                data-width="240"
+                data-shape="square"
+                data-step="imageCropStep"
+                src="imgSrc"
+                data-result="result"
+                crop="initCrop"
+                padding="120"
+                data-result-blob="resultBlob"
+                max-size="1024"></image-crop>
+    </div>
+
+    <div ng-show="imageCropStep == 2" class="col-md-8 text-center">
+        <button class="btn btn-warning col-md-2" ng-click="clear()">放弃</button>
+        <button class="btn btn-default col-md-2 col-md-offset-1" ng-click="initCrop = true">选择</button>
+    </div>
+
+    <div ng-show="imageCropStep == 3" class="col-md-8 text-center">
+        <img ng-src="{{result}}">
+        <button ng-click="clear()" class="btn btn-warning">重新选择图片</button>
+        <button ng-click="submit()" class="btn btn-default">确认使用图片</button>
+    </div>
+</div>

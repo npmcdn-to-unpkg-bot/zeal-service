@@ -80,24 +80,6 @@ public interface AlbumService {
      */
     void update(long id, String name, String description, int[] deleteIdArray, List<MultipartFile> newFiles, int[] tags, long userInfoId);
 
-
-    /**
-     * 获取相册所在的硬盘文件夹
-     *
-     * @param album
-     * @return
-     */
-    File getDiskFolder(Album album);
-
-    /**
-     * 获取相册所在的硬盘文件夹
-     *
-     * @param albumId
-     * @return
-     */
-    File getDiskFolder(long albumId);
-
-
     void save(PageAlbum pageAlbum, UserInfo userInfo);
 
     /**
@@ -117,22 +99,6 @@ public interface AlbumService {
     File getThumbnail(long albumId);
 
 
-    /**
-     * 获取用户的发布或者未发布相册的数量
-     *
-     * @param published
-     * @param userId
-     * @return
-     */
-    long countByPublishStatus(boolean published, long userId);
 
-    /**
-     * 获取用户发布或者未发布的相册列表
-     *
-     * @param published
-     * @param userId
-     * @return
-     */
-    PagedList<AlbumVO> findByPublishStatus(boolean published, long userId, int page, int pageSize);
 
 }

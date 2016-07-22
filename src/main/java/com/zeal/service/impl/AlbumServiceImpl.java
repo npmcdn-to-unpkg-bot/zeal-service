@@ -134,7 +134,7 @@ public class AlbumServiceImpl implements AlbumService {
             }
         }
         albumDao.delete(album);
-        FileUtils.deleteFile(getDiskFolder(album).getPath());
+        FileUtils.deleteFile(AlbumUtils.getAlbumFolder(album).getPath());
     }
 
     @Override
@@ -196,7 +196,7 @@ public class AlbumServiceImpl implements AlbumService {
         if (deleteIdArray != null && deleteIdArray.length > 0) {
             for (int deleteId : deleteIdArray) {
                 Picture picture = pictureDao.find(deleteId);
-                PictureUtils.deleteDiskFile(picture);
+                AlbumUtils.deleteDiskFile(picture);
                 pictureDao.delete(picture);
             }
         }
@@ -219,28 +219,6 @@ public class AlbumServiceImpl implements AlbumService {
         }
     }
 
-    /**
-     * 获取相册所在的硬盘文件夹
-     *
-     * @param album
-     * @return
-     */
-    @Override
-    public File getDiskFolder(Album album) {
-
-        return new File(ConfigureUtils.getAlbumRepository() + album.getUserInfo().getId() + File.separator + album.getId());
-    }
-
-    /**
-     * 获取相册所在的硬盘文件夹
-     *
-     * @param albumId
-     * @return
-     */
-    @Override
-    public File getDiskFolder(long albumId) {
-        return getDiskFolder(albumDao.find(albumId));
-    }
 
     @Override
     @Transactional
@@ -288,10 +266,10 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public File createThumbnail(long albumId) {
         Album album = albumDao.find(albumId);
-        File albumFolder = getDiskFolder(album);
+        File albumFolder = AlbumUtils.getAlbumFolder(album);
         File thumbnailFile = FileUtils.createFile(albumFolder.getPath() + File.separator + "thumbnail" + File.separator + "thumbnail.jpeg");
         List<Picture> pictures = album.getPictures();
-        File picFile = PictureUtils.getDiskFile(pictures.get(0));
+        File picFile = AlbumUtils.getDiskFile(pictures.get(0));
         ImageUtils.createThumbnail(picFile, thumbnailFile);
         return thumbnailFile;
     }
@@ -305,38 +283,21 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public File getThumbnail(long albumId) {
         Album album = albumDao.find(albumId);
-        File albumFolder = getDiskFolder(album);
+        File albumFolder = AlbumUtils.getAlbumFolder(album);
         File file = new File(albumFolder.getPath() + File.separator + "thumbnail" + File.separator + "thumbnail.jpeg");
         if (!file.exists()) return null;
         return file;
     }
 
+
     /**
-     * 获取用户的发布或者未发布相册的数量
+     * 下载图片
      *
-     * @param published
-     * @param userId
+     * @param pictures
+     * @param userInfoId
+     * @param albumId
      * @return
      */
-    @Override
-    public long countByPublishStatus(boolean published, long userId) {
-
-        return albumDao.countByUserInfoIdAndPublishStatus(userId, published);
-    }
-
-    /**
-     * 获取用户发布或者未发布的相册列表
-     *
-     * @param published
-     * @param userId
-     * @param page
-     * @param pageSize  @return
-     */
-    @Override
-    public PagedList<AlbumVO> findByPublishStatus(boolean published, long userId, int page, int pageSize) {
-        return convert(albumDao.pagedByAuthorAndPublishStatus(userId, published, page, pageSize));
-    }
-
     private List<File> download(List<PagePicture> pictures, long userInfoId, long albumId) {
         List<File> downloads = new ArrayList<>();
         try {
@@ -382,21 +343,6 @@ public class AlbumServiceImpl implements AlbumService {
         return list;
     }
 
-    private PagedList<AlbumVO> convert(PagedList<Album> albumPagedList) {
-        PagedList<AlbumVO> albumVOPagedList = new PagedList<>();
-        albumVOPagedList.setTotalSize(albumPagedList.getTotalSize());
-        albumVOPagedList.setPage(albumPagedList.getPage());
-        albumVOPagedList.setSize(albumPagedList.getSize());
-        List<Album> albums = albumPagedList.getList();
-        List<AlbumVO> albumVOs = new ArrayList<>();
-        if (albums != null && !albums.isEmpty()) {
-            for (Album album : albums) {
-                albumVOs.add(new AlbumVO(album));
-            }
-        }
-        albumVOPagedList.setList(albumVOs);
-        return albumVOPagedList;
-    }
 
     private void resolvePicturesFromMultipartFiles(List<File> files,
                                                    List<Picture> pictures,

@@ -157,7 +157,7 @@ public class AlbumDao extends AbstractBaseDao<Album> {
                     pagedAlbumInfo.setAuthorAppreciated(((BigInteger) array[8]).longValue() > 0);
                     pagedAlbumInfo.setCollected(((BigInteger) array[9]).longValue() > 0);
                     //TODO 获取作者头像
-                    pagedAlbumInfo.setAuthorPhoto((String) array[10]);
+                    pagedAlbumInfo.setAuthorPhoto(ConfigureUtils.getPhotoServer() + ((BigInteger) array[3]).longValue());
                     pagedAlbumInfos.add(pagedAlbumInfo);
                 }
             }
@@ -171,12 +171,6 @@ public class AlbumDao extends AbstractBaseDao<Album> {
         query.setParameter("tagId", tagId);
         query.setParameter("publishStatus", published ? 1 : 0);
         pagedList.setTotalSize(Long.valueOf(query.getSingleResult().toString()));
-        /*TypedQuery<Album> query = this.entityManager().createQuery("SELECT o FROM Album o inner join o.albumTags t where o.isPublished = :isPublished and t.id = :tagId ORDER BY o.publishDate desc ", Album.class);
-        query.setFirstResult((page - 1) * pageSize);
-        query.setMaxResults(pageSize);
-        query.setParameter("isPublished", published);
-        query.setParameter("tagId", tagId);
-        */
         return pagedList;
     }
 

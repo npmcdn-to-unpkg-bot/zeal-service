@@ -7,7 +7,9 @@ import com.zeal.http.response.Response;
 import com.zeal.http.response.my.ZealInfo;
 import com.zeal.service.AlbumService;
 import com.zeal.service.UserInfoService;
+import com.zeal.utils.ConfigureUtils;
 import com.zeal.utils.SessionUtils;
+import com.zeal.utils.StringUtils;
 import com.zeal.utils.VerifyCodeUtils;
 import com.zeal.vo.user.UserInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -134,5 +138,18 @@ public class UserInfoController extends AbstractController {
         return new Response.Builder().success().result(base64).build();
     }
 
+
+    @RequestMapping(value = "/photo/{userInfoId}")
+    public void photo(@PathVariable("userInfoId") long userInfoId, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        UserInfoVO userInfoVO = userInfoService.find(userInfoId);
+        if (!StringUtils.isEmpty(userInfoVO.getPhoto())) {
+            File file = new File(ConfigureUtils.getPhotoRepository() + userInfoVO.getPhoto());
+            if (file.exists()) {
+                returnFile(response, file);
+                return;
+            }
+        }
+        returnFile(response, new File(ConfigureUtils.getPhotoEmpty()));
+    }
 
 }

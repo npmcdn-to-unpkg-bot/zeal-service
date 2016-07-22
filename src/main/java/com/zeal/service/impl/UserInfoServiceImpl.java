@@ -4,18 +4,21 @@ import com.zeal.dao.UserInfoDao;
 import com.zeal.entity.UserInfo;
 import com.zeal.exception.BizException;
 import com.zeal.exception.BizExceptionCode;
-import com.zeal.http.request.user.UpdateBasicUserInfoRequest;
-import com.zeal.http.request.user.UserLoginRequest;
-import com.zeal.http.request.user.UserRegisterRequest;
+import com.zeal.http.request.user.*;
 import com.zeal.http.response.album.AlbumAuthorInfo;
 import com.zeal.service.UserInfoService;
+import com.zeal.utils.ConfigureUtils;
+import com.zeal.utils.ImageUtils;
 import com.zeal.utils.StringUtils;
 import com.zeal.vo.user.UserInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by yang_shoulai on 2016/6/27.
@@ -120,6 +123,43 @@ public class UserInfoServiceImpl implements UserInfoService {
         userInfo.setDescription(request.getDescription());
         userInfo.setEmail(request.getEmail());
         userInfo.setPhoneNumber(request.getPhoneNumber());
+        userInfoDao.update(userInfo);
+    }
+
+    @Override
+    @Transactional
+    public void updatePassword(UpdatePasswordRequest request, long userInfoId) {
+        if (request == null || StringUtils.isEmpty(request.getPassword()) || StringUtils.isEmpty(request.getNewPassword())) {
+            throw new BizException("错误的请求参数");
+        }
+        UserInfo userInfo = userInfoDao.find(userInfoId);
+        String oldPassword = StringUtils.toMD5(request.getPassword());
+        if (oldPassword == null || !oldPassword.equals(userInfo.getPassword())) {
+            throw new BizException("原始密码不正确");
+        }
+        userInfo.setPassword(StringUtils.toMD5(request.getNewPassword()));
+        userInfoDao.update(userInfo);
+    }
+
+    @Override
+    @Transactional
+    public void updatePhoto(UpdatePhotoRequest request, long userInfoId) throws IOException {
+        if (request == null || StringUtils.isEmpty(request.getPhotoBase64())) {
+            throw new BizException("错误的请求参数");
+        }
+        UserInfo userInfo = userInfoDao.find(userInfoId);
+        String base64Str = request.getPhotoBase64().substring(request.getPhotoBase64().indexOf(",") + 1);
+        if (!ImageUtils.isImage(base64Str)) {
+            throw new BizException("字符串不是base64编码的图片");
+        }
+        String type = ImageUtils.getImageType(base64Str);
+        if (type == null) {
+            throw new BizException("无法获取上传的图片类型");
+        }
+        String relatePath = userInfo.getId() + File.separator + "photos" + File.separator + UUID.randomUUID() + "." + type;
+        String savePath = ConfigureUtils.getPhotoRepository() + relatePath;
+        ImageUtils.base64ToImage(base64Str, savePath);
+        userInfo.setPhoto(relatePath);
         userInfoDao.update(userInfo);
     }
 }

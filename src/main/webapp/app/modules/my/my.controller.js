@@ -50,6 +50,7 @@
             $scope.zealInfo.collectionCount--;
         });
 
+
         /**
          * 前往信息编辑页面
          */

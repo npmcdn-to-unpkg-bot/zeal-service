@@ -1,10 +1,10 @@
 package com.zeal.service;
 
-import com.zeal.http.request.user.UpdateBasicUserInfoRequest;
-import com.zeal.http.request.user.UserLoginRequest;
-import com.zeal.http.request.user.UserRegisterRequest;
+import com.zeal.http.request.user.*;
 import com.zeal.http.response.album.AlbumAuthorInfo;
 import com.zeal.vo.user.UserInfoVO;
+
+import java.io.IOException;
 
 /**
  * Created by yang_shoulai on 2016/6/27.
@@ -47,9 +47,25 @@ public interface UserInfoService {
 
     /**
      * 更新用户的基本信息
+     *
      * @param userInfoId
      * @param request
      */
     void updateBasicUserInfo(long userInfoId, UpdateBasicUserInfoRequest request);
 
+    /**
+     * 修改用户密码
+     *
+     * @param request    新密码请求
+     * @param userInfoId 用户ID
+     */
+    void updatePassword(UpdatePasswordRequest request, long userInfoId);
+
+    /**
+     * 修改头像
+     *
+     * @param request    头像请求数据
+     * @param userInfoId 用户ID
+     */
+    void updatePhoto(UpdatePhotoRequest request, long userInfoId) throws IOException;
 }

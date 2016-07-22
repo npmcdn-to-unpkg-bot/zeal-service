@@ -2,12 +2,15 @@ package com.zeal.controller;
 
 import com.zeal.common.PagedList;
 import com.zeal.http.request.user.UpdateBasicUserInfoRequest;
+import com.zeal.http.request.user.UpdatePasswordRequest;
+import com.zeal.http.request.user.UpdatePhotoRequest;
 import com.zeal.http.response.Response;
 import com.zeal.http.response.album.AlbumAuthorInfo;
 import com.zeal.http.response.album.AlbumInfo;
 import com.zeal.service.AlbumCollectionService;
 import com.zeal.service.AlbumService;
 import com.zeal.service.UserInfoService;
+import com.zeal.utils.ConfigureUtils;
 import com.zeal.utils.SessionUtils;
 import com.zeal.utils.StringUtils;
 import com.zeal.vo.user.UserInfoVO;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
@@ -90,7 +94,7 @@ public class MyController extends AbstractController {
 
 
     /**
-     * 返回我的基本信息
+     * 更新我的基本信息
      *
      * @param request
      * @return
@@ -101,4 +105,25 @@ public class MyController extends AbstractController {
         userInfoService.updateBasicUserInfo(SessionUtils.getUserInfoId(request), updateBasicUserInfoRequest);
         return new Response.Builder().success().result(userInfoService.find(SessionUtils.getUserInfoId(request))).build();
     }
+
+    /**
+     * 更新我的密码
+     *
+     * @return
+     */
+    @RequestMapping(value = "/updatePassword", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+    @ResponseBody
+    public Response updatePassword(@RequestBody UpdatePasswordRequest request, HttpServletRequest httpServletRequest) {
+        userInfoService.updatePassword(request, SessionUtils.getUserInfoId(httpServletRequest));
+        return new Response.Builder().success().build();
+    }
+
+
+    @RequestMapping(value = "/updatePhoto", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+    @ResponseBody
+    public Response updatePhoto(@RequestBody UpdatePhotoRequest request, HttpServletRequest httpServletRequest) throws IOException {
+        userInfoService.updatePhoto(request, SessionUtils.getUserInfoId(httpServletRequest));
+        return new Response.Builder().success().build();
+    }
+
 }

@@ -13,6 +13,9 @@ public class ConfigureUtils {
 
     private static String KEY_ALBUMS_REPOSITORY = "zeal.albums.repository";
 
+    private static String KEY_PHOTOS_REPOSITORY = "zeal.photos.repository";
+
+    private static String KEY_PHOTOS_SERVER = "zeal.photos.server";
 
     private static Properties properties;
 
@@ -43,6 +46,19 @@ public class ConfigureUtils {
     public static String getAlbumRepository() {
         return properties.getProperty(KEY_ALBUMS_REPOSITORY);
     }
+
+    public static String getPhotoServer() {
+        return properties.getProperty(KEY_PHOTOS_SERVER);
+    }
+
+    public static String getPhotoRepository() {
+        return properties.getProperty(KEY_PHOTOS_REPOSITORY);
+    }
+
+    public static String getPhotoEmpty() {
+        return properties.getProperty("zeal.photo.empty");
+    }
+
 
     public static String getString(String key) {
         return properties.getProperty(key, null);

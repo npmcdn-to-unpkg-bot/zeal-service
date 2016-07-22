@@ -133,7 +133,33 @@
                     url: "/zeal/my/updateBasic",
                     data: request
                 });
-            }
+            };
+
+            /**
+             * 更新我的密码信息
+             * @param request
+             * @returns {*|{promise, success, error}}
+             */
+            this.updatePassword = function (request) {
+                return HttpService.http({
+                    method: "POST",
+                    url: "/zeal/my/updatePassword",
+                    data: request
+                });
+            };
+
+            /**
+             * 更新头像
+             * @param photoBase64 图片的64编码
+             * @returns {*|{promise, success, error}}
+             */
+            this.updatePhoto = function (photoBase64) {
+                return HttpService.http({
+                    method: "POST",
+                    url: "/zeal/my/updatePhoto",
+                    data: {photoBase64: photoBase64}
+                });
+            };
 
         }]);
 })();

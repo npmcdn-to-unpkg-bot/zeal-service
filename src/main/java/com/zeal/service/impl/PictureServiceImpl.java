@@ -4,7 +4,7 @@ import com.zeal.dao.PictureDao;
 import com.zeal.entity.Picture;
 import com.zeal.service.PictureService;
 import com.zeal.utils.ConfigureUtils;
-import com.zeal.utils.PictureUtils;
+import com.zeal.utils.AlbumUtils;
 import com.zeal.vo.album.AlbumVO;
 import com.zeal.vo.album.PictureVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class PictureServiceImpl implements PictureService {
     public void delete(long id, long userInfoId) {
         Picture picture = pictureDao.find(id);
         pictureDao.delete(picture);
-        PictureUtils.deleteDiskFile(picture);
+        AlbumUtils.deleteDiskFile(picture);
     }
 
     @Override

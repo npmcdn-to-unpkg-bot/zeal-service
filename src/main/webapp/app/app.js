@@ -3,7 +3,7 @@
  */
 
 (function () {
-    angular.module("app", ['zeal-common']);
+    angular.module("app", ['zeal-common', 'ImageCropper']);
     angular.module("app").run(['$rootScope', '$state', '$stateParams', '$window', '$anchorScroll',
         function ($rootScope, $state, $stateParams, $window, $anchorScroll) {
             $rootScope.$state = $state;
@@ -111,10 +111,12 @@
         }).state('my.userinfo.password', {
             url: "/password",
             templateUrl: "/zeal/app/modules/my/userinfo/password.html",
+            controller: 'MyUserInfoPasswordController',
             title: "修改密码 - Zeal for you"
         }).state('my.userinfo.photo', {
             url: "/photo",
             templateUrl: "/zeal/app/modules/my/userinfo/photo.html",
+            controller: 'MyUserInfoPhotoController',
             title: "修改头像 - Zeal for you"
         });
     });
